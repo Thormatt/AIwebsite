@@ -1,0 +1,23 @@
+{
+  "name": "ai-consulting-website",
+  "version": "1.0.0",
+  "description": "Professional AI Consulting Services Website",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site - no build required'",
+    "preview": "npx serve ."
+  },
+  "keywords": [
+    "AI consulting",
+    "artificial intelligence",
+    "machine learning",
+    "generative AI",
+    "business consulting"
+  ],
+  "author": "AI Consulting Pro",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
