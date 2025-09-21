@@ -458,6 +458,83 @@ section {
     color: var(--text-muted);
 }
 
+/* Tools Section */
+.tools-section {
+    padding: calc(var(--space-xl) * 2) 0;
+    background: var(--background);
+}
+
+.tools-intro {
+    text-align: center;
+    margin-bottom: calc(var(--space-xl) * 1.5);
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tool-card {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: var(--space-lg);
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: var(--gold-light);
+}
+
+.tool-badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: var(--gold);
+    color: var(--white);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tool-card .tool-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.tool-card .tool-tagline {
+    color: var(--gold);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.tool-card .tool-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+    margin: var(--space-sm) 0 var(--space-md) 0;
+}
+
+.tool-card .btn {
+    align-self: flex-start;
+    margin-top: auto;
+}
+
 /* Footer */
 .footer {
     background: var(--background);

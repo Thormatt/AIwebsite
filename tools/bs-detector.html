@@ -3,672 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Vendor BS Detector - Thor Advisory</title>
+    <title>Vendor BS Detector - Thor AI Advisory</title>
+    <meta name="description" content="Decode vendor marketing fluff instantly. Analyze buzzword density and get a reality check on AI vendor pitches.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
     <style>
-        :root {
-            --charcoal: #2c3e50;
-            --sage: #4a5d4e;
-            --gold: #d4a574;
-            --cream: #faf8f3;
-            --white: #ffffff;
-            --red: #e74c3c;
-            --orange: #f39c12;
-            --green: #27ae60;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
-            min-height: 100vh;
-            color: white;
-            padding: 2rem;
-        }
-
         .detector-container {
             max-width: 900px;
             margin: 0 auto;
-            animation: fadeIn 0.6s ease;
+            padding: 2rem;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header {
+        .detector-header {
             text-align: center;
             margin-bottom: 3rem;
         }
 
-        h1 {
-            font-size: 3rem;
+        .detector-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff 0%, #d4a574 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 3s ease infinite;
         }
 
-        @keyframes shimmer {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .subtitle {
-            color: #a0a0a0;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .warning {
-            color: var(--gold);
-            font-size: 0.875rem;
-            font-style: italic;
+        .detector-header p {
+            font-size: 1.125rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .input-section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
             padding: 2rem;
             margin-bottom: 2rem;
         }
 
         .input-label {
             display: block;
-            margin-bottom: 1rem;
             font-weight: 500;
-            color: var(--gold);
+            color: #4b5563;
+            margin-bottom: 1rem;
         }
 
         #vendor-pitch {
             width: 100%;
-            min-height: 150px;
+            min-height: 200px;
             padding: 1rem;
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(212, 165, 116, 0.3);
-            border-radius: 12px;
-            color: white;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.95rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
             resize: vertical;
-            transition: all 0.3s ease;
+            transition: border-color 0.2s;
         }
 
         #vendor-pitch:focus {
             outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 20px rgba(212, 165, 116, 0.2);
-        }
-
-        .sample-pitches {
-            margin-top: 1rem;
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .sample-btn {
-            padding: 0.5rem 1rem;
-            background: rgba(212, 165, 116, 0.1);
-            border: 1px solid rgba(212, 165, 116, 0.3);
-            border-radius: 20px;
-            color: var(--gold);
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .sample-btn:hover {
-            background: rgba(212, 165, 116, 0.2);
-            transform: translateY(-2px);
+            border-color: #d4a574;
         }
 
         .analyze-btn {
             width: 100%;
-            padding: 1.2rem;
-            background: linear-gradient(135deg, var(--sage) 0%, var(--charcoal) 100%);
-            border: none;
-            border-radius: 12px;
+            padding: 1rem;
+            background: #d4a574;
             color: white;
-            font-size: 1.1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.125rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            margin-top: 1.5rem;
-        }
-
-        .analyze-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .analyze-btn:hover::before {
-            width: 500px;
-            height: 500px;
+            transition: background 0.2s;
+            margin-top: 1rem;
         }
 
         .analyze-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: #b8935f;
         }
 
-        .analyze-btn.analyzing {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 100%);
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
+        .analyze-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
         }
 
         .results-section {
             display: none;
-            animation: slideUp 0.5s ease;
+            animation: fadeIn 0.5s ease;
         }
 
-        .results-section.show {
+        .results-section.active {
             display: block;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .scanner-effect {
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: 2rem 0;
-            opacity: 0;
-            animation: scan 2s linear infinite;
-        }
-
-        .scanner-effect.active {
-            opacity: 1;
-        }
-
-        @keyframes scan {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(100%); }
-        }
-
-        .bs-meter-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .meter-wrapper {
-            position: relative;
-            width: 300px;
-            height: 150px;
-            margin: 2rem auto;
-        }
-
-        .meter-gauge {
-            width: 100%;
-            height: 100%;
-        }
-
-        .meter-text {
-            position: absolute;
-            top: 70%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-
-        .verdict {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-top: 1rem;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .verdict.low { color: var(--green); }
-        .verdict.medium { color: var(--gold); }
-        .verdict.high { color: var(--orange); }
-        .verdict.extreme { color: var(--red); }
-
-        .flags-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .flags-title {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            color: var(--gold);
-        }
-
-        .flag-item {
-            background: rgba(231, 76, 60, 0.1);
-            border: 1px solid rgba(231, 76, 60, 0.3);
+        .bs-score-card {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
             border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            animation: slideIn 0.5s ease;
-            animation-fill-mode: both;
+            padding: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .bs-meter {
+            margin: 2rem 0;
         }
 
-        .flag-phrase {
-            color: #ff6b6b;
+        .bs-level {
+            font-size: 3rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-family: 'JetBrains Mono', monospace;
+            margin: 1rem 0;
         }
 
-        .flag-explanation {
-            color: #c0c0c0;
-            font-size: 0.9rem;
-            line-height: 1.5;
+        .bs-level.low { color: #10b981; }
+        .bs-level.medium { color: #f59e0b; }
+        .bs-level.high { color: #ef4444; }
+        .bs-level.extreme { color: #dc2626; }
+
+        .bs-percentage {
+            font-size: 1.25rem;
+            opacity: 0.9;
         }
 
-        .translation-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+        .meter-bar {
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .meter-fill {
+            height: 100%;
+            border-radius: 15px;
+            transition: width 1s ease, background 1s ease;
+        }
+
+        .buzzword-analysis {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
             padding: 2rem;
             margin-bottom: 2rem;
         }
 
-        .translation-title {
-            font-size: 1.3rem;
+        .buzzword-analysis h2 {
+            color: #2c3e50;
             margin-bottom: 1.5rem;
-            color: var(--gold);
         }
 
-        .translation-item {
+        .buzzword-list {
             display: flex;
-            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.5rem;
             margin-bottom: 1.5rem;
-            animation: fadeIn 0.5s ease;
         }
 
-        .translation-icon {
-            font-size: 1.5rem;
-            margin-right: 1rem;
+        .buzzword-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #fef3e6;
+            border: 1px solid #d4a574;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: #92400e;
+        }
+
+        .translation-box {
+            background: #f9fafb;
+            border-left: 4px solid #d4a574;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .translation-box h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
         }
 
         .translation-text {
-            flex: 1;
-        }
-
-        .they-say {
-            color: var(--gold);
-            font-weight: 500;
-            margin-bottom: 0.3rem;
-        }
-
-        .they-mean {
-            color: #a0a0a0;
+            color: #4b5563;
+            line-height: 1.6;
             font-style: italic;
         }
 
-        .share-section {
-            background: linear-gradient(135deg, var(--sage) 0%, var(--charcoal) 100%);
-            border-radius: 20px;
+        .reality-check {
+            background: #fafafa;
+            border-radius: 12px;
             padding: 2rem;
-            text-align: center;
             margin-top: 2rem;
         }
 
-        .share-title {
-            font-size: 1.2rem;
+        .reality-check h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        .reality-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reality-list li {
+            position: relative;
+            padding-left: 2rem;
             margin-bottom: 1rem;
+            color: #4b5563;
+            line-height: 1.6;
         }
 
-        .share-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
+        .reality-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #d4a574;
+            font-weight: bold;
         }
 
-        .share-btn {
-            padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
+        .back-link {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            color: #d4a574;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
         }
 
-        .share-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .back-link:hover {
+            color: #b8935f;
         }
 
-        .reset-btn {
-            padding: 0.8rem 1.5rem;
-            background: transparent;
-            border: 1px solid var(--gold);
-            border-radius: 50px;
-            color: var(--gold);
+        .sample-pitches {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .sample-btn {
+            padding: 0.5rem 1rem;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.875rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
         }
 
-        .reset-btn:hover {
-            background: rgba(212, 165, 116, 0.1);
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .meter-wrapper {
-                width: 250px;
-                height: 125px;
-            }
+        .sample-btn:hover {
+            background: #e5e7eb;
+            border-color: #9ca3af;
         }
     </style>
 </head>
 <body>
     <div class="detector-container">
-        <div class="header">
-            <h1>AI Vendor BS Detector™</h1>
-            <p class="subtitle">Paste any vendor pitch and watch the truth emerge</p>
-            <p class="warning">Warning: Results may cause uncomfortable realizations</p>
+        <a href="../index.html" class="back-link">← Back to Main Site</a>
+
+        <div class="detector-header">
+            <h1>Vendor BS Detector</h1>
+            <p>Paste any vendor's marketing pitch below and watch us decode the fluff, expose the buzzwords, and give you the reality check you need.</p>
         </div>
 
         <div class="input-section">
-            <label for="vendor-pitch" class="input-label">
-                📋 Paste the vendor's pitch, website copy, or marketing email:
-            </label>
-            <textarea id="vendor-pitch" placeholder="Example: 'Our proprietary AI-powered solution leverages cutting-edge machine learning to revolutionize your business with unprecedented ROI...'""></textarea>
-            
+            <label for="vendor-pitch" class="input-label">Paste the vendor pitch here:</label>
+            <textarea id="vendor-pitch" placeholder="Our revolutionary AI-powered, blockchain-enabled, quantum-ready solution leverages cutting-edge machine learning algorithms to synergistically transform your digital ecosystem..."></textarea>
+
             <div class="sample-pitches">
-                <button class="sample-btn" onclick="loadSample('generic')">Generic AI Pitch</button>
-                <button class="sample-btn" onclick="loadSample('enterprise')">Enterprise Platform</button>
-                <button class="sample-btn" onclick="loadSample('chatbot')">AI Chatbot</button>
+                <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 0.5rem;">Try a sample pitch:</p>
+                <button class="sample-btn" onclick="loadSample('enterprise')">Enterprise AI Platform</button>
+                <button class="sample-btn" onclick="loadSample('chatbot')">AI Chatbot Solution</button>
                 <button class="sample-btn" onclick="loadSample('analytics')">Predictive Analytics</button>
             </div>
 
-            <button class="analyze-btn" onclick="analyzePitch()">
-                🔍 Detect BS Level
-            </button>
+            <button class="analyze-btn" onclick="analyzePitch()">Analyze Pitch</button>
         </div>
 
-        <div class="scanner-effect"></div>
-
         <div class="results-section" id="results">
-            <div class="bs-meter-container">
-                <h2>BS Level Analysis</h2>
-                <div class="meter-wrapper">
-                    <svg class="meter-gauge" viewBox="0 0 300 150">
-                        <!-- Background arc -->
-                        <path d="M 30 120 A 120 120 0 0 1 270 120" 
-                              stroke="rgba(255,255,255,0.1)" 
-                              stroke-width="30" 
-                              fill="none" />
-                        
-                        <!-- Gradient definitions -->
-                        <defs>
-                            <linearGradient id="meterGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" style="stop-color:#27ae60" />
-                                <stop offset="33%" style="stop-color:#f39c12" />
-                                <stop offset="66%" style="stop-color:#e67e22" />
-                                <stop offset="100%" style="stop-color:#e74c3c" />
-                            </linearGradient>
-                        </defs>
-                        
-                        <!-- Colored arc -->
-                        <path id="meterArc" d="M 30 120 A 120 120 0 0 1 270 120" 
-                              stroke="url(#meterGradient)" 
-                              stroke-width="30" 
-                              fill="none"
-                              stroke-dasharray="377"
-                              stroke-dashoffset="377" />
-                        
-                        <!-- Needle -->
-                        <line id="needle" x1="150" y1="120" x2="150" y2="30" 
-                              stroke="#ff6b6b" 
-                              stroke-width="3"
-                              transform="rotate(-90 150 120)" />
-                        <circle cx="150" cy="120" r="8" fill="#ff6b6b" />
-                    </svg>
-                    <div class="meter-text" id="bs-score">0%</div>
+            <div class="bs-score-card">
+                <h2>BS Detection Results</h2>
+                <div class="bs-meter">
+                    <div class="bs-level" id="bs-level">--</div>
+                    <div class="bs-percentage" id="bs-percentage">Buzzword Density: --%</div>
+                    <div class="meter-bar">
+                        <div class="meter-fill" id="meter-fill"></div>
+                    </div>
                 </div>
-                <div class="verdict" id="verdict">Analyzing...</div>
             </div>
 
-            <div class="flags-container">
-                <h3 class="flags-title">🚩 Red Flags Detected</h3>
-                <div id="red-flags"></div>
-            </div>
-
-            <div class="translation-container">
-                <h3 class="translation-title">🔄 BS Translation Service</h3>
-                <div id="translations"></div>
-            </div>
-
-            <div class="share-section">
-                <h3 class="share-title">Share the Truth</h3>
-                <div class="share-buttons">
-                    <a href="#" class="share-btn" id="linkedin-share">
-                        <span>🔗</span> Share on LinkedIn
-                    </a>
-                    <a href="#" class="share-btn" id="twitter-share">
-                        <span>🐦</span> Share on X
-                    </a>
-                    <button class="reset-btn" onclick="resetDetector()">
-                        Test Another Pitch
-                    </button>
+            <div class="buzzword-analysis">
+                <h2>Buzzwords Detected</h2>
+                <div class="buzzword-list" id="buzzword-list">
+                    <!-- Buzzwords will be inserted here -->
                 </div>
+
+                <div class="translation-box">
+                    <h3>Plain English Translation</h3>
+                    <p class="translation-text" id="translation">
+                        <!-- Translation will be inserted here -->
+                    </p>
+                </div>
+            </div>
+
+            <div class="reality-check">
+                <h2>Reality Check</h2>
+                <ul class="reality-list" id="reality-list">
+                    <!-- Reality check points will be inserted here -->
+                </ul>
             </div>
         </div>
     </div>
 
     <script>
-        // BS Detection Database
-        const bsPhrases = {
-            'proprietary ai': {
-                score: 20,
-                explanation: "Translation: We tweaked an open-source model and added our logo"
-            },
-            'cutting-edge': {
-                score: 15,
-                explanation: "Translation: We're using technology from 2019"
-            },
-            'revolutionary': {
-                score: 18,
-                explanation: "Translation: It's incrementally better, maybe"
-            },
-            'game-changing': {
-                score: 15,
-                explanation: "Translation: It might save you 5% if everything goes perfectly"
-            },
-            'disrupting': {
-                score: 20,
-                explanation: "Translation: We're hoping to be acquired"
-            },
-            'unprecedented': {
-                score: 18,
-                explanation: "Translation: We haven't checked what competitors offer"
-            },
-            'seamless integration': {
-                score: 15,
-                explanation: "Translation: You'll need 3 engineers for 6 months"
-            },
-            'plug-and-play': {
-                score: 20,
-                explanation: "Translation: Plug, play, debug, refactor, cry, repeat"
-            },
-            'no code required': {
-                score: 25,
-                explanation: "Translation: You'll need code, just not immediately"
-            },
-            'leverages machine learning': {
-                score: 10,
-                explanation: "Translation: It has if-statements, possibly a regression"
-            },
-            'neural network': {
-                score: 8,
-                explanation: "Translation: We use TensorFlow's tutorial code"
-            },
-            'deep learning': {
-                score: 10,
-                explanation: "Translation: It has more than 2 layers"
-            },
-            'artificial intelligence': {
-                score: 5,
-                explanation: "Translation: It uses computers to do things"
-            },
-            'synergy': {
-                score: 25,
-                explanation: "Translation: We don't know what this does either"
-            },
-            'transformative': {
-                score: 15,
-                explanation: "Translation: It changes things, not necessarily for the better"
-            },
-            'next-generation': {
-                score: 12,
-                explanation: "Translation: Slightly newer than the old thing"
-            },
-            'enterprise-grade': {
-                score: 10,
-                explanation: "Translation: It's expensive"
-            },
-            'military-grade': {
-                score: 20,
-                explanation: "Translation: Built by the lowest bidder"
-            },
-            'award-winning': {
-                score: 15,
-                explanation: "Translation: We paid for an award"
-            },
-            'industry-leading': {
-                score: 12,
-                explanation: "Translation: We're in the industry"
-            },
-            'best-in-class': {
-                score: 15,
-                explanation: "Translation: We defined the class"
-            },
-            'powered by ai': {
-                score: 15,
-                explanation: "Translation: Contains an API call to OpenAI"
-            },
-            'cognitive': {
-                score: 18,
-                explanation: "Translation: It processes data, like all software"
-            },
-            'intelligent automation': {
-                score: 15,
-                explanation: "Translation: Automated, but you'll babysit it"
-            },
-            'state-of-the-art': {
-                score: 10,
-                explanation: "Translation: Current, not future"
-            },
-            'paradigm shift': {
-                score: 25,
-                explanation: "Translation: Please don't ask specific questions"
-            },
-            'turnkey solution': {
-                score: 18,
-                explanation: "Translation: Turn key, find problems, turn more keys"
-            },
-            'future-proof': {
-                score: 20,
-                explanation: "Translation: Will be obsolete in 18 months"
-            },
-            'scalable': {
-                score: 5,
-                explanation: "Translation: Costs multiply with usage"
-            },
-            'roi': {
-                score: 5,
-                explanation: "Translation: We made up these numbers"
-            },
-            '10x': {
-                score: 20,
-                explanation: "Translation: Marginally better, if at all"
-            },
-            'unicorn': {
-                score: 15,
-                explanation: "Translation: Burning cash at unprecedented rates"
-            },
-            'blockchain': {
-                score: 30,
-                explanation: "Translation: We're really desperate for funding"
-            },
-            'quantum': {
-                score: 35,
-                explanation: "Translation: We don't understand physics or computing"
-            }
-        };
+        const buzzwords = [
+            'revolutionary', 'disruptive', 'innovative', 'cutting-edge', 'next-generation',
+            'synergistic', 'paradigm', 'ecosystem', 'holistic', 'seamless',
+            'leverage', 'utilize', 'optimize', 'streamline', 'transform',
+            'ai-powered', 'ml-driven', 'blockchain', 'quantum', 'cloud-native',
+            'scalable', 'robust', 'enterprise-grade', 'best-in-class', 'world-class',
+            'digital transformation', 'digital ecosystem', 'digital journey',
+            'actionable insights', 'data-driven', 'real-time', 'omnichannel',
+            'frictionless', 'turnkey', 'end-to-end', 'future-proof', 'game-changing'
+        ];
 
         const samplePitches = {
-            generic: "Our proprietary AI-powered platform leverages cutting-edge machine learning algorithms to deliver game-changing insights that will revolutionize your business operations. This seamless, plug-and-play solution requires no coding and provides enterprise-grade intelligence with unprecedented ROI. Our award-winning, industry-leading technology creates a paradigm shift in how businesses operate.",
-            
-            enterprise: "Introducing the next-generation enterprise AI suite that disrupts traditional business intelligence. Our military-grade, cognitive computing platform delivers transformative results through intelligent automation. This turnkey solution is completely future-proof and scales seamlessly with your organization. Best-in-class neural networks provide 10x productivity gains.",
-            
-            chatbot: "Our revolutionary conversational AI uses state-of-the-art natural language processing powered by proprietary deep learning models. This no-code solution offers seamless integration with your existing systems. The platform's unprecedented ability to understand context delivers a truly cognitive experience that will transform customer engagement.",
-            
-            analytics: "Leverage our cutting-edge predictive analytics platform powered by artificial intelligence and machine learning. This game-changing solution provides actionable insights through our proprietary algorithms. The synergy between our neural networks and your data creates transformative business value with guaranteed ROI."
+            enterprise: "Our revolutionary AI-powered platform leverages cutting-edge machine learning algorithms to transform your enterprise's digital ecosystem. With our best-in-class, cloud-native solution, you'll achieve unprecedented scalability while driving actionable insights through real-time data analytics. Our holistic approach ensures seamless integration across your entire technology stack, delivering a truly frictionless experience that will disrupt your industry.",
+            chatbot: "Introducing our next-generation conversational AI solution that revolutionizes customer engagement through innovative natural language processing. This enterprise-grade, omnichannel platform utilizes state-of-the-art deep learning to deliver personalized, context-aware interactions at scale. Our turnkey solution seamlessly integrates with your existing infrastructure, providing game-changing customer experiences while optimizing operational efficiency.",
+            analytics: "Transform your business with our disruptive predictive analytics platform that harnesses the power of quantum-ready algorithms and blockchain technology. Our robust, scalable solution delivers real-time, actionable insights by leveraging big data and advanced machine learning models. This end-to-end, future-proof system empowers data-driven decision making while ensuring enterprise-grade security and compliance."
         };
 
         function loadSample(type) {
@@ -676,230 +347,158 @@
         }
 
         function analyzePitch() {
-            const pitch = document.getElementById('vendor-pitch').value;
-            if (!pitch.trim()) {
-                alert('Please paste a vendor pitch first!');
+            const pitch = document.getElementById('vendor-pitch').value.trim();
+
+            if (!pitch) {
+                alert('Please enter a vendor pitch to analyze');
                 return;
             }
 
-            // Show analyzing state
-            const btn = document.querySelector('.analyze-btn');
-            btn.classList.add('analyzing');
-            btn.textContent = '🔄 Analyzing BS Levels...';
-
-            // Show scanner effect
-            document.querySelector('.scanner-effect').classList.add('active');
-
-            // Simulate analysis time
-            setTimeout(() => {
-                performAnalysis(pitch);
-                btn.classList.remove('analyzing');
-                btn.textContent = '🔍 Detect BS Level';
-                document.querySelector('.scanner-effect').classList.remove('active');
-            }, 2000);
-        }
-
-        function performAnalysis(pitch) {
+            // Count buzzwords
             const lowerPitch = pitch.toLowerCase();
-            let totalScore = 0;
-            let foundFlags = [];
-            let maxScore = 0;
+            const words = lowerPitch.split(/\s+/);
+            const foundBuzzwords = [];
+            let buzzwordCount = 0;
 
-            // Check for BS phrases
-            for (const [phrase, data] of Object.entries(bsPhrases)) {
-                if (lowerPitch.includes(phrase)) {
-                    totalScore += data.score;
-                    maxScore += data.score;
-                    foundFlags.push({
-                        phrase: phrase,
-                        explanation: data.explanation,
-                        score: data.score
-                    });
+            buzzwords.forEach(buzzword => {
+                if (lowerPitch.includes(buzzword)) {
+                    foundBuzzwords.push(buzzword);
+                    // Count occurrences
+                    const regex = new RegExp(buzzword, 'gi');
+                    const matches = lowerPitch.match(regex);
+                    buzzwordCount += matches ? matches.length : 0;
                 }
+            });
+
+            // Calculate BS percentage
+            const bsPercentage = Math.min(Math.round((buzzwordCount / words.length) * 100), 100);
+
+            // Determine BS level
+            let bsLevel, bsClass, fillColor;
+            if (bsPercentage < 10) {
+                bsLevel = 'Low BS';
+                bsClass = 'low';
+                fillColor = '#10b981';
+            } else if (bsPercentage < 20) {
+                bsLevel = 'Moderate BS';
+                bsClass = 'medium';
+                fillColor = '#f59e0b';
+            } else if (bsPercentage < 35) {
+                bsLevel = 'High BS';
+                bsClass = 'high';
+                fillColor = '#ef4444';
+            } else {
+                bsLevel = 'EXTREME BS';
+                bsClass = 'extreme';
+                fillColor = '#dc2626';
             }
 
-            // Calculate percentage (cap at 100)
-            let percentage = Math.min(Math.round((totalScore / 100) * 100), 100);
-            
-            // Adjust based on pitch length (more words = more potential BS)
-            const wordCount = pitch.split(' ').length;
-            if (wordCount > 200) percentage = Math.min(percentage + 10, 100);
-            if (wordCount > 500) percentage = Math.min(percentage + 10, 100);
+            // Update results
+            document.getElementById('bs-level').textContent = bsLevel;
+            document.getElementById('bs-level').className = 'bs-level ' + bsClass;
+            document.getElementById('bs-percentage').textContent = `Buzzword Density: ${bsPercentage}%`;
 
-            // Check for specific patterns
-            if (lowerPitch.includes('ai') && lowerPitch.includes('blockchain')) {
-                percentage = Math.min(percentage + 20, 100);
-            }
-            if ((lowerPitch.match(/revolutionary|game-changing|disrupting/gi) || []).length > 2) {
-                percentage = Math.min(percentage + 15, 100);
-            }
+            const meterFill = document.getElementById('meter-fill');
+            meterFill.style.width = bsPercentage + '%';
+            meterFill.style.background = fillColor;
+
+            // Display buzzwords
+            const buzzwordList = document.getElementById('buzzword-list');
+            buzzwordList.innerHTML = foundBuzzwords.map(word =>
+                `<span class="buzzword-tag">${word}</span>`
+            ).join('');
+
+            // Generate translation
+            const translation = generateTranslation(pitch, foundBuzzwords);
+            document.getElementById('translation').textContent = translation;
+
+            // Generate reality check
+            const realityPoints = generateRealityCheck(bsPercentage, foundBuzzwords);
+            document.getElementById('reality-list').innerHTML = realityPoints.map(point =>
+                `<li>${point}</li>`
+            ).join('');
 
             // Show results
-            showResults(percentage, foundFlags);
+            document.getElementById('results').classList.add('active');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function showResults(score, flags) {
-            // Show results section
-            document.getElementById('results').classList.add('show');
-            
-            // Animate the meter
-            setTimeout(() => {
-                const arc = document.getElementById('meterArc');
-                const needle = document.getElementById('needle');
-                const scoreText = document.getElementById('bs-score');
-                
-                // Animate arc fill
-                const offset = 377 - (377 * score / 100);
-                arc.style.transition = 'stroke-dashoffset 1.5s ease';
-                arc.style.strokeDashoffset = offset;
-                
-                // Rotate needle
-                const rotation = -90 + (180 * score / 100);
-                needle.style.transition = 'transform 1.5s ease';
-                needle.style.transform = `rotate(${rotation}deg)`;
-                needle.style.transformOrigin = '150px 120px';
-                
-                // Animate score text
-                let currentScore = 0;
-                const increment = score / 30;
-                const timer = setInterval(() => {
-                    currentScore += increment;
-                    if (currentScore >= score) {
-                        currentScore = score;
-                        clearInterval(timer);
-                    }
-                    scoreText.textContent = Math.round(currentScore) + '%';
-                }, 50);
-                
-                // Set verdict
-                const verdict = document.getElementById('verdict');
-                if (score < 25) {
-                    verdict.className = 'verdict low';
-                    verdict.textContent = '✅ Surprisingly Honest!';
-                } else if (score < 50) {
-                    verdict.className = 'verdict medium';
-                    verdict.textContent = '⚠️ Moderate BS Detected';
-                } else if (score < 75) {
-                    verdict.className = 'verdict high';
-                    verdict.textContent = '🚨 High BS Alert!';
-                } else {
-                    verdict.className = 'verdict extreme';
-                    verdict.textContent = '💀 WEAPONS-GRADE BS!';
-                }
-            }, 100);
-            
-            // Display red flags
-            const flagsContainer = document.getElementById('red-flags');
-            flagsContainer.innerHTML = '';
-            
-            // Sort flags by score
-            flags.sort((a, b) => b.score - a.score);
-            
-            flags.slice(0, 8).forEach((flag, index) => {
-                const flagDiv = document.createElement('div');
-                flagDiv.className = 'flag-item';
-                flagDiv.style.animationDelay = `${index * 0.1}s`;
-                flagDiv.innerHTML = `
-                    <div class="flag-phrase">"${flag.phrase}" (+${flag.score} BS points)</div>
-                    <div class="flag-explanation">${flag.explanation}</div>
-                `;
-                flagsContainer.appendChild(flagDiv);
-            });
-            
-            // Add translations
-            const translationsContainer = document.getElementById('translations');
-            translationsContainer.innerHTML = '';
-            
-            const translations = generateTranslations(score);
-            translations.forEach((trans, index) => {
-                const transDiv = document.createElement('div');
-                transDiv.className = 'translation-item';
-                transDiv.style.animationDelay = `${index * 0.15}s`;
-                transDiv.innerHTML = `
-                    <div class="translation-icon">${trans.icon}</div>
-                    <div class="translation-text">
-                        <div class="they-say">They say: "${trans.theySay}"</div>
-                        <div class="they-mean">They mean: "${trans.theyMean}"</div>
-                    </div>
-                `;
-                translationsContainer.appendChild(transDiv);
-            });
-            
-            // Update share links
-            updateShareLinks(score);
-            
-            // Scroll to results
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+        function generateTranslation(pitch, buzzwords) {
+            const translations = {
+                'revolutionary': 'slightly different from what exists',
+                'disruptive': 'hoping to get market share',
+                'innovative': 'has some new features',
+                'cutting-edge': 'relatively recent technology',
+                'synergistic': 'works together (like everything should)',
+                'paradigm shift': 'different approach',
+                'leverage': 'use',
+                'utilize': 'use',
+                'ai-powered': 'uses some form of machine learning',
+                'blockchain': 'probably unnecessary distributed database',
+                'seamless': 'works most of the time',
+                'scalable': 'can handle more users (with more servers)',
+                'robust': 'usually doesn\'t crash',
+                'enterprise-grade': 'expensive',
+                'best-in-class': 'as good as competitors',
+                'actionable insights': 'reports with recommendations',
+                'digital transformation': 'moving to newer technology',
+                'frictionless': 'fewer steps than before',
+                'game-changing': 'incremental improvement'
+            };
 
-        function generateTranslations(score) {
-            const translations = [
-                {
-                    icon: '🎯',
-                    theySay: "We offer a complete solution",
-                    theyMean: "We'll sell you more stuff later"
-                },
-                {
-                    icon: '💰',
-                    theySay: "Competitive pricing",
-                    theyMean: "Expensive, but so is everyone else"
-                },
-                {
-                    icon: '🚀',
-                    theySay: "Fast implementation",
-                    theyMean: "Fast to start, slow to finish"
-                },
-                {
-                    icon: '🤖',
-                    theySay: "AI-powered insights",
-                    theyMean: "We graph your data differently"
-                },
-                {
-                    icon: '📈',
-                    theySay: "Proven ROI",
-                    theyMean: "One customer saved money once"
-                }
-            ];
-            
-            if (score > 50) {
-                translations.push({
-                    icon: '🎪',
-                    theySay: "Industry disruption",
-                    theyMean: "We're really good at marketing"
-                });
+            if (buzzwords.length === 0) {
+                return "This pitch is relatively straightforward and focuses on actual capabilities rather than marketing hype.";
+            } else if (buzzwords.length < 5) {
+                return "They're trying to sell you their product with moderate marketing language. The core offering might be decent, but verify the specific claims.";
+            } else if (buzzwords.length < 10) {
+                return "This is heavy on marketing speak. They're probably offering something similar to existing solutions but want to sound special. Focus on specific features and pricing.";
+            } else {
+                return "This is marketing word salad. They're likely offering a standard solution dressed up in fancy language. Ask for specific use cases, actual customer references, and detailed pricing.";
             }
-            
-            if (score > 75) {
-                translations.push({
-                    icon: '🦄',
-                    theySay: "Unprecedented capabilities",
-                    theyMean: "We haven't tested this properly"
-                });
+        }
+
+        function generateRealityCheck(bsPercentage, buzzwords) {
+            const points = [];
+
+            if (bsPercentage > 30) {
+                points.push("Red flag: Excessive buzzword usage often masks lack of substance");
             }
-            
-            return translations.slice(0, 5);
+
+            if (buzzwords.includes('ai-powered') || buzzwords.includes('ml-driven')) {
+                points.push("Ask specifically what AI/ML techniques they use and for what tasks");
+            }
+
+            if (buzzwords.includes('blockchain')) {
+                points.push("Question whether blockchain is actually necessary for this use case");
+            }
+
+            if (buzzwords.includes('revolutionary') || buzzwords.includes('disruptive')) {
+                points.push("Request concrete examples of how this is different from existing solutions");
+            }
+
+            if (buzzwords.includes('seamless') || buzzwords.includes('frictionless')) {
+                points.push("Ask about integration requirements, setup time, and common implementation challenges");
+            }
+
+            if (buzzwords.includes('enterprise-grade') || buzzwords.includes('best-in-class')) {
+                points.push("Get specific performance benchmarks and compare with competitors");
+            }
+
+            if (buzzwords.includes('scalable') || buzzwords.includes('robust')) {
+                points.push("Request actual uptime statistics and performance under load metrics");
+            }
+
+            // Always add these
+            points.push("Ask for case studies from companies similar to yours");
+            points.push("Request a detailed breakdown of total cost of ownership");
+            points.push("Insist on a proof of concept with your actual data");
+
+            return points;
         }
 
-        function updateShareLinks(score) {
-            const message = `I just analyzed a vendor pitch with the AI BS Detector and it scored ${score}% on the BS scale! 😂`;
-            const url = window.location.href;
-            
-            document.getElementById('linkedin-share').href = 
-                `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(message)}`;
-            
-            document.getElementById('twitter-share').href = 
-                `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(url)}`;
-        }
-
-        function resetDetector() {
-            document.getElementById('vendor-pitch').value = '';
-            document.getElementById('results').classList.remove('show');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Add keyboard shortcut
-        document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        // Enter key to analyze
+        document.getElementById('vendor-pitch').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
                 analyzePitch();
             }
         });
