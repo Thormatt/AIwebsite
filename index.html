@@ -33,6 +33,7 @@
                 <a href="#tools">Tools</a>
                 <a href="#office-hours">Office Hours</a>
                 <a href="#about">About</a>
+                <a href="#contact">Contact</a>
             </div>
         </div>
     </nav>
@@ -41,7 +42,7 @@
     <header class="hero">
         <div class="hero-content">
             <h1 class="hero-name">Thor Matthiasson</h1>
-            <p class="hero-tagline">AI Strategy Without the Hype</p>
+            <p class="hero-tagline">Business Intelligence & AI Strategy Advisor</p>
             <p class="hero-description">
                 I help executives understand AI—what it can do,<br>
                 what it can't, and whether it makes sense for<br>
@@ -372,7 +373,7 @@
                     <p>These calls are free and informal—bring your questions about AI strategy,
                     implementation challenges, or just to think through whether AI makes sense for your situation.</p>
                     <p>No preparation needed. No follow-up sales calls.</p>
-                    <a href="mailto:thormatt@gmail.com?subject=Office%20Hours%20Request" class="btn btn-primary">Schedule a Call</a>
+                    <a href="#contact" class="btn btn-primary">Request Office Hours</a>
                 </div>
                 <div class="calendar-visual">
                     <div class="calendar-week">
@@ -409,48 +410,97 @@
             <div class="about-content">
                 <div class="about-text">
                     <p>
-                        Thor partners with leaders to translate priorities into AI-enabled experimentation,
-                        measurement, and go-to-market strategies. He brings cross-disciplinary thinking and
-                        clear, outcome-focused guidance for complex transformations.
+                        Thor helps leaders turn AI into measurable growth by designing pilots, implementation,
+                        and go-to-market strategies. He brings cross-functional insight, executive advisory
+                        experience, and a practical playbook for responsible, human-centered AI transformation.
                     </p>
                     <p>
-                        As a serial entrepreneur, Thor co-founded Two Birds, Mobius Carbon, and Svartigaldur,
-                        building practical AI applications that solve real business problems. Earlier in his
-                        career, he led SEM analytics for multi-market campaigns, developing data-driven
-                        strategies that delivered measurable results.
+                        With deep expertise in data analytics, tech product development, and performance marketing
+                        across Europe and North America, Thor has built a reputation for delivering results that
+                        matter. His approach combines analytical rigor with strategic vision to create AI
+                        solutions that drive real business value.
                     </p>
                     <p>
-                        A frequent invitee to security and industry forums—including NATO and Google events—Thor
-                        is recognized for his ability to bridge technical complexity and business strategy.
-                        His approach combines deep technical understanding with pragmatic business sense.
+                        An award-winning strategist—recognized at the European Search Awards and with a Eurobest
+                        Grand Prix—Thor has shared his insights at NATO security forums and Google partner events,
+                        speaking on AI, digital media, and influence. These platforms have shaped his understanding
+                        of AI's potential and its responsible deployment.
                     </p>
                     <p>
-                        Thor works with a select group of clients, focusing on organizations ready to move
-                        beyond AI hype to build sustainable, value-creating capabilities. His advisory
-                        practice emphasizes honest assessment, practical implementation, and measurable outcomes.
+                        Thor works with organizations ready to move beyond experimentation to implementation,
+                        focusing on measurable outcomes and sustainable growth. His advisory practice emphasizes
+                        practical strategies that balance innovation with responsibility.
                     </p>
                 </div>
                 <div class="about-credentials">
-                    <h3>Experience</h3>
+                    <h3>Recognition</h3>
                     <ul>
-                        <li>Co-founder: Two Birds, Mobius Carbon, Svartigaldur</li>
-                        <li>Data Analytics & AI Strategy Advisor</li>
-                        <li>Former SEM Analytics Lead for Multi-Market Campaigns</li>
-                        <li>Speaker at NATO and Google Industry Forums</li>
+                        <li>European Search Awards Winner</li>
+                        <li>Eurobest Grand Prix</li>
+                        <li>NATO Security Forum Speaker</li>
+                        <li>Google Partner Events Speaker</li>
                     </ul>
 
-                    <h3>Focus Areas</h3>
+                    <h3>Expertise</h3>
                     <ul>
-                        <li>AI-Enabled Experimentation & Measurement</li>
-                        <li>Go-to-Market Strategy for AI Products</li>
-                        <li>Cross-Functional AI Transformation</li>
-                        <li>Data Analytics & Business Intelligence</li>
+                        <li>Business Intelligence & Data Analytics</li>
+                        <li>AI Pilot Design & Implementation</li>
+                        <li>Go-to-Market Strategy</li>
+                        <li>Performance Marketing</li>
+                        <li>Tech Product Development</li>
+                        <li>Human-Centered AI Transformation</li>
                     </ul>
 
-                    <h3>Contact</h3>
-                    <p class="contact-email">thormatt@gmail.com</p>
-                    <p class="contact-location">Global / Remote</p>
+                    <h3>Get in Touch</h3>
+                    <a href="#contact" class="btn btn-primary">Send a Message</a>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <p class="section-subtitle">Let's discuss how AI can drive measurable growth for your organization</p>
+
+            <div class="contact-form-container">
+                <form id="contact-form" class="contact-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject">
+                            <option value="advisory">Advisory Services</option>
+                            <option value="office-hours">Office Hours Request</option>
+                            <option value="speaking">Speaking Engagement</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+
+                    <div id="form-status" class="form-status"></div>
+                </form>
             </div>
         </div>
     </section>
@@ -459,10 +509,10 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2024 Thor Matthiasson. Data Analytics & AI Strategy Advisory.</p>
+                <p>&copy; 2024 Thor Matthiasson. Business Intelligence & AI Strategy Advisory.</p>
                 <div class="footer-links">
                     <a href="https://www.linkedin.com/in/thormatthiasson" target="_blank">LinkedIn</a>
-                    <a href="mailto:thormatt@gmail.com">Email</a>
+                    <a href="#contact">Contact</a>
                 </div>
             </div>
         </div>

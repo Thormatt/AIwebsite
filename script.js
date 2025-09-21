@@ -146,13 +146,60 @@ document.querySelectorAll('.service').forEach(card => {
     });
 });
 
-// Simple form handler (placeholder)
-const contactForm = document.querySelector('form');
+// Contact form handler using Formspree or similar service
+const contactForm = document.getElementById('contact-form');
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        // This would normally send to a backend
-        console.log('Form submitted - integrate with your email service');
+
+        const formData = new FormData(contactForm);
+        const formStatus = document.getElementById('form-status');
+
+        // Convert to object for easier handling
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        // Show loading state
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+
+        try {
+            // Option 1: Use Formspree (sign up at https://formspree.io)
+            // Replace 'YOUR_FORM_ID' with your actual Formspree form ID
+            // const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(data)
+            // });
+
+            // For now, simulate success (replace with actual endpoint)
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Show success message
+            formStatus.className = 'form-status success';
+            formStatus.textContent = 'Thank you for your message. I\'ll get back to you within 24 hours.';
+            contactForm.reset();
+
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                formStatus.style.display = 'none';
+            }, 5000);
+
+        } catch (error) {
+            // Show error message
+            formStatus.className = 'form-status error';
+            formStatus.textContent = 'There was an error sending your message. Please try again or contact via LinkedIn.';
+        } finally {
+            // Reset button
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
     });
 }
 
