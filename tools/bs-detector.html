@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vendor BS Detector - Thor Advisory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --charcoal: #2c3e50;
+            --sage: #4a5d4e;
+            --gold: #d4a574;
+            --cream: #faf8f3;
+            --white: #ffffff;
+            --red: #e74c3c;
+            --orange: #f39c12;
+            --green: #27ae60;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 2rem;
+        }
+
+        .detector-container {
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #d4a574 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .warning {
+            color: var(--gold);
+            font-size: 0.875rem;
+            font-style: italic;
+        }
+
+        .input-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            color: var(--gold);
+        }
+
+        #vendor-pitch {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        #vendor-pitch:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(212, 165, 116, 0.2);
+        }
+
+        .sample-pitches {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .sample-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(212, 165, 116, 0.1);
+            border: 1px solid rgba(212, 165, 116, 0.3);
+            border-radius: 20px;
+            color: var(--gold);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sample-btn:hover {
+            background: rgba(212, 165, 116, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--sage) 0%, var(--charcoal) 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+
+        .analyze-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .analyze-btn:hover::before {
+            width: 500px;
+            height: 500px;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .analyze-btn.analyzing {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 100%);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .results-section {
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scanner-effect {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 2rem 0;
+            opacity: 0;
+            animation: scan 2s linear infinite;
+        }
+
+        .scanner-effect.active {
+            opacity: 1;
+        }
+
+        @keyframes scan {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+
+        .bs-meter-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .meter-wrapper {
+            position: relative;
+            width: 300px;
+            height: 150px;
+            margin: 2rem auto;
+        }
+
+        .meter-gauge {
+            width: 100%;
+            height: 100%;
+        }
+
+        .meter-text {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .verdict {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .verdict.low { color: var(--green); }
+        .verdict.medium { color: var(--gold); }
+        .verdict.high { color: var(--orange); }
+        .verdict.extreme { color: var(--red); }
+
+        .flags-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .flags-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+        }
+
+        .flag-item {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            animation: slideIn 0.5s ease;
+            animation-fill-mode: both;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .flag-phrase {
+            color: #ff6b6b;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .flag-explanation {
+            color: #c0c0c0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .translation-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .translation-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+        }
+
+        .translation-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .translation-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .translation-text {
+            flex: 1;
+        }
+
+        .they-say {
+            color: var(--gold);
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .they-mean {
+            color: #a0a0a0;
+            font-style: italic;
+        }
+
+        .share-section {
+            background: linear-gradient(135deg, var(--sage) 0%, var(--charcoal) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .share-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .share-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .reset-btn {
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--gold);
+            border-radius: 50px;
+            color: var(--gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: rgba(212, 165, 116, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .meter-wrapper {
+                width: 250px;
+                height: 125px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="detector-container">
+        <div class="header">
+            <h1>AI Vendor BS Detector™</h1>
+            <p class="subtitle">Paste any vendor pitch and watch the truth emerge</p>
+            <p class="warning">Warning: Results may cause uncomfortable realizations</p>
+        </div>
+
+        <div class="input-section">
+            <label for="vendor-pitch" class="input-label">
+                📋 Paste the vendor's pitch, website copy, or marketing email:
+            </label>
+            <textarea id="vendor-pitch" placeholder="Example: 'Our proprietary AI-powered solution leverages cutting-edge machine learning to revolutionize your business with unprecedented ROI...'""></textarea>
+            
+            <div class="sample-pitches">
+                <button class="sample-btn" onclick="loadSample('generic')">Generic AI Pitch</button>
+                <button class="sample-btn" onclick="loadSample('enterprise')">Enterprise Platform</button>
+                <button class="sample-btn" onclick="loadSample('chatbot')">AI Chatbot</button>
+                <button class="sample-btn" onclick="loadSample('analytics')">Predictive Analytics</button>
+            </div>
+
+            <button class="analyze-btn" onclick="analyzePitch()">
+                🔍 Detect BS Level
+            </button>
+        </div>
+
+        <div class="scanner-effect"></div>
+
+        <div class="results-section" id="results">
+            <div class="bs-meter-container">
+                <h2>BS Level Analysis</h2>
+                <div class="meter-wrapper">
+                    <svg class="meter-gauge" viewBox="0 0 300 150">
+                        <!-- Background arc -->
+                        <path d="M 30 120 A 120 120 0 0 1 270 120" 
+                              stroke="rgba(255,255,255,0.1)" 
+                              stroke-width="30" 
+                              fill="none" />
+                        
+                        <!-- Gradient definitions -->
+                        <defs>
+                            <linearGradient id="meterGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#27ae60" />
+                                <stop offset="33%" style="stop-color:#f39c12" />
+                                <stop offset="66%" style="stop-color:#e67e22" />
+                                <stop offset="100%" style="stop-color:#e74c3c" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- Colored arc -->
+                        <path id="meterArc" d="M 30 120 A 120 120 0 0 1 270 120" 
+                              stroke="url(#meterGradient)" 
+                              stroke-width="30" 
+                              fill="none"
+                              stroke-dasharray="377"
+                              stroke-dashoffset="377" />
+                        
+                        <!-- Needle -->
+                        <line id="needle" x1="150" y1="120" x2="150" y2="30" 
+                              stroke="#ff6b6b" 
+                              stroke-width="3"
+                              transform="rotate(-90 150 120)" />
+                        <circle cx="150" cy="120" r="8" fill="#ff6b6b" />
+                    </svg>
+                    <div class="meter-text" id="bs-score">0%</div>
+                </div>
+                <div class="verdict" id="verdict">Analyzing...</div>
+            </div>
+
+            <div class="flags-container">
+                <h3 class="flags-title">🚩 Red Flags Detected</h3>
+                <div id="red-flags"></div>
+            </div>
+
+            <div class="translation-container">
+                <h3 class="translation-title">🔄 BS Translation Service</h3>
+                <div id="translations"></div>
+            </div>
+
+            <div class="share-section">
+                <h3 class="share-title">Share the Truth</h3>
+                <div class="share-buttons">
+                    <a href="#" class="share-btn" id="linkedin-share">
+                        <span>🔗</span> Share on LinkedIn
+                    </a>
+                    <a href="#" class="share-btn" id="twitter-share">
+                        <span>🐦</span> Share on X
+                    </a>
+                    <button class="reset-btn" onclick="resetDetector()">
+                        Test Another Pitch
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // BS Detection Database
+        const bsPhrases = {
+            'proprietary ai': {
+                score: 20,
+                explanation: "Translation: We tweaked an open-source model and added our logo"
+            },
+            'cutting-edge': {
+                score: 15,
+                explanation: "Translation: We're using technology from 2019"
+            },
+            'revolutionary': {
+                score: 18,
+                explanation: "Translation: It's incrementally better, maybe"
+            },
+            'game-changing': {
+                score: 15,
+                explanation: "Translation: It might save you 5% if everything goes perfectly"
+            },
+            'disrupting': {
+                score: 20,
+                explanation: "Translation: We're hoping to be acquired"
+            },
+            'unprecedented': {
+                score: 18,
+                explanation: "Translation: We haven't checked what competitors offer"
+            },
+            'seamless integration': {
+                score: 15,
+                explanation: "Translation: You'll need 3 engineers for 6 months"
+            },
+            'plug-and-play': {
+                score: 20,
+                explanation: "Translation: Plug, play, debug, refactor, cry, repeat"
+            },
+            'no code required': {
+                score: 25,
+                explanation: "Translation: You'll need code, just not immediately"
+            },
+            'leverages machine learning': {
+                score: 10,
+                explanation: "Translation: It has if-statements, possibly a regression"
+            },
+            'neural network': {
+                score: 8,
+                explanation: "Translation: We use TensorFlow's tutorial code"
+            },
+            'deep learning': {
+                score: 10,
+                explanation: "Translation: It has more than 2 layers"
+            },
+            'artificial intelligence': {
+                score: 5,
+                explanation: "Translation: It uses computers to do things"
+            },
+            'synergy': {
+                score: 25,
+                explanation: "Translation: We don't know what this does either"
+            },
+            'transformative': {
+                score: 15,
+                explanation: "Translation: It changes things, not necessarily for the better"
+            },
+            'next-generation': {
+                score: 12,
+                explanation: "Translation: Slightly newer than the old thing"
+            },
+            'enterprise-grade': {
+                score: 10,
+                explanation: "Translation: It's expensive"
+            },
+            'military-grade': {
+                score: 20,
+                explanation: "Translation: Built by the lowest bidder"
+            },
+            'award-winning': {
+                score: 15,
+                explanation: "Translation: We paid for an award"
+            },
+            'industry-leading': {
+                score: 12,
+                explanation: "Translation: We're in the industry"
+            },
+            'best-in-class': {
+                score: 15,
+                explanation: "Translation: We defined the class"
+            },
+            'powered by ai': {
+                score: 15,
+                explanation: "Translation: Contains an API call to OpenAI"
+            },
+            'cognitive': {
+                score: 18,
+                explanation: "Translation: It processes data, like all software"
+            },
+            'intelligent automation': {
+                score: 15,
+                explanation: "Translation: Automated, but you'll babysit it"
+            },
+            'state-of-the-art': {
+                score: 10,
+                explanation: "Translation: Current, not future"
+            },
+            'paradigm shift': {
+                score: 25,
+                explanation: "Translation: Please don't ask specific questions"
+            },
+            'turnkey solution': {
+                score: 18,
+                explanation: "Translation: Turn key, find problems, turn more keys"
+            },
+            'future-proof': {
+                score: 20,
+                explanation: "Translation: Will be obsolete in 18 months"
+            },
+            'scalable': {
+                score: 5,
+                explanation: "Translation: Costs multiply with usage"
+            },
+            'roi': {
+                score: 5,
+                explanation: "Translation: We made up these numbers"
+            },
+            '10x': {
+                score: 20,
+                explanation: "Translation: Marginally better, if at all"
+            },
+            'unicorn': {
+                score: 15,
+                explanation: "Translation: Burning cash at unprecedented rates"
+            },
+            'blockchain': {
+                score: 30,
+                explanation: "Translation: We're really desperate for funding"
+            },
+            'quantum': {
+                score: 35,
+                explanation: "Translation: We don't understand physics or computing"
+            }
+        };
+
+        const samplePitches = {
+            generic: "Our proprietary AI-powered platform leverages cutting-edge machine learning algorithms to deliver game-changing insights that will revolutionize your business operations. This seamless, plug-and-play solution requires no coding and provides enterprise-grade intelligence with unprecedented ROI. Our award-winning, industry-leading technology creates a paradigm shift in how businesses operate.",
+            
+            enterprise: "Introducing the next-generation enterprise AI suite that disrupts traditional business intelligence. Our military-grade, cognitive computing platform delivers transformative results through intelligent automation. This turnkey solution is completely future-proof and scales seamlessly with your organization. Best-in-class neural networks provide 10x productivity gains.",
+            
+            chatbot: "Our revolutionary conversational AI uses state-of-the-art natural language processing powered by proprietary deep learning models. This no-code solution offers seamless integration with your existing systems. The platform's unprecedented ability to understand context delivers a truly cognitive experience that will transform customer engagement.",
+            
+            analytics: "Leverage our cutting-edge predictive analytics platform powered by artificial intelligence and machine learning. This game-changing solution provides actionable insights through our proprietary algorithms. The synergy between our neural networks and your data creates transformative business value with guaranteed ROI."
+        };
+
+        function loadSample(type) {
+            document.getElementById('vendor-pitch').value = samplePitches[type];
+        }
+
+        function analyzePitch() {
+            const pitch = document.getElementById('vendor-pitch').value;
+            if (!pitch.trim()) {
+                alert('Please paste a vendor pitch first!');
+                return;
+            }
+
+            // Show analyzing state
+            const btn = document.querySelector('.analyze-btn');
+            btn.classList.add('analyzing');
+            btn.textContent = '🔄 Analyzing BS Levels...';
+
+            // Show scanner effect
+            document.querySelector('.scanner-effect').classList.add('active');
+
+            // Simulate analysis time
+            setTimeout(() => {
+                performAnalysis(pitch);
+                btn.classList.remove('analyzing');
+                btn.textContent = '🔍 Detect BS Level';
+                document.querySelector('.scanner-effect').classList.remove('active');
+            }, 2000);
+        }
+
+        function performAnalysis(pitch) {
+            const lowerPitch = pitch.toLowerCase();
+            let totalScore = 0;
+            let foundFlags = [];
+            let maxScore = 0;
+
+            // Check for BS phrases
+            for (const [phrase, data] of Object.entries(bsPhrases)) {
+                if (lowerPitch.includes(phrase)) {
+                    totalScore += data.score;
+                    maxScore += data.score;
+                    foundFlags.push({
+                        phrase: phrase,
+                        explanation: data.explanation,
+                        score: data.score
+                    });
+                }
+            }
+
+            // Calculate percentage (cap at 100)
+            let percentage = Math.min(Math.round((totalScore / 100) * 100), 100);
+            
+            // Adjust based on pitch length (more words = more potential BS)
+            const wordCount = pitch.split(' ').length;
+            if (wordCount > 200) percentage = Math.min(percentage + 10, 100);
+            if (wordCount > 500) percentage = Math.min(percentage + 10, 100);
+
+            // Check for specific patterns
+            if (lowerPitch.includes('ai') && lowerPitch.includes('blockchain')) {
+                percentage = Math.min(percentage + 20, 100);
+            }
+            if ((lowerPitch.match(/revolutionary|game-changing|disrupting/gi) || []).length > 2) {
+                percentage = Math.min(percentage + 15, 100);
+            }
+
+            // Show results
+            showResults(percentage, foundFlags);
+        }
+
+        function showResults(score, flags) {
+            // Show results section
+            document.getElementById('results').classList.add('show');
+            
+            // Animate the meter
+            setTimeout(() => {
+                const arc = document.getElementById('meterArc');
+                const needle = document.getElementById('needle');
+                const scoreText = document.getElementById('bs-score');
+                
+                // Animate arc fill
+                const offset = 377 - (377 * score / 100);
+                arc.style.transition = 'stroke-dashoffset 1.5s ease';
+                arc.style.strokeDashoffset = offset;
+                
+                // Rotate needle
+                const rotation = -90 + (180 * score / 100);
+                needle.style.transition = 'transform 1.5s ease';
+                needle.style.transform = `rotate(${rotation}deg)`;
+                needle.style.transformOrigin = '150px 120px';
+                
+                // Animate score text
+                let currentScore = 0;
+                const increment = score / 30;
+                const timer = setInterval(() => {
+                    currentScore += increment;
+                    if (currentScore >= score) {
+                        currentScore = score;
+                        clearInterval(timer);
+                    }
+                    scoreText.textContent = Math.round(currentScore) + '%';
+                }, 50);
+                
+                // Set verdict
+                const verdict = document.getElementById('verdict');
+                if (score < 25) {
+                    verdict.className = 'verdict low';
+                    verdict.textContent = '✅ Surprisingly Honest!';
+                } else if (score < 50) {
+                    verdict.className = 'verdict medium';
+                    verdict.textContent = '⚠️ Moderate BS Detected';
+                } else if (score < 75) {
+                    verdict.className = 'verdict high';
+                    verdict.textContent = '🚨 High BS Alert!';
+                } else {
+                    verdict.className = 'verdict extreme';
+                    verdict.textContent = '💀 WEAPONS-GRADE BS!';
+                }
+            }, 100);
+            
+            // Display red flags
+            const flagsContainer = document.getElementById('red-flags');
+            flagsContainer.innerHTML = '';
+            
+            // Sort flags by score
+            flags.sort((a, b) => b.score - a.score);
+            
+            flags.slice(0, 8).forEach((flag, index) => {
+                const flagDiv = document.createElement('div');
+                flagDiv.className = 'flag-item';
+                flagDiv.style.animationDelay = `${index * 0.1}s`;
+                flagDiv.innerHTML = `
+                    <div class="flag-phrase">"${flag.phrase}" (+${flag.score} BS points)</div>
+                    <div class="flag-explanation">${flag.explanation}</div>
+                `;
+                flagsContainer.appendChild(flagDiv);
+            });
+            
+            // Add translations
+            const translationsContainer = document.getElementById('translations');
+            translationsContainer.innerHTML = '';
+            
+            const translations = generateTranslations(score);
+            translations.forEach((trans, index) => {
+                const transDiv = document.createElement('div');
+                transDiv.className = 'translation-item';
+                transDiv.style.animationDelay = `${index * 0.15}s`;
+                transDiv.innerHTML = `
+                    <div class="translation-icon">${trans.icon}</div>
+                    <div class="translation-text">
+                        <div class="they-say">They say: "${trans.theySay}"</div>
+                        <div class="they-mean">They mean: "${trans.theyMean}"</div>
+                    </div>
+                `;
+                translationsContainer.appendChild(transDiv);
+            });
+            
+            // Update share links
+            updateShareLinks(score);
+            
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function generateTranslations(score) {
+            const translations = [
+                {
+                    icon: '🎯',
+                    theySay: "We offer a complete solution",
+                    theyMean: "We'll sell you more stuff later"
+                },
+                {
+                    icon: '💰',
+                    theySay: "Competitive pricing",
+                    theyMean: "Expensive, but so is everyone else"
+                },
+                {
+                    icon: '🚀',
+                    theySay: "Fast implementation",
+                    theyMean: "Fast to start, slow to finish"
+                },
+                {
+                    icon: '🤖',
+                    theySay: "AI-powered insights",
+                    theyMean: "We graph your data differently"
+                },
+                {
+                    icon: '📈',
+                    theySay: "Proven ROI",
+                    theyMean: "One customer saved money once"
+                }
+            ];
+            
+            if (score > 50) {
+                translations.push({
+                    icon: '🎪',
+                    theySay: "Industry disruption",
+                    theyMean: "We're really good at marketing"
+                });
+            }
+            
+            if (score > 75) {
+                translations.push({
+                    icon: '🦄',
+                    theySay: "Unprecedented capabilities",
+                    theyMean: "We haven't tested this properly"
+                });
+            }
+            
+            return translations.slice(0, 5);
+        }
+
+        function updateShareLinks(score) {
+            const message = `I just analyzed a vendor pitch with the AI BS Detector and it scored ${score}% on the BS scale! 😂`;
+            const url = window.location.href;
+            
+            document.getElementById('linkedin-share').href = 
+                `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(message)}`;
+            
+            document.getElementById('twitter-share').href = 
+                `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(url)}`;
+        }
+
+        function resetDetector() {
+            document.getElementById('vendor-pitch').value = '';
+            document.getElementById('results').classList.remove('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Add keyboard shortcut
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                analyzePitch();
+            }
+        });
+    </script>
+</body>
+</html>

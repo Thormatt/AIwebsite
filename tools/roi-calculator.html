@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI ROI Calculator - Thor AI Advisory</title>
+    <meta name="description" content="Calculate realistic ROI projections for your AI implementation with actual costs and timelines">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .calculator-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .calculator-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .calculator-header p {
+            font-size: 1.125rem;
+            color: #6b7280;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .input-section h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.15s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .input-helper {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .results-section h2 {
+            font-size: 1.875rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #d4a574;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .timeline-chart {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 200px;
+            padding: 1rem 0;
+        }
+
+        .timeline-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 0.5rem;
+        }
+
+        .bar {
+            width: 100%;
+            background: #d4a574;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s ease;
+            min-height: 10px;
+        }
+
+        .bar-label {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .warning-box {
+            background: rgba(217, 119, 6, 0.1);
+            border: 1px solid rgba(217, 119, 6, 0.3);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .warning-box p {
+            color: #fbbf24;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #d4a574;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .calculate-btn:hover {
+            background: #b8935f;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #d4a574;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #b8935f;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <a href="../index.html" class="back-link">← Back to Main Site</a>
+
+        <div class="calculator-header">
+            <h1>AI ROI Calculator</h1>
+            <p>Get realistic projections based on your specific use case and implementation approach</p>
+        </div>
+
+        <div class="calculator-grid">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h2>📊 Project Parameters</h2>
+
+                <div class="input-group">
+                    <label for="use-case">Use Case Type</label>
+                    <select id="use-case">
+                        <option value="customer-service">Customer Service Automation</option>
+                        <option value="content-generation">Content Generation</option>
+                        <option value="data-analysis">Data Analysis & Insights</option>
+                        <option value="process-automation">Process Automation</option>
+                        <option value="predictive-analytics">Predictive Analytics</option>
+                        <option value="custom">Custom Implementation</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="company-size">Company Size (Employees)</label>
+                    <input type="number" id="company-size" value="500" min="1">
+                    <span class="input-helper">Total number of employees</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="affected-employees">Affected Employees</label>
+                    <input type="number" id="affected-employees" value="50" min="1">
+                    <span class="input-helper">Employees who will use the AI system</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="average-salary">Average Annual Salary ($)</label>
+                    <input type="number" id="average-salary" value="75000" min="0">
+                    <span class="input-helper">Average salary of affected employees</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="implementation-type">Implementation Approach</label>
+                    <select id="implementation-type">
+                        <option value="saas">SaaS Solution (Quick)</option>
+                        <option value="hybrid">Hybrid (SaaS + Customization)</option>
+                        <option value="custom">Full Custom Development</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="monthly-volume">Monthly Transaction Volume</label>
+                    <input type="number" id="monthly-volume" value="10000" min="0">
+                    <span class="input-helper">Queries, documents, or transactions per month</span>
+                </div>
+            </div>
+
+            <!-- Cost Inputs Section -->
+            <div class="input-section">
+                <h2>💰 Cost Estimates</h2>
+
+                <div class="input-group">
+                    <label for="initial-investment">Initial Investment ($)</label>
+                    <input type="number" id="initial-investment" value="50000" min="0">
+                    <span class="input-helper">Setup, integration, initial licenses</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="monthly-cost">Monthly Operating Cost ($)</label>
+                    <input type="number" id="monthly-cost" value="5000" min="0">
+                    <span class="input-helper">Licenses, API costs, maintenance</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="training-cost">Training & Change Management ($)</label>
+                    <input type="number" id="training-cost" value="15000" min="0">
+                    <span class="input-helper">Employee training and transition costs</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="efficiency-gain">Expected Efficiency Gain (%)</label>
+                    <input type="number" id="efficiency-gain" value="20" min="0" max="100">
+                    <span class="input-helper">Time saved on affected tasks</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="ramp-time">Ramp-up Time (months)</label>
+                    <input type="number" id="ramp-time" value="6" min="1" max="24">
+                    <span class="input-helper">Time to reach full efficiency</span>
+                </div>
+
+                <button class="calculate-btn" onclick="calculateROI()">Calculate ROI</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="results" style="display: none;">
+            <h2>📈 ROI Analysis</h2>
+
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value" id="breakeven">--</div>
+                    <div class="metric-label">Months to Break-Even</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="roi-1year">--</div>
+                    <div class="metric-label">1-Year ROI</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="roi-3year">--</div>
+                    <div class="metric-label">3-Year ROI</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="monthly-savings">--</div>
+                    <div class="metric-label">Monthly Savings (Peak)</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem;">Cumulative Value Over Time</h3>
+                <div class="timeline-chart" id="timeline-chart">
+                    <div class="timeline-bar">
+                        <div class="bar" id="bar-6mo"></div>
+                        <div class="bar-label">6 mo</div>
+                    </div>
+                    <div class="timeline-bar">
+                        <div class="bar" id="bar-12mo"></div>
+                        <div class="bar-label">12 mo</div>
+                    </div>
+                    <div class="timeline-bar">
+                        <div class="bar" id="bar-18mo"></div>
+                        <div class="bar-label">18 mo</div>
+                    </div>
+                    <div class="timeline-bar">
+                        <div class="bar" id="bar-24mo"></div>
+                        <div class="bar-label">24 mo</div>
+                    </div>
+                    <div class="timeline-bar">
+                        <div class="bar" id="bar-36mo"></div>
+                        <div class="bar-label">36 mo</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>Reality Check:</strong> These projections assume perfect execution. In practice, expect 20-40% variance due to adoption challenges, technical issues, and unforeseen costs. The median AI project takes 50% longer than planned and costs 30% more than budgeted.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateROI() {
+            // Get input values
+            const useCase = document.getElementById('use-case').value;
+            const companySize = parseFloat(document.getElementById('company-size').value);
+            const affectedEmployees = parseFloat(document.getElementById('affected-employees').value);
+            const avgSalary = parseFloat(document.getElementById('average-salary').value);
+            const implementationType = document.getElementById('implementation-type').value;
+            const monthlyVolume = parseFloat(document.getElementById('monthly-volume').value);
+            const initialInvestment = parseFloat(document.getElementById('initial-investment').value);
+            const monthlyCost = parseFloat(document.getElementById('monthly-cost').value);
+            const trainingCost = parseFloat(document.getElementById('training-cost').value);
+            const efficiencyGain = parseFloat(document.getElementById('efficiency-gain').value) / 100;
+            const rampTime = parseFloat(document.getElementById('ramp-time').value);
+
+            // Calculate monthly value
+            const hourlyRate = avgSalary / (52 * 40);
+            const monthlyHoursSaved = affectedEmployees * (40 * 4.33 * efficiencyGain);
+            const peakMonthlySavings = monthlyHoursSaved * hourlyRate;
+
+            // Calculate costs and savings over time
+            const totalInitialCost = initialInvestment + trainingCost;
+            let cumulativeValue = -totalInitialCost;
+            let breakEvenMonth = 0;
+            let values = [];
+
+            for (let month = 1; month <= 36; month++) {
+                // Ramp-up effect
+                const rampFactor = Math.min(month / rampTime, 1);
+                const monthlySavings = peakMonthlySavings * rampFactor;
+                const netMonthly = monthlySavings - monthlyCost;
+
+                cumulativeValue += netMonthly;
+                values.push(cumulativeValue);
+
+                if (cumulativeValue > 0 && breakEvenMonth === 0) {
+                    breakEvenMonth = month;
+                }
+            }
+
+            // Calculate ROI percentages
+            const roi1Year = ((values[11] / totalInitialCost) * 100).toFixed(0);
+            const roi3Year = ((values[35] / totalInitialCost) * 100).toFixed(0);
+
+            // Update display
+            document.getElementById('breakeven').textContent = breakEvenMonth || '36+';
+            document.getElementById('roi-1year').textContent = roi1Year + '%';
+            document.getElementById('roi-3year').textContent = roi3Year + '%';
+            document.getElementById('monthly-savings').textContent = '$' + peakMonthlySavings.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+            // Update chart
+            const maxValue = Math.max(...values, 0);
+            const minValue = Math.min(...values, 0);
+            const range = maxValue - minValue;
+
+            const updateBar = (id, index) => {
+                const value = values[index];
+                const height = Math.max(((value - minValue) / range) * 180, 10);
+                document.getElementById(id).style.height = height + 'px';
+                document.getElementById(id).style.background = value > 0 ? '#10b981' : '#ef4444';
+            };
+
+            updateBar('bar-6mo', 5);
+            updateBar('bar-12mo', 11);
+            updateBar('bar-18mo', 17);
+            updateBar('bar-24mo', 23);
+            updateBar('bar-36mo', 35);
+
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

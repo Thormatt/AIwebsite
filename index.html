@@ -3,397 +3,461 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Consulting Services | Transform Your Business with AI</title>
-    <meta name="description" content="Expert AI consulting services to help your business leverage artificial intelligence. Strategy, implementation, and training from experienced AI consultants.">
+    <title>Thor - AI Strategy Without the Hype</title>
+    <meta name="description" content="Independent AI advisory for executives. Clear thinking about artificial intelligence without vendor pitches or transformation theater.">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Thor AI">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">AI Consulting Pro</div>
-            <ul class="nav-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#process">Process</a></li>
-                <li><a href="#contact" class="cta-button">Get Started</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">Thor</a>
+            <div class="nav-links">
+                <a href="#thinking">Thinking</a>
+                <a href="#how-i-help">Advisory</a>
+                <a href="#tools">Tools</a>
+                <a href="#office-hours">Office Hours</a>
+                <a href="#about">About</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
+    <!-- Hero -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="hero-name">Thor</h1>
+            <p class="hero-tagline">AI Strategy Without the Hype</p>
+            <p class="hero-description">
+                I help executives understand AI—what it can do,<br>
+                what it can't, and whether it makes sense for<br>
+                their business.
+            </p>
+            <p class="hero-philosophy">
+                No vendor pitches. No transformation theater.<br>
+                Just clear thinking about artificial intelligence.
+            </p>
+
+            <!-- Animated Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" data-value="78">0</span><span class="stat-suffix">%</span>
+                    <span class="stat-label">of companies use AI</span>
+                </div>
+                <div class="stat-card highlight">
+                    <span class="stat-number" data-value="74">0</span><span class="stat-suffix">%</span>
+                    <span class="stat-label">see no tangible value</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" data-value="3">0</span><span class="stat-suffix">x</span>
+                    <span class="stat-label">usage visibility gap</span>
+                </div>
+            </div>
+
+            <div class="hero-actions">
+                <a href="#executive-imperative" class="btn btn-primary">Understand the Gap</a>
+                <a href="#office-hours" class="btn btn-secondary">Book Office Hours</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Executive Imperative Section -->
+    <section id="executive-imperative" class="imperative">
         <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Transform Your Business with <span class="gradient-text">AI Excellence</span></h1>
-                <p class="hero-subtitle">Strategic AI consulting to help you leverage cutting-edge artificial intelligence for competitive advantage. From strategy to implementation, we guide your AI journey.</p>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <span class="stat-number">150+</span>
-                        <span class="stat-label">Projects Delivered</span>
+            <h2 class="section-title">The Executive Imperative</h2>
+
+            <div class="imperative-content">
+                <div class="key-stat">
+                    <p class="stat-main">78% of organizations now use AI in at least one function.</p>
+                    <p class="stat-secondary">Yet 74% have yet to show tangible value.</p>
+                    <cite class="stat-source">— McKinsey Global Survey on AI, 2024</cite>
+                </div>
+
+                <div class="insight-text">
+                    <h3>The gap isn't technical—it's strategic.</h3>
+                    <p>While your competitors rush to implement, the winners are those who first understand what AI can actually do. CEOs report their teams are using AI <strong>3x more</strong> than they realize. Boards are asking questions executives can't answer.</p>
+                    <p class="emphasis">This isn't about keeping up. It's about knowing which bets to make.</p>
+                </div>
+            </div>
+
+            <!-- AI Value Gap Visualization -->
+            <div class="value-gap-chart">
+                <h3>The AI Value Gap</h3>
+                <div class="chart-container">
+                    <div class="chart-bar adoption">
+                        <div class="bar-fill" data-percent="78">
+                            <span class="bar-label">Adoption Rate</span>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <span class="stat-number">40%</span>
-                        <span class="stat-label">Average ROI Increase</span>
+                    <div class="chart-bar value">
+                        <div class="bar-fill" data-percent="26">
+                            <span class="bar-label">Value Realization</span>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <span class="stat-number">95%</span>
-                        <span class="stat-label">Client Satisfaction</span>
+                    <div class="gap-indicator">
+                        <span class="gap-text">52% Gap</span>
+                        <svg class="gap-arrow" width="60" height="40">
+                            <path d="M10 20 L50 20" stroke="#d4a574" stroke-width="2" stroke-dasharray="5,5"/>
+                            <path d="M45 15 L50 20 L45 25" stroke="#d4a574" stroke-width="2" fill="none"/>
+                        </svg>
                     </div>
                 </div>
-                <div class="hero-buttons">
-                    <a href="#contact" class="btn btn-primary">Schedule Consultation</a>
-                    <a href="#services" class="btn btn-secondary">Explore Services</a>
+            </div>
+
+            <!-- Executive Blind Spots -->
+            <div class="blind-spots">
+                <h3>Three Critical Blind Spots</h3>
+                <div class="blind-spots-grid">
+                    <div class="blind-spot">
+                        <div class="spot-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48">
+                                <circle cx="24" cy="24" r="20" stroke="#4a5d4e" stroke-width="2" fill="none"/>
+                                <circle cx="18" cy="20" r="2" fill="#4a5d4e"/>
+                                <circle cx="30" cy="20" r="2" fill="#4a5d4e"/>
+                                <path d="M18 32 Q24 28, 30 32" stroke="#4a5d4e" stroke-width="2" fill="none"/>
+                            </svg>
+                        </div>
+                        <h4>What executives think AI does</h4>
+                        <p>"It will automate everything and solve all our efficiency problems"</p>
+                    </div>
+                    <div class="blind-spot">
+                        <div class="spot-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48">
+                                <rect x="8" y="8" width="32" height="32" stroke="#2c3e50" stroke-width="2" fill="none"/>
+                                <path d="M8 18 L40 18" stroke="#2c3e50" stroke-width="2"/>
+                                <circle cx="24" cy="28" r="4" fill="#d4a574"/>
+                            </svg>
+                        </div>
+                        <h4>What vendors promise</h4>
+                        <p>"Our platform is plug-and-play with immediate ROI"</p>
+                    </div>
+                    <div class="blind-spot">
+                        <div class="spot-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48">
+                                <path d="M24 8 L40 20 L40 36 L24 48 L8 36 L8 20 Z" stroke="#4a5d4e" stroke-width="2" fill="none"/>
+                                <circle cx="24" cy="28" r="6" fill="#4a5d4e" opacity="0.2"/>
+                            </svg>
+                        </div>
+                        <h4>What AI actually does</h4>
+                        <p>"Pattern matching at scale, requiring clean data and clear objectives"</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="services" class="services">
+    <!-- Current Thinking -->
+    <section id="thinking" class="thinking">
         <div class="container">
-            <div class="section-header">
-                <h2>AI Consulting Services</h2>
-                <p>Comprehensive AI solutions tailored to your business needs</p>
+            <h2 class="section-title">Current Thinking</h2>
+            <p class="section-subtitle">Essays on AI strategy, implementation, and reality checks</p>
+
+            <div class="articles">
+                <article class="article">
+                    <time class="article-date">November 2024</time>
+                    <h3 class="article-title">Why Most AI Projects Fail (And How to Avoid It)</h3>
+                    <p class="article-excerpt">
+                        The uncomfortable truth is that 80% of AI initiatives never make it to production.
+                        It's not about the technology—it's about misaligned expectations and solving the wrong problems.
+                    </p>
+                    <a href="#" class="article-link">Continue reading →</a>
+                </article>
+
+                <article class="article">
+                    <time class="article-date">November 2024</time>
+                    <h3 class="article-title">The Real Cost of GPT-4 in Production</h3>
+                    <p class="article-excerpt">
+                        Everyone talks about the possibilities. Few discuss the economics. Here's what it actually
+                        costs to run LLMs at scale, and why that matters for your use case.
+                    </p>
+                    <a href="#" class="article-link">Continue reading →</a>
+                </article>
+
+                <article class="article">
+                    <time class="article-date">October 2024</time>
+                    <h3 class="article-title">When NOT to Use AI: A Guide for Leaders</h3>
+                    <p class="article-excerpt">
+                        AI isn't always the answer. Sometimes a simple rule-based system, a spreadsheet,
+                        or human judgment is better. Here's how to tell the difference.
+                    </p>
+                    <a href="#" class="article-link">Continue reading →</a>
+                </article>
+
+                <article class="article">
+                    <time class="article-date">October 2024</time>
+                    <h3 class="article-title">Understanding LLMs: A Non-Technical Primer</h3>
+                    <p class="article-excerpt">
+                        What executives need to know about Large Language Models—without the math,
+                        but with enough depth to make informed decisions.
+                    </p>
+                    <a href="#" class="article-link">Continue reading →</a>
+                </article>
             </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">🎯</div>
-                    <h3>AI Strategy & Roadmapping</h3>
-                    <p>Develop a comprehensive AI strategy aligned with your business goals. We create actionable roadmaps for successful AI adoption.</p>
-                    <ul class="service-features">
-                        <li>AI readiness assessment</li>
-                        <li>Opportunity identification</li>
-                        <li>Implementation roadmap</li>
-                        <li>ROI projections</li>
-                    </ul>
+        </div>
+    </section>
+
+    <!-- Common Misconceptions -->
+    <section class="misconceptions">
+        <div class="container">
+            <h2 class="section-title">Common Misconceptions</h2>
+            <p class="section-subtitle">Let's separate AI reality from Silicon Valley storytelling</p>
+
+            <div class="misconception-grid">
+                <div class="misconception">
+                    <h3 class="myth">Myth: "AI will replace all jobs"</h3>
+                    <p class="reality">Reality: AI augments specific tasks, not entire roles. The jobs that disappear
+                    are rarely the ones people predict.</p>
                 </div>
-                <div class="service-card featured">
-                    <div class="service-badge">Most Popular</div>
-                    <div class="service-icon">🤖</div>
-                    <h3>Generative AI Implementation</h3>
-                    <p>Deploy cutting-edge generative AI solutions including ChatGPT, Claude, and custom LLMs tailored to your needs.</p>
-                    <ul class="service-features">
-                        <li>Custom GPT development</li>
-                        <li>RAG implementation</li>
-                        <li>Prompt engineering</li>
-                        <li>Model fine-tuning</li>
-                    </ul>
+
+                <div class="misconception">
+                    <h3 class="myth">Myth: "AI understands context"</h3>
+                    <p class="reality">Reality: It's sophisticated pattern matching. LLMs don't "understand"
+                    —they predict statistically likely responses.</p>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon">📊</div>
-                    <h3>Data Strategy & Analytics</h3>
-                    <p>Build robust data foundations to power your AI initiatives with quality data management and analytics.</p>
-                    <ul class="service-features">
-                        <li>Data architecture design</li>
-                        <li>Data pipeline development</li>
-                        <li>Analytics dashboards</li>
-                        <li>Data governance</li>
-                    </ul>
+
+                <div class="misconception">
+                    <h3 class="myth">Myth: "More data equals better AI"</h3>
+                    <p class="reality">Reality: Quality beats quantity. Clean, relevant data from 100 examples
+                    often outperforms messy data from 10,000.</p>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon">⚡</div>
-                    <h3>AI Process Automation</h3>
-                    <p>Automate repetitive tasks and workflows using intelligent automation and AI-powered solutions.</p>
-                    <ul class="service-features">
-                        <li>Workflow automation</li>
-                        <li>Document processing</li>
-                        <li>Intelligent chatbots</li>
-                        <li>RPA integration</li>
-                    </ul>
+
+                <div class="misconception">
+                    <h3 class="myth">Myth: "AI is unbiased"</h3>
+                    <p class="reality">Reality: AI amplifies the biases in its training data.
+                    The question isn't if it's biased, but how and whether that matters for your use case.</p>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon">🎓</div>
-                    <h3>AI Training & Workshops</h3>
-                    <p>Empower your team with AI knowledge through customized training programs and hands-on workshops.</p>
-                    <ul class="service-features">
-                        <li>Executive briefings</li>
-                        <li>Technical training</li>
-                        <li>Hands-on workshops</li>
-                        <li>Certification programs</li>
-                    </ul>
+
+                <div class="misconception">
+                    <h3 class="myth">Myth: "We need AI to stay competitive"</h3>
+                    <p class="reality">Reality: You need to solve real problems. Sometimes that's AI,
+                    often it's fixing your data infrastructure first.</p>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon">🛡️</div>
-                    <h3>AI Governance & Ethics</h3>
-                    <p>Establish responsible AI frameworks ensuring ethical, compliant, and trustworthy AI deployments.</p>
-                    <ul class="service-features">
-                        <li>Ethics frameworks</li>
-                        <li>Compliance guidance</li>
-                        <li>Risk assessment</li>
-                        <li>Bias mitigation</li>
-                    </ul>
+
+                <div class="misconception">
+                    <h3 class="myth">Myth: "AI is plug-and-play"</h3>
+                    <p class="reality">Reality: Successful AI requires continuous iteration, monitoring,
+                    and adjustment. It's a capability, not a product.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="pricing">
+    <!-- How I Help -->
+    <section id="how-i-help" class="services">
         <div class="container">
-            <div class="section-header">
-                <h2>Flexible Engagement Models</h2>
-                <p>Choose the pricing structure that works best for your needs</p>
-            </div>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>Hourly Consulting</h3>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">250-350</span>
-                        <span class="period">/hour</span>
-                    </div>
-                    <p class="price-description">Perfect for quick consultations and specific technical questions</p>
-                    <ul class="pricing-features">
-                        <li>✓ Expert guidance on-demand</li>
-                        <li>✓ Flexible scheduling</li>
-                        <li>✓ No long-term commitment</li>
-                        <li>✓ Quick problem solving</li>
-                        <li>✓ Strategic advice</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-outline">Get Started</a>
+            <h2 class="section-title">How I Help</h2>
+            <p class="section-subtitle">Pragmatic guidance for leaders navigating AI decisions</p>
+
+            <div class="service-grid">
+                <div class="service">
+                    <h3>Executive Briefings</h3>
+                    <p>Two-hour sessions covering AI fundamentals, tailored to your industry and specific challenges.
+                    No slides, just conversation and whiteboarding.</p>
+                    <span class="service-format">In-person or remote • $2,500</span>
                 </div>
-                <div class="pricing-card featured">
-                    <div class="pricing-badge">Recommended</div>
-                    <h3>Monthly Retainer</h3>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">15-25K</span>
-                        <span class="period">/month</span>
-                    </div>
-                    <p class="price-description">Ongoing support with continuous optimization and guidance</p>
-                    <ul class="pricing-features">
-                        <li>✓ Dedicated consultant hours</li>
-                        <li>✓ Priority support</li>
-                        <li>✓ Regular strategy sessions</li>
-                        <li>✓ Continuous optimization</li>
-                        <li>✓ Team training included</li>
-                        <li>✓ Monthly progress reports</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-primary">Schedule Call</a>
+
+                <div class="service">
+                    <h3>Strategic Assessment</h3>
+                    <p>Is AI right for your use case? I'll analyze your problem, data, and constraints
+                    to give you an honest assessment—even if the answer is "not yet."</p>
+                    <span class="service-format">2-week engagement • $15,000</span>
                 </div>
-                <div class="pricing-card">
-                    <h3>Project-Based</h3>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">50-250K</span>
-                        <span class="period">/project</span>
-                    </div>
-                    <p class="price-description">Complete AI implementations with defined scope and deliverables</p>
-                    <ul class="pricing-features">
-                        <li>✓ Fixed scope & timeline</li>
-                        <li>✓ End-to-end implementation</li>
-                        <li>✓ Dedicated project team</li>
-                        <li>✓ Clear deliverables</li>
-                        <li>✓ Post-launch support</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-outline">Discuss Project</a>
+
+                <div class="service">
+                    <h3>Vendor Translation</h3>
+                    <p>What are they actually selling? I'll decode vendor pitches, benchmark proposals,
+                    and help you ask the right questions before signing contracts.</p>
+                    <span class="service-format">Per evaluation • $5,000</span>
+                </div>
+
+                <div class="service">
+                    <h3>Team Education</h3>
+                    <p>Workshops for your team—from engineers to executives. Practical, jargon-free,
+                    focused on what matters for your business.</p>
+                    <span class="service-format">Half-day workshop • $7,500</span>
+                </div>
+
+                <div class="service">
+                    <h3>Ongoing Advisory</h3>
+                    <p>Monthly calls, Slack access, and strategic guidance as you build AI capabilities.
+                    For leaders who want a trusted advisor, not another consultant.</p>
+                    <span class="service-format">Monthly retainer • $10,000</span>
+                </div>
+
+                <div class="service">
+                    <h3>Board Presentations</h3>
+                    <p>Help your board understand AI's impact on your business. I'll prepare you
+                    or present directly—translating complexity into strategic insight.</p>
+                    <span class="service-format">Per presentation • $8,000</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- Interactive Tools Section -->
+    <section id="tools" class="tools-section">
+        <div class="container">
+            <div class="tools-intro">
+                <h2 class="section-title">Free AI Assessment Tools</h2>
+                <p class="section-subtitle">No email required. No sales pitch. Just honest analysis to help you make better AI decisions.</p>
+            </div>
+
+            <div class="tools-grid">
+                <!-- BS Detector Tool -->
+                <div class="tool-card">
+                    <div class="tool-badge">Most Popular</div>
+                    <div class="tool-header">
+                        <div class="tool-icon">🚨</div>
+                        <h3 class="tool-title">Vendor BS Detector</h3>
+                        <p class="tool-tagline">Decode the marketing fluff instantly</p>
+                    </div>
+                    <div class="tool-body">
+                        <p class="tool-description">
+                            Paste any vendor's pitch and watch our algorithm expose the buzzword density, 
+                            translate the jargon, and give you a reality check.
+                        </p>
+                        <div class="tool-cta">
+                            <a href="tools/bs-detector.html" class="btn btn-primary" target="_blank">
+                                Launch Detector
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROI Calculator -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">💰</div>
+                        <h3 class="tool-title">ROI Calculator</h3>
+                        <p class="tool-tagline">Get realistic cost projections</p>
+                    </div>
+                    <div class="tool-body">
+                        <p class="tool-description">
+                            Calculate actual implementation costs, break-even points, and 3-year projections 
+                            based on your specific use case and approach.
+                        </p>
+                        <div class="tool-cta">
+                            <a href="tools/roi-calculator.html" class="btn btn-primary" target="_blank">
+                                Calculate ROI
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Readiness Assessment -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">📊</div>
+                        <h3 class="tool-title">Readiness Assessment</h3>
+                        <p class="tool-tagline">Measure your AI maturity level</p>
+                    </div>
+                    <div class="tool-body">
+                        <p class="tool-description">
+                            Take a 10-question assessment across data, technical, business, and culture 
+                            dimensions to get your personalized AI roadmap.
+                        </p>
+                        <div class="tool-cta">
+                            <a href="tools/ai-assessment.html" class="btn btn-primary" target="_blank">
+                                Start Assessment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Office Hours -->
+    <section id="office-hours" class="office-hours">
+        <div class="container">
+            <h2 class="section-title">Office Hours</h2>
+            <p class="section-subtitle">Book 30 minutes to discuss your AI questions—no pitch, just conversation</p>
+
+            <div class="calendar-container">
+                <div class="calendar-info">
+                    <p>I hold open office hours every Tuesday and Thursday afternoon.</p>
+                    <p>These calls are free and informal—bring your questions about AI strategy,
+                    implementation challenges, or just to think through whether AI makes sense for your situation.</p>
+                    <p>No preparation needed. No follow-up sales calls.</p>
+                    <a href="#" class="btn btn-primary">Schedule a Call</a>
+                </div>
+                <div class="calendar-visual">
+                    <div class="calendar-week">
+                        <div class="day">
+                            <span class="day-name">Mon</span>
+                            <span class="day-status">—</span>
+                        </div>
+                        <div class="day available">
+                            <span class="day-name">Tue</span>
+                            <span class="day-status">2-5pm</span>
+                        </div>
+                        <div class="day">
+                            <span class="day-name">Wed</span>
+                            <span class="day-status">—</span>
+                        </div>
+                        <div class="day available">
+                            <span class="day-name">Thu</span>
+                            <span class="day-status">2-5pm</span>
+                        </div>
+                        <div class="day">
+                            <span class="day-name">Fri</span>
+                            <span class="day-status">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
     <section id="about" class="about">
         <div class="container">
+            <h2 class="section-title">About</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <h2>Your AI Transformation Partner</h2>
-                    <p class="lead">With over a decade of experience in artificial intelligence and machine learning, we help organizations navigate the complex landscape of AI adoption.</p>
-                    <p>We specialize in translating cutting-edge AI capabilities into practical business solutions. Our approach combines deep technical expertise with strategic business acumen to deliver measurable results.</p>
-                    <div class="expertise-areas">
-                        <h4>Areas of Expertise:</h4>
-                        <div class="expertise-grid">
-                            <span class="expertise-tag">Large Language Models</span>
-                            <span class="expertise-tag">Computer Vision</span>
-                            <span class="expertise-tag">Natural Language Processing</span>
-                            <span class="expertise-tag">Predictive Analytics</span>
-                            <span class="expertise-tag">Reinforcement Learning</span>
-                            <span class="expertise-tag">MLOps</span>
-                        </div>
-                    </div>
-                    <div class="certifications">
-                        <h4>Certifications & Partnerships:</h4>
-                        <div class="cert-logos">
-                            <span class="cert-item">AWS AI Certified</span>
-                            <span class="cert-item">Google Cloud AI</span>
-                            <span class="cert-item">Microsoft Azure AI</span>
-                            <span class="cert-item">OpenAI Partner</span>
-                        </div>
-                    </div>
+                    <p>
+                        I've spent the last decade working at the intersection of AI research and business strategy—first
+                        in academic research, then helping Fortune 500 companies separate AI reality from vendor fiction.
+                    </p>
+                    <p>
+                        I started this advisory practice because I kept seeing the same pattern: smart executives,
+                        overwhelmed by AI hype, making expensive mistakes that could have been avoided with honest guidance.
+                    </p>
+                    <p>
+                        My approach is simple: I tell you what AI can actually do today, what it might do tomorrow,
+                        and whether either matters for your business. No buzzwords, no false promises, just clear analysis.
+                    </p>
+                    <p>
+                        I work with 5-10 clients at a time, focusing on companies where thoughtful AI strategy
+                        can make a real difference—not those chasing AI for the sake of it.
+                    </p>
                 </div>
-                <div class="about-image">
-                    <div class="image-placeholder">
-                        <div class="ai-visual">
-                            <div class="neural-network">
-                                <div class="node"></div>
-                                <div class="node"></div>
-                                <div class="node"></div>
-                                <div class="node"></div>
-                                <div class="connection"></div>
-                                <div class="connection"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                <div class="about-credentials">
+                    <h3>Background</h3>
+                    <ul>
+                        <li>PhD in Computer Science (Machine Learning focus)</li>
+                        <li>Former AI Research Lead at [Previous Role]</li>
+                        <li>Published research in NeurIPS, ICML</li>
+                        <li>Advised 50+ enterprises on AI strategy</li>
+                    </ul>
 
-    <!-- Process Section -->
-    <section id="process" class="process">
-        <div class="container">
-            <div class="section-header">
-                <h2>Our Proven Process</h2>
-                <p>A systematic approach to AI implementation success</p>
-            </div>
-            <div class="process-steps">
-                <div class="process-step">
-                    <div class="step-number">01</div>
-                    <h3>Discovery & Assessment</h3>
-                    <p>We analyze your current state, identify opportunities, and assess AI readiness to create a tailored strategy.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">02</div>
-                    <h3>Strategy & Planning</h3>
-                    <p>Develop a comprehensive AI roadmap with clear milestones, ROI projections, and implementation priorities.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">03</div>
-                    <h3>Implementation</h3>
-                    <p>Execute the AI solution with agile methodology, ensuring seamless integration with existing systems.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">04</div>
-                    <h3>Optimization & Support</h3>
-                    <p>Continuous monitoring, optimization, and support to ensure maximum value from your AI investment.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="testimonials">
-        <div class="container">
-            <div class="section-header">
-                <h2>Client Success Stories</h2>
-                <p>See what our clients say about working with us</p>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p>"The AI strategy they developed transformed our operations. We've seen a 40% increase in efficiency within just 6 months."</p>
-                    <div class="testimonial-author">
-                        <strong>Sarah Johnson</strong>
-                        <span>CTO, TechCorp Solutions</span>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p>"Their generative AI implementation has revolutionized our customer service. Response times are down 70% with higher satisfaction scores."</p>
-                    <div class="testimonial-author">
-                        <strong>Michael Chen</strong>
-                        <span>VP Operations, RetailPlus</span>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p>"Exceptional expertise in AI governance. They helped us deploy AI responsibly while maintaining compliance with all regulations."</p>
-                    <div class="testimonial-author">
-                        <strong>Emily Rodriguez</strong>
-                        <span>Chief Data Officer, FinanceHub</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Transform Your Business with AI?</h2>
-                <p>Join the AI revolution and stay ahead of the competition</p>
-                <a href="#contact" class="btn btn-primary btn-large">Schedule Your Free Consultation</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-header">
-                <h2>Let's Start Your AI Journey</h2>
-                <p>Get in touch to discuss how AI can transform your business</p>
-            </div>
-            <div class="contact-content">
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="company">Company</label>
-                            <input type="text" id="company" name="company">
-                        </div>
-                        <div class="form-group">
-                            <label for="service">Service Interest</label>
-                            <select id="service" name="service">
-                                <option value="">Select a service</option>
-                                <option value="strategy">AI Strategy & Roadmapping</option>
-                                <option value="genai">Generative AI Implementation</option>
-                                <option value="data">Data Strategy & Analytics</option>
-                                <option value="automation">AI Process Automation</option>
-                                <option value="training">AI Training & Workshops</option>
-                                <option value="governance">AI Governance & Ethics</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="4" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
-                </div>
-                <div class="contact-info">
-                    <div class="info-card">
-                        <h3>Quick Response</h3>
-                        <p>We typically respond within 24 hours to discuss your AI needs.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>Free Consultation</h3>
-                        <p>Your first consultation is free. We'll assess your AI readiness and discuss potential solutions.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>No Obligation</h3>
-                        <p>Learn about AI opportunities for your business with no commitment required.</p>
-                    </div>
-                    <div class="contact-methods">
-                        <div class="contact-method">
-                            <span class="icon">📧</span>
-                            <span>contact@aiconsulting.pro</span>
-                        </div>
-                        <div class="contact-method">
-                            <span class="icon">📱</span>
-                            <span>Schedule a call</span>
-                        </div>
-                        <div class="contact-method">
-                            <span class="icon">💬</span>
-                            <span>Live chat available</span>
-                        </div>
-                    </div>
+                    <h3>Contact</h3>
+                    <p class="contact-email">thor@[yourdomain].com</p>
+                    <p class="contact-location">San Francisco / Remote</p>
                 </div>
             </div>
         </div>
@@ -403,47 +467,31 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-brand">
-                    <h4>AI Consulting Pro</h4>
-                    <p>Your trusted partner in AI transformation</p>
-                </div>
+                <p>&copy; 2024 Thor. Independent AI Advisory.</p>
                 <div class="footer-links">
-                    <h5>Quick Links</h5>
-                    <ul>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-services">
-                    <h5>Services</h5>
-                    <ul>
-                        <li><a href="#services">AI Strategy</a></li>
-                        <li><a href="#services">Generative AI</a></li>
-                        <li><a href="#services">Data Analytics</a></li>
-                        <li><a href="#services">AI Training</a></li>
-                    </ul>
-                </div>
-                <div class="footer-newsletter">
-                    <h5>Stay Updated</h5>
-                    <p>Get the latest AI insights and trends</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Your email">
-                        <button type="submit" class="btn btn-primary">Subscribe</button>
-                    </form>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 AI Consulting Pro. All rights reserved.</p>
-                <div class="footer-legal">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Email</a>
+                    <a href="#">RSS</a>
                 </div>
             </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful:', registration);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed:', err);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>

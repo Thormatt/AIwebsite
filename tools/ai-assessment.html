@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Readiness Assessment - Thor AI Advisory</title>
+    <meta name="description" content="Measure your organization's AI maturity across data, technical, business, and cultural dimensions">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .assessment-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .assessment-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .assessment-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .assessment-header p {
+            font-size: 1.125rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #d4a574 0%, #b8935f 100%);
+            height: 100%;
+            width: 0;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .question-container {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            min-height: 400px;
+            display: none;
+        }
+
+        .question-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-header {
+            margin-bottom: 2rem;
+        }
+
+        .question-category {
+            display: inline-block;
+            background: #f3f4f6;
+            color: #4b5563;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            color: #2c3e50;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 1.25rem;
+            background: #fafafa;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: #d4a574;
+            background: #fffbf5;
+        }
+
+        .option.selected {
+            border-color: #d4a574;
+            background: #fef3e6;
+        }
+
+        .option-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+            position: relative;
+        }
+
+        .option.selected .option-radio {
+            border-color: #d4a574;
+        }
+
+        .option.selected .option-radio::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 8px;
+            height: 8px;
+            background: #d4a574;
+            border-radius: 50%;
+        }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option-label {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .option-description {
+            font-size: 0.875rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-prev {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: #e5e7eb;
+        }
+
+        .btn-next {
+            background: #d4a574;
+            color: white;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background: #b8935f;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .overall-score {
+            font-size: 4rem;
+            font-weight: 600;
+            color: #d4a574;
+            margin: 1rem 0;
+        }
+
+        .score-label {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+
+        .maturity-level {
+            display: inline-block;
+            background: rgba(212, 165, 116, 0.2);
+            color: #d4a574;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        .dimension-scores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .dimension-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .dimension-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .dimension-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .dimension-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .dimension-score {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .recommendations {
+            background: #fafafa;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .recommendations h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        .recommendation-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendation-list li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .recommendation-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #d4a574;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #d4a574;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #b8935f;
+        }
+
+        .restart-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #d4a574;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+        }
+
+        .restart-btn:hover {
+            background: #b8935f;
+        }
+    </style>
+</head>
+<body>
+    <div class="assessment-container">
+        <a href="../index.html" class="back-link">← Back to Main Site</a>
+
+        <div class="assessment-header">
+            <h1>AI Readiness Assessment</h1>
+            <p>Answer 10 questions to understand your organization's AI maturity and get a personalized roadmap</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+
+        <!-- Questions -->
+        <div id="questions">
+            <!-- Question containers will be generated by JavaScript -->
+        </div>
+
+        <!-- Results -->
+        <div class="results-container" id="results">
+            <div class="score-card">
+                <div class="score-label">Overall AI Readiness Score</div>
+                <div class="overall-score" id="overall-score">--</div>
+                <div class="maturity-level" id="maturity-level">Calculating...</div>
+            </div>
+
+            <div class="dimension-scores" id="dimension-scores">
+                <!-- Dimension scores will be generated by JavaScript -->
+            </div>
+
+            <div class="recommendations">
+                <h2>Recommended Next Steps</h2>
+                <ul class="recommendation-list" id="recommendations">
+                    <!-- Recommendations will be generated by JavaScript -->
+                </ul>
+            </div>
+
+            <button class="restart-btn" onclick="restartAssessment()">Take Assessment Again</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                category: "Data Readiness",
+                text: "How would you describe your organization's data infrastructure?",
+                options: [
+                    { value: 1, label: "Ad-hoc", description: "Data is scattered across spreadsheets and individual systems" },
+                    { value: 2, label: "Basic", description: "Some centralized databases but limited integration" },
+                    { value: 3, label: "Structured", description: "Well-organized data warehouse with regular ETL processes" },
+                    { value: 4, label: "Advanced", description: "Real-time data pipeline with quality monitoring and governance" }
+                ]
+            },
+            {
+                id: 2,
+                category: "Data Readiness",
+                text: "What percentage of your critical business data is clean and accessible?",
+                options: [
+                    { value: 1, label: "Less than 25%", description: "Most data requires significant cleaning before use" },
+                    { value: 2, label: "25-50%", description: "Some clean datasets available but many gaps" },
+                    { value: 3, label: "50-75%", description: "Majority of data is usable with minor preparation" },
+                    { value: 4, label: "Over 75%", description: "Data is consistently clean and readily accessible" }
+                ]
+            },
+            {
+                id: 3,
+                category: "Technical Capability",
+                text: "What is your team's current AI/ML expertise level?",
+                options: [
+                    { value: 1, label: "Minimal", description: "No dedicated AI expertise, would need external help" },
+                    { value: 2, label: "Basic", description: "Some employees with basic ML knowledge or interest" },
+                    { value: 3, label: "Intermediate", description: "Small team with practical ML experience" },
+                    { value: 4, label: "Advanced", description: "Established data science team with production ML experience" }
+                ]
+            },
+            {
+                id: 4,
+                category: "Technical Capability",
+                text: "How mature is your IT infrastructure for supporting AI workloads?",
+                options: [
+                    { value: 1, label: "Legacy", description: "Aging on-premise systems, limited cloud adoption" },
+                    { value: 2, label: "Transitioning", description: "Mix of on-premise and cloud, modernization in progress" },
+                    { value: 3, label: "Modern", description: "Cloud-first approach with scalable compute resources" },
+                    { value: 4, label: "Optimized", description: "Elastic infrastructure with GPU access and MLOps pipelines" }
+                ]
+            },
+            {
+                id: 5,
+                category: "Business Alignment",
+                text: "How well-defined are your AI use cases and business objectives?",
+                options: [
+                    { value: 1, label: "Exploratory", description: "General interest but no specific use cases identified" },
+                    { value: 2, label: "Emerging", description: "Some ideas but lacking clear business case or metrics" },
+                    { value: 3, label: "Defined", description: "Clear use cases with estimated ROI and success metrics" },
+                    { value: 4, label: "Strategic", description: "AI roadmap integrated with business strategy and KPIs" }
+                ]
+            },
+            {
+                id: 6,
+                category: "Business Alignment",
+                text: "What's your leadership's stance on AI adoption?",
+                options: [
+                    { value: 1, label: "Skeptical", description: "Leadership is cautious or unconvinced about AI value" },
+                    { value: 2, label: "Curious", description: "Open to exploring but needs more education" },
+                    { value: 3, label: "Supportive", description: "Active support with allocated budget for pilots" },
+                    { value: 4, label: "Champion", description: "Leadership driving AI transformation with full commitment" }
+                ]
+            },
+            {
+                id: 7,
+                category: "Organizational Culture",
+                text: "How does your organization typically approach new technology adoption?",
+                options: [
+                    { value: 1, label: "Conservative", description: "Wait for proven solutions, avoid early adoption" },
+                    { value: 2, label: "Cautious", description: "Adopt after thorough vetting and peer validation" },
+                    { value: 3, label: "Progressive", description: "Willing to pilot new technologies with proper planning" },
+                    { value: 4, label: "Innovative", description: "Culture of experimentation and continuous learning" }
+                ]
+            },
+            {
+                id: 8,
+                category: "Organizational Culture",
+                text: "How prepared is your workforce for AI-driven changes?",
+                options: [
+                    { value: 1, label: "Resistant", description: "Significant concerns about job displacement" },
+                    { value: 2, label: "Uncertain", description: "Mixed feelings, need more communication and training" },
+                    { value: 3, label: "Open", description: "Generally positive with some reskilling initiatives" },
+                    { value: 4, label: "Eager", description: "Excited about AI augmentation with active upskilling" }
+                ]
+            },
+            {
+                id: 9,
+                category: "Risk & Governance",
+                text: "What's your approach to AI ethics and governance?",
+                options: [
+                    { value: 1, label: "Undefined", description: "Haven't considered AI-specific risks or ethics" },
+                    { value: 2, label: "Aware", description: "Recognize the importance but no formal framework" },
+                    { value: 3, label: "Developing", description: "Working on guidelines and responsible AI practices" },
+                    { value: 4, label: "Established", description: "Clear AI governance framework with ethics committee" }
+                ]
+            },
+            {
+                id: 10,
+                category: "Risk & Governance",
+                text: "How do you handle data privacy and security for AI systems?",
+                options: [
+                    { value: 1, label: "Basic", description: "Standard IT security with no AI-specific measures" },
+                    { value: 2, label: "Compliant", description: "Meet regulatory requirements but minimal beyond" },
+                    { value: 3, label: "Proactive", description: "Strong data governance with privacy-by-design approach" },
+                    { value: 4, label: "Advanced", description: "Comprehensive framework including model security and auditing" }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+        let questionElements = [];
+
+        function initAssessment() {
+            // Create question containers
+            const questionsContainer = document.getElementById('questions');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-container';
+                questionDiv.id = `question-${index}`;
+                if (index === 0) questionDiv.classList.add('active');
+
+                questionDiv.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-category">${q.category}</div>
+                        <div class="question-number">Question ${q.id} of ${questions.length}</div>
+                        <div class="question-text">${q.text}</div>
+                    </div>
+                    <div class="options-grid">
+                        ${q.options.map((opt, optIndex) => `
+                            <div class="option" onclick="selectOption(${index}, ${opt.value})">
+                                <div class="option-radio"></div>
+                                <div class="option-content">
+                                    <div class="option-label">${opt.label}</div>
+                                    <div class="option-description">${opt.description}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn btn-prev" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>
+                            Previous
+                        </button>
+                        <button class="nav-btn btn-next" onclick="nextQuestion()" disabled>
+                            ${index === questions.length - 1 ? 'See Results' : 'Next'}
+                        </button>
+                    </div>
+                `;
+
+                questionsContainer.appendChild(questionDiv);
+                questionElements.push(questionDiv);
+            });
+        }
+
+        function selectOption(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            // Update UI
+            const container = questionElements[questionIndex];
+            const options = container.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[value - 1].classList.add('selected');
+
+            // Enable next button
+            const nextBtn = container.querySelector('.btn-next');
+            nextBtn.disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                questionElements[currentQuestion].classList.remove('active');
+                currentQuestion++;
+                questionElements[currentQuestion].classList.add('active');
+                updateProgress();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                questionElements[currentQuestion].classList.remove('active');
+                currentQuestion--;
+                questionElements[currentQuestion].classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        function showResults() {
+            // Hide questions, show results
+            document.getElementById('questions').style.display = 'none';
+            document.getElementById('results').classList.add('active');
+            document.getElementById('progress').style.width = '100%';
+
+            // Calculate scores
+            const dimensions = {
+                "Data Readiness": [],
+                "Technical Capability": [],
+                "Business Alignment": [],
+                "Organizational Culture": [],
+                "Risk & Governance": []
+            };
+
+            questions.forEach((q, index) => {
+                if (answers[index]) {
+                    dimensions[q.category].push(answers[index]);
+                }
+            });
+
+            // Calculate dimension scores and overall score
+            let totalScore = 0;
+            let dimensionCount = 0;
+            const dimensionScores = {};
+
+            for (const [dimension, scores] of Object.entries(dimensions)) {
+                if (scores.length > 0) {
+                    const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+                    dimensionScores[dimension] = (avg / 4) * 100;
+                    totalScore += dimensionScores[dimension];
+                    dimensionCount++;
+                }
+            }
+
+            const overallScore = Math.round(totalScore / dimensionCount);
+
+            // Determine maturity level
+            let maturityLevel;
+            if (overallScore < 25) maturityLevel = "AI Curious";
+            else if (overallScore < 50) maturityLevel = "AI Exploring";
+            else if (overallScore < 75) maturityLevel = "AI Ready";
+            else maturityLevel = "AI Advanced";
+
+            // Update UI
+            document.getElementById('overall-score').textContent = overallScore + '%';
+            document.getElementById('maturity-level').textContent = maturityLevel;
+
+            // Display dimension scores
+            const dimensionContainer = document.getElementById('dimension-scores');
+            dimensionContainer.innerHTML = '';
+
+            for (const [dimension, score] of Object.entries(dimensionScores)) {
+                const color = score < 25 ? '#ef4444' :
+                             score < 50 ? '#f59e0b' :
+                             score < 75 ? '#10b981' : '#059669';
+
+                dimensionContainer.innerHTML += `
+                    <div class="dimension-card">
+                        <div class="dimension-name">${dimension}</div>
+                        <div class="dimension-bar">
+                            <div class="dimension-fill" style="width: ${score}%; background: ${color};"></div>
+                        </div>
+                        <div class="dimension-score">${Math.round(score)}%</div>
+                    </div>
+                `;
+            }
+
+            // Generate recommendations
+            const recommendations = generateRecommendations(overallScore, dimensionScores);
+            const recList = document.getElementById('recommendations');
+            recList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+        }
+
+        function generateRecommendations(overall, dimensions) {
+            const recs = [];
+
+            if (overall < 25) {
+                recs.push("Start with AI education: Schedule executive briefings to understand AI capabilities and limitations");
+                recs.push("Focus on data foundation: Begin organizing and cleaning your most critical datasets");
+                recs.push("Identify one simple use case: Pick a low-risk, high-visibility pilot project");
+            } else if (overall < 50) {
+                recs.push("Build a small AI task force: Assemble cross-functional team to explore opportunities");
+                recs.push("Invest in data infrastructure: Prioritize data quality and accessibility improvements");
+                recs.push("Run proof-of-concept projects: Test 2-3 use cases with clear success metrics");
+            } else if (overall < 75) {
+                recs.push("Scale successful pilots: Move proven use cases into production");
+                recs.push("Develop AI governance: Create framework for ethical AI and risk management");
+                recs.push("Invest in team capabilities: Hire or train dedicated AI/ML talent");
+            } else {
+                recs.push("Optimize and expand: Focus on scaling AI across the organization");
+                recs.push("Share best practices: Become a center of excellence for AI adoption");
+                recs.push("Explore cutting-edge applications: Consider advanced AI like generative models");
+            }
+
+            // Add dimension-specific recommendations
+            const weakest = Object.entries(dimensions).sort((a, b) => a[1] - b[1])[0];
+            if (weakest[1] < 50) {
+                recs.push(`Priority focus area: Improve ${weakest[0]} (currently at ${Math.round(weakest[1])}%)`);
+            }
+
+            return recs;
+        }
+
+        function restartAssessment() {
+            currentQuestion = 0;
+            answers = {};
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('questions').style.display = 'block';
+
+            // Reset all questions
+            questionElements.forEach((el, index) => {
+                el.classList.remove('active');
+                if (index === 0) el.classList.add('active');
+
+                // Clear selections
+                el.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+
+                // Disable next button
+                const nextBtn = el.querySelector('.btn-next');
+                if (nextBtn) nextBtn.disabled = true;
+            });
+
+            updateProgress();
+        }
+
+        // Initialize on page load
+        initAssessment();
+        updateProgress();
+    </script>
+</body>
+</html>
