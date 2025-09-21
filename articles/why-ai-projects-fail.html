@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Most AI Projects Fail (And How to Avoid It) - Thor Matthiasson</title>
+    <meta name="description" content="80% of AI initiatives never make it to production. Learn why AI projects fail and how to ensure yours succeeds with practical strategies from real implementations.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .article-date {
+            color: #d4a574;
+            font-weight: 500;
+        }
+
+        .article-reading-time {
+            color: #6b7280;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin: 1rem 0;
+            line-height: 1.2;
+        }
+
+        .article-subtitle {
+            font-size: 1.25rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .article-content {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: #374151;
+        }
+
+        .article-content h2 {
+            font-size: 1.875rem;
+            color: #2c3e50;
+            margin: 2.5rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .article-content h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin: 2rem 0 1rem 0;
+            font-weight: 500;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+            line-height: 1.8;
+        }
+
+        .article-content blockquote {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #faf8f3;
+            border-left: 4px solid #d4a574;
+            font-style: italic;
+        }
+
+        .highlight-box {
+            background: #fef3e6;
+            border: 1px solid #d4a574;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-box h4 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #d4a574;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #b8935f;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .cta-box h3 {
+            margin-bottom: 1rem;
+        }
+
+        .cta-box p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .failure-reasons {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .failure-reasons h3 {
+            color: #ef4444;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <a href="../index.html#thinking" class="back-link">← Back to Articles</a>
+
+        <article>
+            <header class="article-header">
+                <div class="article-meta">
+                    <time class="article-date">November 2024</time>
+                    <span class="article-reading-time">7 min read</span>
+                </div>
+                <h1 class="article-title">Why Most AI Projects Fail (And How to Avoid It)</h1>
+                <p class="article-subtitle">
+                    The uncomfortable truth is that 80% of AI initiatives never make it to production.
+                    It's not about the technology—it's about misaligned expectations and solving the wrong problems.
+                </p>
+            </header>
+
+            <div class="article-content">
+                <p>
+                    Last week, I sat across from a CEO who had just terminated their third AI initiative in 18 months.
+                    Combined investment: $2.3 million. Combined value delivered: zero. This isn't unusual—it's the norm.
+                    And it's entirely preventable.
+                </p>
+
+                <p>
+                    The pattern is so consistent it's almost predictable: excitement about AI's potential leads to
+                    rushed implementation without clear objectives, which results in technically impressive solutions
+                    that solve no real business problems.
+                </p>
+
+                <h2>The Real Reasons AI Projects Fail</h2>
+
+                <p>
+                    After analyzing dozens of failed AI initiatives across industries, five failure patterns emerge
+                    consistently. Understanding these is the first step to avoiding them.
+                </p>
+
+                <div class="failure-reasons">
+                    <h3>1. Starting with Technology Instead of Problems</h3>
+                    <p>
+                        The most common mistake: "We need to use AI" becomes the objective, rather than "We need
+                        to solve X problem." This backwards approach guarantees failure because you're optimizing
+                        for the wrong outcome.
+                    </p>
+                </div>
+
+                <div class="failure-reasons">
+                    <h3>2. Underestimating Data Reality</h3>
+                    <p>
+                        Everyone assumes their data is better than it is. In reality, 70% of AI project time is
+                        spent cleaning, organizing, and preparing data. Most organizations discover their data is
+                        too messy, incomplete, or biased only after significant investment.
+                    </p>
+                </div>
+
+                <div class="failure-reasons">
+                    <h3>3. Ignoring the Human Element</h3>
+                    <p>
+                        AI doesn't exist in a vacuum. It requires people to trust it, use it, and maintain it.
+                        Projects that don't account for change management, training, and cultural shift are dead
+                        on arrival.
+                    </p>
+                </div>
+
+                <h2>The Success Framework</h2>
+
+                <p>
+                    Successful AI implementations follow a different pattern. They start small, focus on specific
+                    problems, and scale based on proven value. Here's the framework that works:
+                </p>
+
+                <div class="highlight-box">
+                    <h4>The 3P Framework for AI Success</h4>
+                    <ul>
+                        <li><strong>Problem First:</strong> Define the specific business problem with measurable outcomes</li>
+                        <li><strong>Pilot Small:</strong> Start with a controlled experiment that can fail safely</li>
+                        <li><strong>Prove Value:</strong> Demonstrate ROI before scaling</li>
+                    </ul>
+                </div>
+
+                <h3>Problem First: Getting Specific</h3>
+
+                <p>
+                    Replace "We want to use AI for customer service" with "We need to reduce response time for
+                    tier-1 support tickets from 24 hours to 2 hours while maintaining 90% satisfaction scores."
+                </p>
+
+                <p>
+                    The second statement is measurable, specific, and focused on business value. It also makes
+                    it clear whether AI is even the right solution.
+                </p>
+
+                <h3>Pilot Small: The 90-Day Rule</h3>
+
+                <p>
+                    If you can't show some value in 90 days, you're probably solving the wrong problem or using
+                    the wrong approach. Small pilots allow you to:
+                </p>
+
+                <ul>
+                    <li>Test assumptions with real data</li>
+                    <li>Identify unexpected challenges early</li>
+                    <li>Build organizational confidence</li>
+                    <li>Fail fast and cheap if necessary</li>
+                </ul>
+
+                <blockquote>
+                    "The goal isn't to build the perfect AI system. It's to quickly discover what actually works
+                    in your specific context with your specific constraints."
+                </blockquote>
+
+                <h3>Prove Value: Beyond the Prototype</h3>
+
+                <p>
+                    A working prototype isn't the same as production value. Before scaling, you need to prove:
+                </p>
+
+                <ul>
+                    <li><strong>Technical viability:</strong> It works reliably with real-world data</li>
+                    <li><strong>Economic viability:</strong> The ROI justifies the investment</li>
+                    <li><strong>Operational viability:</strong> Your team can actually use and maintain it</li>
+                </ul>
+
+                <h2>The Questions to Ask Before Starting</h2>
+
+                <p>
+                    Before launching any AI initiative, get clear answers to these five questions:
+                </p>
+
+                <ol>
+                    <li>What specific, measurable problem are we solving?</li>
+                    <li>Why is AI the right solution versus other approaches?</li>
+                    <li>What does success look like in numbers?</li>
+                    <li>What data do we actually have (not what we wish we had)?</li>
+                    <li>Who will use this daily and why would they want to?</li>
+                </ol>
+
+                <p>
+                    If you can't answer all five clearly, you're not ready to start. And that's okay—better to
+                    discover this before spending millions.
+                </p>
+
+                <h2>The Path Forward</h2>
+
+                <p>
+                    AI failure isn't inevitable—it's preventable. The organizations succeeding with AI aren't
+                    necessarily more technically sophisticated. They're more disciplined about problem selection,
+                    more realistic about capabilities, and more focused on value delivery.
+                </p>
+
+                <p>
+                    Start with one specific problem. Run a small pilot. Measure everything. Scale what works.
+                    This isn't the exciting approach, but it's the one that actually delivers results.
+                </p>
+
+                <p>
+                    The companies winning with AI aren't the ones with the biggest budgets or the best technology.
+                    They're the ones who learned to ask better questions before building anything.
+                </p>
+            </div>
+
+            <footer class="article-footer">
+                <div class="cta-box">
+                    <h3>Need Help Defining Your AI Strategy?</h3>
+                    <p>Let's discuss how to approach AI in a way that actually delivers value for your organization.</p>
+                    <a href="../index.html#contact" class="btn btn-primary">Get in Touch</a>
+                </div>
+            </footer>
+        </article>
+    </div>
+</body>
+</html>
