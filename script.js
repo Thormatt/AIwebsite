@@ -168,18 +168,20 @@ if (contactForm) {
         submitBtn.textContent = 'Sending...';
 
         try {
-            // Option 1: Use Formspree (sign up at https://formspree.io)
-            // Replace 'YOUR_FORM_ID' with your actual Formspree form ID
-            // const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(data)
-            // });
+            // Send to Vercel serverless function
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-            // For now, simulate success (replace with actual endpoint)
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Failed to send message');
+            }
 
             // Show success message
             formStatus.className = 'form-status success';

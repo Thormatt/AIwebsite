@@ -1,23 +1,28 @@
 {
-  "name": "ai-consulting-website",
+  "name": "thor-ai-website",
   "version": "1.0.0",
-  "description": "Professional AI Consulting Services Website",
+  "description": "Thor Matthiasson - Business Intelligence & AI Strategy Advisory",
   "main": "index.html",
   "scripts": {
-    "dev": "npx serve .",
+    "dev": "vercel dev",
     "build": "echo 'Static site - no build required'",
-    "preview": "npx serve ."
+    "preview": "npx serve .",
+    "deploy": "vercel --prod"
   },
   "keywords": [
     "AI consulting",
-    "artificial intelligence",
-    "machine learning",
-    "generative AI",
-    "business consulting"
+    "business intelligence",
+    "AI strategy",
+    "data analytics",
+    "digital transformation"
   ],
-  "author": "AI Consulting Pro",
+  "author": "Thor Matthiasson",
   "license": "MIT",
+  "dependencies": {
+    "resend": "^2.0.0"
+  },
   "devDependencies": {
-    "serve": "^14.2.0"
+    "serve": "^14.2.0",
+    "vercel": "^32.0.0"
   }
 }
