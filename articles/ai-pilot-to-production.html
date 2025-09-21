@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Pilot to Production: The 90-Day AI Value Framework - Thor Matthiasson</title>
+    <meta name="description" content="Only 26% of AI pilots make it to production. Learn the exact framework for designing, running, and scaling AI pilots that deliver measurable value in 90 days.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .article-date {
+            color: #d4a574;
+            font-weight: 500;
+        }
+
+        .article-reading-time {
+            color: #6b7280;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin: 1rem 0;
+            line-height: 1.2;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2rem;
+            }
+        }
+
+        .article-subtitle {
+            font-size: 1.25rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .article-content {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: #374151;
+        }
+
+        .article-content h2 {
+            font-size: 1.875rem;
+            color: #2c3e50;
+            margin: 2.5rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .article-content h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin: 2rem 0 1rem 0;
+            font-weight: 500;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+            line-height: 1.8;
+        }
+
+        .article-content blockquote {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #faf8f3;
+            border-left: 4px solid #d4a574;
+            font-style: italic;
+        }
+
+        .highlight-box {
+            background: #fef3e6;
+            border: 1px solid #d4a574;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-box h4 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+        }
+
+        .timeline-container {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .timeline-phase {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .timeline-phase:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .phase-label {
+            font-weight: 600;
+            color: #d4a574;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        .phase-content h4 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .checklist {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .checklist h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            margin-right: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .metric-change {
+            font-size: 0.875rem;
+            color: #10b981;
+            margin-top: 0.25rem;
+        }
+
+        .warning-box {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-box h4 {
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+        }
+
+        .article-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #d4a574;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #b8935f;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .cta-box h3 {
+            margin-bottom: 1rem;
+        }
+
+        .cta-box p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .decision-matrix {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .decision-matrix table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .decision-matrix th {
+            background: #f9fafb;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .decision-matrix td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .decision-matrix tr:last-child td {
+            border-bottom: none;
+        }
+
+        .score-high {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .score-medium {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .score-low {
+            color: #ef4444;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <a href="../index.html#thinking" class="back-link">← Back to Articles</a>
+
+        <article>
+            <header class="article-header">
+                <div class="article-meta">
+                    <time class="article-date">December 2024</time>
+                    <span class="article-reading-time">10 min read</span>
+                </div>
+                <h1 class="article-title">From Pilot to Production: The 90-Day AI Value Framework</h1>
+                <p class="article-subtitle">
+                    Most AI pilots are designed to succeed in demos and fail in reality. Here's the framework I use to design pilots that actually scale, with real metrics from 50+ implementations.
+                </p>
+            </header>
+
+            <div class="article-content">
+                <p>
+                    "Our pilot was a huge success!" The CTO was beaming. Six months later, the project was dead.
+                    Sound familiar? It should—this story plays out in 74% of organizations attempting AI implementation.
+                </p>
+
+                <p>
+                    The problem isn't that pilots fail. It's that they succeed at the wrong things. They optimize
+                    for impressive demos instead of operational reality. They measure vanity metrics instead of value.
+                    They solve tomorrow's problems while ignoring today's constraints.
+                </p>
+
+                <p>
+                    After guiding 50+ AI pilots from conception to scale, I've developed a framework that flips the
+                    script: The 90-Day Value Framework. It's designed to fail fast or scale faster, with clear
+                    go/no-go decisions built into every phase.
+                </p>
+
+                <h2>Why Most Pilots Are DOA (Dead on Arrival)</h2>
+
+                <p>
+                    Before diving into the framework, let's acknowledge why traditional pilots fail. It's not
+                    incompetence—it's structural.
+                </p>
+
+                <div class="warning-box">
+                    <h4>The Five Pilot Killers</h4>
+                    <ol>
+                        <li><strong>Scope Creep:</strong> Starting with "let's revolutionize everything" instead of "let's fix this one thing"</li>
+                        <li><strong>Perfect Data Assumption:</strong> Building for data you wish you had, not data you actually have</li>
+                        <li><strong>IT in Isolation:</strong> Technical teams building in vacuum without operational input</li>
+                        <li><strong>Success Theater:</strong> Optimizing metrics that look good in PowerPoint but mean nothing on the floor</li>
+                        <li><strong>No Kill Criteria:</strong> No clear conditions for stopping, so zombie pilots shamble on</li>
+                    </ol>
+                </div>
+
+                <h2>The 90-Day Value Framework</h2>
+
+                <p>
+                    This framework divides pilots into three 30-day sprints, each with specific objectives,
+                    deliverables, and kill criteria. If you can't show value in 90 days, you're solving the
+                    wrong problem.
+                </p>
+
+                <div class="timeline-container">
+                    <h3>Framework Overview</h3>
+
+                    <div class="timeline-phase">
+                        <div class="phase-label">Days 1-30</div>
+                        <div class="phase-content">
+                            <h4>Discovery & Design</h4>
+                            <p>Define the specific problem, audit actual data, identify success metrics, and design minimal viable pilot. This phase is about getting brutally honest about what you're solving and what you have to work with.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-phase">
+                        <div class="phase-label">Days 31-60</div>
+                        <div class="phase-content">
+                            <h4>Build & Test</h4>
+                            <p>Develop the solution with real data, test with actual users, iterate based on feedback, and measure early indicators. This phase separates demos from reality.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-phase">
+                        <div class="phase-label">Days 61-90</div>
+                        <div class="phase-content">
+                            <h4>Validate & Decide</h4>
+                            <p>Run controlled production test, measure actual value, document scaling requirements, and make go/no-go decision. This phase provides clear evidence for scaling or killing.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>Days 1-30: Discovery & Design</h2>
+
+                <p>
+                    The first sprint is about preventing failure, not ensuring success. Most pilots fail because
+                    they solve the wrong problem or assume perfect conditions. This phase forces brutal honesty.
+                </p>
+
+                <h3>The Problem Selection Matrix</h3>
+
+                <p>
+                    Not all problems deserve pilots. Use this matrix to score potential use cases:
+                </p>
+
+                <div class="decision-matrix">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Criteria</th>
+                                <th>Weight</th>
+                                <th>Score (1-5)</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Problem Frequency</td>
+                                <td>25%</td>
+                                <td>How often does this occur?</td>
+                                <td>Daily = 5, Weekly = 3, Monthly = 1</td>
+                            </tr>
+                            <tr>
+                                <td>Data Availability</td>
+                                <td>25%</td>
+                                <td>Do we have clean, accessible data?</td>
+                                <td>Ready = 5, Needs cleaning = 3, Must build = 1</td>
+                            </tr>
+                            <tr>
+                                <td>User Readiness</td>
+                                <td>20%</td>
+                                <td>Will users actually adopt this?</td>
+                                <td>Eager = 5, Willing = 3, Resistant = 1</td>
+                            </tr>
+                            <tr>
+                                <td>Value Clarity</td>
+                                <td>20%</td>
+                                <td>Can we measure success clearly?</td>
+                                <td>Clear metrics = 5, Fuzzy = 3, Undefined = 1</td>
+                            </tr>
+                            <tr>
+                                <td>Technical Fit</td>
+                                <td>10%</td>
+                                <td>Is AI the right solution?</td>
+                                <td>Perfect fit = 5, Good = 3, Forced = 1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>
+                    <strong>Kill Criteria:</strong> Total score below 3.0? Kill the pilot now. You'll save money
+                    and credibility.
+                </p>
+
+                <div class="checklist">
+                    <h4>✓ Day 30 Deliverables Checklist</h4>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Specific problem statement (one sentence, measurable outcome)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Data audit results (what you have, not what you want)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Success metrics defined (specific numbers, not concepts)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>User journey mapped (current state vs. future state)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Technical architecture sketched (simple, not perfect)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Budget and resource plan (realistic, not optimistic)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Kill criteria documented (when to stop)</label>
+                    </div>
+                </div>
+
+                <h2>Days 31-60: Build & Test</h2>
+
+                <p>
+                    This sprint separates wishes from reality. You're building with actual data, testing with
+                    real users, and measuring true impact. No demos, no mockups—real implementation.
+                </p>
+
+                <h3>The MVP Trap</h3>
+
+                <p>
+                    Most teams build an MVP that's either too M (minimal to the point of useless) or not V
+                    (viable in production). The sweet spot: solve one complete workflow end-to-end.
+                </p>
+
+                <div class="highlight-box">
+                    <h4>The 80/20 Rule for AI Pilots</h4>
+                    <p>
+                        Build the 20% of features that deliver 80% of value. If your pilot has more than five
+                        core features, you're building a product, not running an experiment.
+                    </p>
+                </div>
+
+                <h3>Real User Testing Protocol</h3>
+
+                <p>
+                    Forget focus groups and surveys. Here's how to test with real users:
+                </p>
+
+                <ol>
+                    <li><strong>Shadow First:</strong> Watch users do their current workflow. Document every click, every pause, every frustration.</li>
+                    <li><strong>Prototype Second:</strong> Have users try the AI solution while you observe. No training, minimal instruction.</li>
+                    <li><strong>Measure Honestly:</strong> Time saved? Errors reduced? Satisfaction improved? Get numbers, not opinions.</li>
+                    <li><strong>Iterate Daily:</strong> Fix the biggest friction point each day. Small improvements compound.</li>
+                </ol>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Typical Week 6 Metrics</div>
+                        <div class="metric-value">40%</div>
+                        <div class="metric-change">Task completion rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">After Iteration</div>
+                        <div class="metric-value">75%</div>
+                        <div class="metric-change">Week 8 completion rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">User Satisfaction</div>
+                        <div class="metric-value">6.2/10</div>
+                        <div class="metric-change">Minimum viable score</div>
+                    </div>
+                </div>
+
+                <p>
+                    <strong>Kill Criteria:</strong> Below 60% task completion or 5.0 satisfaction by Day 60?
+                    The problem isn't iteration—it's foundation. Kill or pivot.
+                </p>
+
+                <h2>Days 61-90: Validate & Decide</h2>
+
+                <p>
+                    The final sprint answers one question: Should we scale this? Not "could we" or "might we"—should
+                    we, based on hard evidence.
+                </p>
+
+                <h3>The Production Test</h3>
+
+                <p>
+                    Run your pilot in actual production conditions for at least two weeks. No hand-holding,
+                    no special support, no excuses. This is where pilots usually die—when the training wheels come off.
+                </p>
+
+                <div class="checklist">
+                    <h4>✓ Production Readiness Assessment</h4>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>System handles real data volume without crashing</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Users can operate without constant support</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Error rates are acceptable and manageable</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Value metrics show positive trend</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Scaling costs are understood and acceptable</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>Maintenance requirements are documented</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label>User feedback is predominantly positive</label>
+                    </div>
+                </div>
+
+                <h3>The Go/No-Go Decision Matrix</h3>
+
+                <p>
+                    By Day 90, you need a clear decision. Use this matrix:
+                </p>
+
+                <div class="decision-matrix">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Target</th>
+                                <th>Actual</th>
+                                <th>Go/No-Go</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Value Delivered</td>
+                                <td>Define specific metric</td>
+                                <td>Measured result</td>
+                                <td><span class="score-high">Go if exceeded</span></td>
+                            </tr>
+                            <tr>
+                                <td>User Adoption</td>
+                                <td>> 70% active use</td>
+                                <td>Actual %</td>
+                                <td><span class="score-medium">Go if > 60%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Technical Stability</td>
+                                <td>< 1% error rate</td>
+                                <td>Actual rate</td>
+                                <td><span class="score-low">No-go if > 5%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Scaling Cost</td>
+                                <td>< 3x pilot cost</td>
+                                <td>Projected cost</td>
+                                <td><span class="score-medium">Review if > 5x</span></td>
+                            </tr>
+                            <tr>
+                                <td>Time to Value</td>
+                                <td>< 6 months</td>
+                                <td>Projected timeline</td>
+                                <td><span class="score-low">No-go if > 12 mo</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Case Study: The Pilot That Actually Scaled</h2>
+
+                <p>
+                    A logistics company wanted to "transform operations with AI." Instead, we focused on one problem:
+                    routing drivers spent 45 minutes each morning planning routes manually.
+                </p>
+
+                <p>
+                    <strong>Days 1-30:</strong> Discovered drivers didn't trust automated routing because it ignored
+                    local knowledge (construction, traffic patterns, customer preferences). Designed system that
+                    suggested routes but allowed modifications.
+                </p>
+
+                <p>
+                    <strong>Days 31-60:</strong> Built integration with existing systems. Tested with 5 volunteer
+                    drivers. Initial resistance high, but after incorporating their feedback on local preferences,
+                    adoption improved. Time savings: 25 minutes average.
+                </p>
+
+                <p>
+                    <strong>Days 61-90:</strong> Expanded to 20 drivers. Measured: 23 minutes saved per driver,
+                    8% fuel reduction, 92% voluntary adoption, 15% fewer late deliveries. ROI clear: $2,100 per
+                    driver per month.
+                </p>
+
+                <p>
+                    <strong>Scaling Decision:</strong> Clear GO. Rolled out to 500 drivers over 6 months. Annual
+                    impact: $8.4M in operational savings. Success factor: solving a specific, daily pain point
+                    with user input throughout.
+                </p>
+
+                <h2>The Uncomfortable Truth About Scaling</h2>
+
+                <p>
+                    Here's what nobody tells you about scaling AI pilots: Most shouldn't scale. And that's okay.
+                    A successful pilot that reveals AI isn't the right solution saves millions compared to
+                    forced scaling.
+                </p>
+
+                <div class="highlight-box">
+                    <h4>The 30-30-40 Rule</h4>
+                    <ul>
+                        <li>30% of pilots should fail in Discovery (wrong problem)</li>
+                        <li>30% should fail in Testing (wrong solution)</li>
+                        <li>40% should scale successfully</li>
+                    </ul>
+                    <p>
+                        If all your pilots are scaling, you're not taking enough intelligent risks or you're
+                        forcing bad fits.
+                    </p>
+                </div>
+
+                <h2>Your 90-Day Pilot Playbook</h2>
+
+                <p>
+                    Ready to run a pilot that actually matters? Here's your playbook:
+                </p>
+
+                <ol>
+                    <li><strong>Pick a Monday Problem:</strong> Choose something that hurts every Monday, not a strategic vision for 2027</li>
+                    <li><strong>Set Kill Criteria:</strong> Define exactly when you'll stop, before you start</li>
+                    <li><strong>Involve Real Users:</strong> From day 1, not day 81</li>
+                    <li><strong>Measure Actual Value:</strong> Time saved, errors reduced, costs cut—not "engagement"</li>
+                    <li><strong>Document Everything:</strong> Failures teach more than successes</li>
+                    <li><strong>Decide Decisively:</strong> On day 90, make the call. No extensions, no maybes</li>
+                </ol>
+
+                <blockquote>
+                    "The goal of a pilot isn't to prove AI works. It's to discover if AI solves your specific
+                    problem better than alternatives. Most of the time, it doesn't—and discovering that in 90
+                    days instead of 18 months is a massive win."
+                </blockquote>
+
+                <h2>The Next 90 Days Start Now</h2>
+
+                <p>
+                    Every day you delay starting a properly structured pilot is a day your competitors might be
+                    learning what works. But more importantly, it's a day you're not learning what doesn't.
+                </p>
+
+                <p>
+                    The 90-Day Framework isn't about moving fast—it's about failing fast or scaling faster. It's
+                    about getting to "no" quickly or getting to "yes" with confidence.
+                </p>
+
+                <p>
+                    Because here's the final truth: The organizations winning with AI aren't the ones running
+                    the most pilots. They're the ones running the right pilots, the right way, and making the
+                    right decisions based on evidence, not hope.
+                </p>
+
+                <p>
+                    Your next pilot starts with a choice: Another six-month initiative that goes nowhere, or
+                    90 days to real answers. Choose wisely. Your ROI depends on it.
+                </p>
+            </div>
+
+            <footer class="article-footer">
+                <div class="cta-box">
+                    <h3>Ready to Design a Pilot That Matters?</h3>
+                    <p>Let's structure your AI pilot for real value, not theater.</p>
+                    <a href="../index.html#contact" class="btn btn-primary">Start Your 90-Day Journey</a>
+                </div>
+            </footer>
+        </article>
+    </div>
+</body>
+</html>
