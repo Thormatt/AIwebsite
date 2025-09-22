@@ -76,8 +76,32 @@
             font-size: 1.125rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
             margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .analyze-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .analyze-btn:active {
+            transform: scale(0.98);
+        }
+
+        .analyze-btn:active::before {
+            width: 400px;
+            height: 400px;
         }
 
         .analyze-btn:hover {
@@ -110,6 +134,18 @@
             padding: 2.5rem;
             text-align: center;
             margin-bottom: 2rem;
+            animation: cardSlideIn 0.5s ease-out;
+        }
+
+        @keyframes cardSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .bs-meter {
@@ -143,7 +179,13 @@
         .meter-fill {
             height: 100%;
             border-radius: 15px;
-            transition: width 1s ease, background 1s ease;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s ease;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
         }
 
         .buzzword-analysis {
@@ -393,14 +435,20 @@
                 fillColor = '#dc2626';
             }
 
-            // Update results
+            // Update results with animation
             document.getElementById('bs-level').textContent = bsLevel;
             document.getElementById('bs-level').className = 'bs-level ' + bsClass;
-            document.getElementById('bs-percentage').textContent = `Buzzword Density: ${bsPercentage}%`;
+
+            // Animate percentage counter
+            animateCounter('bs-percentage', bsPercentage);
 
             const meterFill = document.getElementById('meter-fill');
-            meterFill.style.width = bsPercentage + '%';
-            meterFill.style.background = fillColor;
+            // Reset and animate
+            meterFill.style.width = '0%';
+            setTimeout(() => {
+                meterFill.style.width = bsPercentage + '%';
+                meterFill.style.background = fillColor;
+            }, 100);
 
             // Display buzzwords
             const buzzwordList = document.getElementById('buzzword-list');
@@ -494,6 +542,25 @@
             points.push("Insist on a proof of concept with your actual data");
 
             return points;
+        }
+
+        // Animate counter function
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const duration = 1500;
+            const steps = 30;
+            const stepDuration = duration / steps;
+            let currentValue = 0;
+            const increment = targetValue / steps;
+
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    currentValue = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = `Buzzword Density: ${Math.round(currentValue)}%`;
+            }, stepDuration);
         }
 
         // Enter key to analyze

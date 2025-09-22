@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Build vs Buy Analyzer - Thor Matthiasson</title>
+    <meta name="description" content="Should you build custom AI or buy an existing solution? Get a data-driven recommendation based on your specific context.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #faf8f3;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .analyzer-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .analyzer-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .analyzer-header h1 {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .analyzer-header p {
+            font-size: 1.25rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .criteria-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .criteria-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .criterion {
+            border-left: 3px solid #d4a574;
+            padding-left: 1.5rem;
+        }
+
+        .criterion h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .slider-container {
+            margin: 1.5rem 0;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #d4a574;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: #b8935f;
+            transform: scale(1.1);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #d4a574;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .select-container {
+            margin: 1rem 0;
+        }
+
+        .select-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+            font-weight: 500;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #d4a574;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 2rem;
+        }
+
+        .analyze-btn:hover {
+            background: #b8935f;
+            transform: translateY(-1px);
+        }
+
+        .results-section {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .recommendation-card {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: cardSlideIn 0.5s ease-out;
+        }
+
+        @keyframes cardSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .recommendation {
+            font-size: 3rem;
+            font-weight: 600;
+            margin: 1rem 0;
+            animation: scaleIn 0.6s ease-out 0.3s both;
+        }
+
+        @keyframes scaleIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .recommendation.build { color: #10b981; }
+        .recommendation.buy { color: #3b82f6; }
+        .recommendation.hybrid { color: #f59e0b; }
+
+        .confidence-meter {
+            margin: 2rem 0;
+        }
+
+        .confidence-label {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .meter-bar {
+            height: 30px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .meter-fill {
+            height: 100%;
+            border-radius: 15px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+
+        .score-breakdown {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .score-breakdown h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        .factor-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            animation: slideInLeft 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .factor-row:nth-child(2) { animation-delay: 0.1s; }
+        .factor-row:nth-child(3) { animation-delay: 0.2s; }
+        .factor-row:nth-child(4) { animation-delay: 0.3s; }
+        .factor-row:nth-child(5) { animation-delay: 0.4s; }
+        .factor-row:nth-child(6) { animation-delay: 0.5s; }
+
+        .factor-name {
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        .factor-score {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .score-bar {
+            width: 200px;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .score-fill.build { background: #10b981; }
+        .score-fill.buy { background: #3b82f6; }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #d4a574;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #b8935f;
+        }
+
+        .insights-box {
+            background: #fef3e6;
+            border: 1px solid #d4a574;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .insights-box h3 {
+            color: #92400e;
+            margin-bottom: 1rem;
+        }
+
+        .insights-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .insights-box li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #92400e;
+        }
+
+        .insights-box li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .analyzer-header h1 {
+                font-size: 2rem;
+            }
+
+            .score-bar {
+                width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="analyzer-container">
+        <a href="../index.html" class="back-link">← Back to Main Site</a>
+
+        <div class="analyzer-header">
+            <h1>Build vs Buy Analyzer</h1>
+            <p>Get a data-driven recommendation on whether to build custom AI or buy an existing solution based on your specific context.</p>
+        </div>
+
+        <div class="criteria-section">
+            <div class="criteria-grid">
+                <div class="criterion">
+                    <h3>Technical Context</h3>
+
+                    <div class="select-container">
+                        <label class="select-label">Primary Use Case</label>
+                        <select id="use-case">
+                            <option value="customer-service">Customer Service Automation</option>
+                            <option value="document-processing">Document Processing</option>
+                            <option value="predictive-analytics">Predictive Analytics</option>
+                            <option value="content-generation">Content Generation</option>
+                            <option value="computer-vision">Computer Vision</option>
+                            <option value="recommendation">Recommendation Engine</option>
+                            <option value="nlp-analysis">NLP/Text Analysis</option>
+                            <option value="custom">Highly Specific/Custom</option>
+                        </select>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Technical Complexity</span>
+                            <span id="complexity-label">Medium</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="complexity" oninput="updateLabel('complexity')">
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>In-House AI Expertise</span>
+                            <span id="expertise-label">Some</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="expertise" oninput="updateLabel('expertise')">
+                    </div>
+                </div>
+
+                <div class="criterion">
+                    <h3>Business Requirements</h3>
+
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Competitive Differentiation Need</span>
+                            <span id="differentiation-label">Moderate</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="differentiation" oninput="updateLabel('differentiation')">
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Time to Market Pressure</span>
+                            <span id="urgency-label">Moderate</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="urgency" oninput="updateLabel('urgency')">
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Data Sensitivity</span>
+                            <span id="sensitivity-label">Medium</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="sensitivity" oninput="updateLabel('sensitivity')">
+                    </div>
+                </div>
+
+                <div class="criterion">
+                    <h3>Resource Constraints</h3>
+
+                    <div class="select-container">
+                        <label class="select-label">Budget Range</label>
+                        <select id="budget">
+                            <option value="minimal">< $50K</option>
+                            <option value="small">$50K - $250K</option>
+                            <option value="medium" selected>$250K - $1M</option>
+                            <option value="large">$1M - $5M</option>
+                            <option value="enterprise">$5M+</option>
+                        </select>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Available Development Time</span>
+                            <span id="timeline-label">6-12 months</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="timeline" oninput="updateLabel('timeline')">
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Risk Tolerance</span>
+                            <span id="risk-label">Moderate</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="risk" oninput="updateLabel('risk')">
+                    </div>
+                </div>
+            </div>
+
+            <button class="analyze-btn" onclick="analyzeDecision()">Analyze Build vs Buy</button>
+        </div>
+
+        <div class="results-section" id="results">
+            <div class="recommendation-card">
+                <h2>Recommendation</h2>
+                <div class="recommendation" id="recommendation">BUILD</div>
+                <div class="confidence-meter">
+                    <div class="confidence-label">Confidence: <span id="confidence">85%</span></div>
+                    <div class="meter-bar">
+                        <div class="meter-fill" id="meter-fill"></div>
+                    </div>
+                </div>
+                <p id="recommendation-summary"></p>
+            </div>
+
+            <div class="score-breakdown">
+                <h2>Decision Factors Analysis</h2>
+                <div id="factors-list"></div>
+            </div>
+
+            <div class="insights-box">
+                <h3>Key Insights</h3>
+                <ul id="insights-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const labels = {
+            complexity: ['Very Simple', 'Simple', 'Medium', 'Complex', 'Very Complex'],
+            expertise: ['None', 'Limited', 'Some', 'Strong', 'Expert'],
+            differentiation: ['None', 'Low', 'Moderate', 'High', 'Critical'],
+            urgency: ['No Rush', 'Flexible', 'Moderate', 'Urgent', 'Critical'],
+            sensitivity: ['Public', 'Low', 'Medium', 'High', 'Critical'],
+            timeline: ['< 3 months', '3-6 months', '6-12 months', '1-2 years', '2+ years'],
+            risk: ['Very Low', 'Low', 'Moderate', 'High', 'Very High']
+        };
+
+        function updateLabel(sliderId) {
+            const slider = document.getElementById(sliderId);
+            const value = parseInt(slider.value);
+            const label = document.getElementById(sliderId + '-label');
+            label.textContent = labels[sliderId][value - 1];
+        }
+
+        function analyzeDecision() {
+            // Get all input values
+            const useCase = document.getElementById('use-case').value;
+            const complexity = parseInt(document.getElementById('complexity').value);
+            const expertise = parseInt(document.getElementById('expertise').value);
+            const differentiation = parseInt(document.getElementById('differentiation').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const sensitivity = parseInt(document.getElementById('sensitivity').value);
+            const budget = document.getElementById('budget').value;
+            const timeline = parseInt(document.getElementById('timeline').value);
+            const risk = parseInt(document.getElementById('risk').value);
+
+            // Calculate scores for build vs buy
+            let buildScore = 0;
+            let buyScore = 0;
+            const factors = [];
+
+            // Use case analysis
+            const customUseCases = ['custom', 'computer-vision', 'recommendation'];
+            const commodityUseCases = ['customer-service', 'document-processing', 'content-generation'];
+
+            if (customUseCases.includes(useCase)) {
+                buildScore += 20;
+                factors.push({ name: 'Use Case Uniqueness', build: 80, buy: 20 });
+            } else if (commodityUseCases.includes(useCase)) {
+                buyScore += 20;
+                factors.push({ name: 'Use Case Maturity', build: 20, buy: 80 });
+            } else {
+                buildScore += 10;
+                buyScore += 10;
+                factors.push({ name: 'Use Case Flexibility', build: 50, buy: 50 });
+            }
+
+            // Technical complexity vs expertise
+            if (complexity > 3 && expertise < 3) {
+                buyScore += 25;
+                factors.push({ name: 'Complexity/Expertise Gap', build: 20, buy: 80 });
+            } else if (expertise >= 4) {
+                buildScore += 15;
+                factors.push({ name: 'Technical Capability', build: 70, buy: 30 });
+            } else {
+                factors.push({ name: 'Technical Feasibility', build: 50, buy: 50 });
+            }
+
+            // Differentiation need
+            if (differentiation >= 4) {
+                buildScore += 25;
+                factors.push({ name: 'Competitive Advantage', build: 90, buy: 10 });
+            } else if (differentiation <= 2) {
+                buyScore += 20;
+                factors.push({ name: 'Commodity Solution', build: 20, buy: 80 });
+            } else {
+                factors.push({ name: 'Strategic Value', build: 50, buy: 50 });
+            }
+
+            // Time pressure
+            if (urgency >= 4) {
+                buyScore += 30;
+                factors.push({ name: 'Time to Market', build: 10, buy: 90 });
+            } else if (urgency <= 2) {
+                buildScore += 15;
+                factors.push({ name: 'Development Timeline', build: 70, buy: 30 });
+            } else {
+                factors.push({ name: 'Speed Requirements', build: 40, buy: 60 });
+            }
+
+            // Data sensitivity
+            if (sensitivity >= 4) {
+                buildScore += 20;
+                factors.push({ name: 'Data Control', build: 85, buy: 15 });
+            } else {
+                buyScore += 10;
+                factors.push({ name: 'Data Requirements', build: 40, buy: 60 });
+            }
+
+            // Budget considerations
+            const budgetScores = {
+                'minimal': { build: 10, buy: 90 },
+                'small': { build: 25, buy: 75 },
+                'medium': { build: 50, buy: 50 },
+                'large': { build: 70, buy: 30 },
+                'enterprise': { build: 80, buy: 20 }
+            };
+
+            buildScore += budgetScores[budget].build / 4;
+            buyScore += budgetScores[budget].buy / 4;
+            factors.push({
+                name: 'Budget Alignment',
+                build: budgetScores[budget].build,
+                buy: budgetScores[budget].buy
+            });
+
+            // Risk tolerance
+            if (risk <= 2) {
+                buyScore += 15;
+                factors.push({ name: 'Risk Management', build: 30, buy: 70 });
+            } else if (risk >= 4) {
+                buildScore += 10;
+                factors.push({ name: 'Risk Appetite', build: 60, buy: 40 });
+            } else {
+                factors.push({ name: 'Risk Profile', build: 50, buy: 50 });
+            }
+
+            // Normalize scores
+            const total = buildScore + buyScore;
+            const buildPercentage = Math.round((buildScore / total) * 100);
+            const buyPercentage = Math.round((buyScore / total) * 100);
+
+            // Determine recommendation
+            let recommendation, confidence, summary;
+            const difference = Math.abs(buildPercentage - buyPercentage);
+
+            if (difference < 15) {
+                recommendation = 'HYBRID';
+                confidence = 60 + difference;
+                summary = "Consider a hybrid approach: buy core capabilities and build differentiating features.";
+            } else if (buildPercentage > buyPercentage) {
+                recommendation = 'BUILD';
+                confidence = Math.min(50 + difference, 95);
+                summary = "Building custom AI aligns better with your requirements for control and differentiation.";
+            } else {
+                recommendation = 'BUY';
+                confidence = Math.min(50 + difference, 95);
+                summary = "Buying an existing solution offers faster time-to-value with lower risk.";
+            }
+
+            // Update UI
+            document.getElementById('recommendation').textContent = recommendation;
+            document.getElementById('recommendation').className = 'recommendation ' + recommendation.toLowerCase();
+            document.getElementById('confidence').textContent = confidence + '%';
+            document.getElementById('recommendation-summary').textContent = summary;
+
+            // Update confidence meter
+            const meterFill = document.getElementById('meter-fill');
+            meterFill.style.width = '0%';
+            setTimeout(() => {
+                meterFill.style.width = confidence + '%';
+                meterFill.style.background =
+                    recommendation === 'BUILD' ? '#10b981' :
+                    recommendation === 'BUY' ? '#3b82f6' : '#f59e0b';
+            }, 100);
+
+            // Display factors
+            const factorsList = document.getElementById('factors-list');
+            factorsList.innerHTML = '';
+            factors.forEach((factor, index) => {
+                const row = document.createElement('div');
+                row.className = 'factor-row';
+                row.style.animationDelay = (index * 0.1) + 's';
+                row.innerHTML = `
+                    <span class="factor-name">${factor.name}</span>
+                    <div class="factor-score">
+                        <div class="score-bar">
+                            <div class="score-fill ${factor.build > factor.buy ? 'build' : 'buy'}"
+                                 style="width: ${Math.max(factor.build, factor.buy)}%"></div>
+                        </div>
+                        <span>${factor.build > factor.buy ? 'Build' : 'Buy'} ${Math.max(factor.build, factor.buy)}%</span>
+                    </div>
+                `;
+                factorsList.appendChild(row);
+            });
+
+            // Generate insights
+            const insights = [];
+
+            if (urgency >= 4 && recommendation === 'BUILD') {
+                insights.push("Warning: Building custom will conflict with your urgent timeline");
+            }
+            if (expertise < 3 && recommendation === 'BUILD') {
+                insights.push("Consider hiring AI talent or partnering with specialists");
+            }
+            if (differentiation >= 4 && recommendation === 'BUY') {
+                insights.push("Look for solutions with extensive customization capabilities");
+            }
+            if (sensitivity >= 4) {
+                insights.push("Ensure any solution meets your data governance requirements");
+            }
+            if (budget === 'minimal' && recommendation === 'BUILD') {
+                insights.push("Building custom AI on this budget will require careful scope management");
+            }
+            if (recommendation === 'HYBRID') {
+                insights.push("Start with a vendor solution and gradually build custom components");
+                insights.push("Focus custom development on your unique differentiators");
+            }
+
+            const insightsList = document.getElementById('insights-list');
+            insightsList.innerHTML = insights.map(insight => `<li>${insight}</li>`).join('');
+
+            // Show results
+            document.getElementById('results').classList.add('active');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
