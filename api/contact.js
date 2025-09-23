@@ -38,19 +38,40 @@ export default async function handler(req, res) {
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const result = await resend.emails.send({
-          from: 'Contact Form <onboarding@resend.dev>', // Using Resend's test domain
+          from: 'AI Executive Coaching <onboarding@resend.dev>', // More professional sender name
           to: 'thormatt@gmail.com', // Your email
-          subject: `[AI Executive Coaching] ${type === 'executive-session' ? 'Executive Session Request' : type || 'Contact'} from ${name}`,
+          subject: `New inquiry from ${name} - ${company || 'Executive Coaching'}`,
+          text: `Name: ${name}\nCompany: ${company || 'Not provided'}\nEmail: ${email}\nType: ${type || 'General Inquiry'}\n\nMessage:\n${message}`,
           html: `
-            <h2>New Contact Form Submission</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Company:</strong> ${company || 'Not provided'}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Type:</strong> ${type || 'General Inquiry'}</p>
-            <p><strong>Message:</strong></p>
-            <p>${message.replace(/\n/g, '<br>')}</p>
-            <hr>
-            <p><small>Sent from ai-executive-coaching.vercel.app</small></p>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #2c3e50;">New Contact Form Submission</h2>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 8px 0; color: #666;"><strong>Name:</strong></td>
+                  <td style="padding: 8px 0;">${name}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666;"><strong>Company:</strong></td>
+                  <td style="padding: 8px 0;">${company || 'Not provided'}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666;"><strong>Email:</strong></td>
+                  <td style="padding: 8px 0;"><a href="mailto:${email}">${email}</a></td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666;"><strong>Type:</strong></td>
+                  <td style="padding: 8px 0;">${type || 'General Inquiry'}</td>
+                </tr>
+              </table>
+              <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                <p style="color: #333;"><strong>Message:</strong></p>
+                <p style="color: #555; line-height: 1.6;">${message.replace(/\n/g, '<br>')}</p>
+              </div>
+              <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 12px;">
+                <p>This email was sent from your website contact form at ai-executive-coaching.vercel.app</p>
+                <p>Reply directly to this email to respond to ${name}</p>
+              </div>
+            </div>
           `,
           reply_to: email,
         });
