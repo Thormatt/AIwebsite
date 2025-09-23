@@ -183,9 +183,14 @@ if (contactForm) {
                 throw new Error(result.error || 'Failed to send message');
             }
 
-            // Show success message
+            // Log for debugging
+            console.log('Email sent:', result);
+
+            // Show success message with debug info
             formStatus.className = 'form-status success';
-            formStatus.textContent = 'Thank you for your message. I\'ll get back to you within 24 hours.';
+            formStatus.textContent = result.debug
+                ? `Thank you! Email sent to ${result.to}. ${result.debug}`
+                : 'Thank you for your message. I\'ll get back to you within 24 hours.';
             contactForm.reset();
 
             // Hide message after 5 seconds

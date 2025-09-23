@@ -56,7 +56,15 @@ export default async function handler(req, res) {
         });
 
         console.log('Email sent successfully:', result);
-        return res.status(200).json({ success: true, message: 'Email sent successfully', id: result.id });
+        console.log('Sent to:', 'thormatt@gmail.com');
+        console.log('Email ID:', result.id);
+        return res.status(200).json({
+          success: true,
+          message: 'Email sent successfully',
+          id: result.id,
+          to: 'thormatt@gmail.com',
+          debug: `Check spam folder. Email ID: ${result.id}`
+        });
       } catch (error) {
         console.error('Resend error:', error);
         return res.status(500).json({
