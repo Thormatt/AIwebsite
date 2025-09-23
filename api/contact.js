@@ -33,26 +33,38 @@ export default async function handler(req, res) {
     // Then add RESEND_API_KEY to your Vercel environment variables
 
     if (process.env.RESEND_API_KEY) {
-      const { Resend } = await import('resend');
-      const resend = new Resend(process.env.RESEND_API_KEY);
+      try {
+        const { Resend } = await import('resend');
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
-      await resend.emails.send({
-        from: 'Contact Form <onboarding@resend.dev>', // Change this after domain verification
-        to: 'thormatt@gmail.com', // Your email
-        subject: `[Website Contact] ${subject || 'General Inquiry'} from ${name}`,
-        html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Company:</strong> ${company || 'Not provided'}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Subject:</strong> ${subject || 'General Inquiry'}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message.replace(/\n/g, '<br>')}</p>
-        `,
-        reply_to: email,
-      });
+        const result = await resend.emails.send({
+          from: 'Contact Form <onboarding@resend.dev>', // Using Resend's test domain
+          to: 'thormatt@gmail.com', // Your email
+          subject: `[AI Executive Coaching] ${type === 'executive-session' ? 'Executive Session Request' : subject || 'Contact'} from ${name}`,
+          html: `
+            <h2>New Contact Form Submission</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Company:</strong> ${company || 'Not provided'}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Type:</strong> ${type || 'General Inquiry'}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message.replace(/\n/g, '<br>')}</p>
+            <hr>
+            <p><small>Sent from ai-executive-coaching.vercel.app</small></p>
+          `,
+          reply_to: email,
+        });
 
-      return res.status(200).json({ success: true, message: 'Email sent successfully' });
+        console.log('Email sent successfully:', result);
+        return res.status(200).json({ success: true, message: 'Email sent successfully', id: result.id });
+      } catch (error) {
+        console.error('Resend error:', error);
+        return res.status(500).json({
+          error: 'Failed to send email',
+          details: error.message,
+          hint: 'Check that RESEND_API_KEY is set correctly in Vercel environment variables'
+        });
+      }
     }
 
     // Option 2: Store in a database or Google Sheets
