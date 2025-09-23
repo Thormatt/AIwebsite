@@ -874,6 +874,23 @@ section {
     white-space: nowrap;
 }
 
+/* Ensure text contrast on mobile */
+@media (max-width: 768px) {
+    .chart-bar.value .bar-label {
+        color: var(--text-primary);
+        text-shadow: 0 0 4px rgba(255,255,255,0.8);
+    }
+
+    .chart-bar.adoption .bar-label {
+        color: var(--white);
+    }
+
+    .chart-container {
+        max-width: 100%;
+        overflow: visible;
+    }
+}
+
 .gap-indicator {
     position: absolute;
     right: 30%;
@@ -992,15 +1009,17 @@ section {
     .nav-links {
         width: 100%;
         overflow-x: auto;
-        gap: var(--space-sm);
+        gap: var(--space-xs);
         padding: var(--space-xs) 0;
+        padding-right: var(--space-md);
         -webkit-overflow-scrolling: touch;
     }
 
     .nav-links a {
         font-size: 0.875rem;
         white-space: nowrap;
-        padding: 0.25rem 0.5rem;
+        padding: 0.25rem 0.35rem;
+        flex-shrink: 0;
     }
 
     .misconception-grid,
