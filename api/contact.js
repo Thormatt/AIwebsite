@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, company, email, subject, message } = req.body;
+    const { name, company, email, type, message } = req.body;
 
     // Validate required fields
     if (!name || !email || !message) {
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
         const result = await resend.emails.send({
           from: 'Contact Form <onboarding@resend.dev>', // Using Resend's test domain
           to: 'thormatt@gmail.com', // Your email
-          subject: `[AI Executive Coaching] ${type === 'executive-session' ? 'Executive Session Request' : subject || 'Contact'} from ${name}`,
+          subject: `[AI Executive Coaching] ${type === 'executive-session' ? 'Executive Session Request' : type || 'Contact'} from ${name}`,
           html: `
             <h2>New Contact Form Submission</h2>
             <p><strong>Name:</strong> ${name}</p>

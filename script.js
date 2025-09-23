@@ -195,8 +195,15 @@ if (contactForm) {
 
         } catch (error) {
             // Show error message
+            console.error('Contact form error:', error);
             formStatus.className = 'form-status error';
-            formStatus.textContent = 'There was an error sending your message. Please try again or contact via LinkedIn.';
+
+            // Show more specific error if available
+            if (error.message) {
+                formStatus.textContent = `Error: ${error.message}. Please try again or contact via LinkedIn.`;
+            } else {
+                formStatus.textContent = 'There was an error sending your message. Please try again or contact via LinkedIn.';
+            }
         } finally {
             // Reset button
             submitBtn.disabled = false;
