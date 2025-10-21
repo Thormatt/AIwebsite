@@ -34,18 +34,57 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Thor Matthiasson AI Advisory",
+        "description": "Executive AI advisory and strategy consulting for CEOs and senior leaders navigating artificial intelligence implementation",
+        "url": "https://thormatthiasson.com",
+        "logo": "https://thormatthiasson.com/logo.png",
+        "founder": {
+            "@type": "Person",
+            "name": "Thor Matthiasson",
+            "jobTitle": "AI Strategy Advisor",
+            "description": "AI Strategy Advisor with background in international business, performance marketing, data analytics, and machine learning",
+            "sameAs": [
+                "https://www.linkedin.com/in/thor-matthiasson-647a9415/"
+            ]
+        },
+        "serviceType": [
+            "AI Strategy Consulting",
+            "Executive AI Advisory",
+            "AI Maturity Assessment",
+            "AI Implementation Planning"
+        ],
+        "areaServed": {
+            "@type": "Country",
+            "name": "United States"
+        },
+        "priceRange": "$$$"
+    }
+    </script>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="nav">
         <div class="nav-container">
-            <a href="#" class="nav-logo">Thor Matthiasson</a>
+            <a href="index.html" class="nav-logo">Thor Matthiasson</a>
+            <button class="nav-menu-button" aria-label="Menu" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div class="nav-links">
-                <a href="#thinking">Thinking</a>
-                <a href="#how-i-help">Advisory</a>
-                <a href="#tools">Tools</a>
-                <a href="#office-hours">Executive Sessions</a>
-                <a href="#about">About</a>
+                <a href="thinking.html">Thinking</a>
+                <a href="services.html">Advisory</a>
+                <a href="framework.html">Framework</a>
+                <a href="tools.html">Tools</a>
+                <a href="portfolio.html">Portfolio</a>
                 <a href="#contact">Contact</a>
             </div>
         </div>
@@ -57,7 +96,7 @@
             <div class="hero-content">
                 <div class="hero-text">
             <h1 class="hero-name">Thor Matthiasson</h1>
-            <p class="hero-tagline">Executive AI Coach & Strategic Advisor</p>
+            <p class="hero-tagline">AI Strategy Advisor</p>
             <p class="hero-description">
                 I work with C-Suite leaders and executives through 1-on-1 coaching<br>
                 navigating AI decisions—from board presentations<br>
@@ -72,26 +111,34 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-number" data-value="73">0</span><span class="stat-suffix">%</span>
-                    <span class="stat-label">of CEOs feel AI pressure</span>
+                    <span class="stat-label">of investors demand AI at scale<sup>1</sup></span>
                 </div>
                 <div class="stat-card highlight">
-                    <span class="stat-number" data-value="89">0</span><span class="stat-suffix">%</span>
-                    <span class="stat-label">lack clear AI strategy</span>
+                    <span class="stat-number" data-value="74">0</span><span class="stat-suffix">%</span>
+                    <span class="stat-label">fail to show tangible value<sup>2</sup></span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-number" data-value="2">0</span><span class="stat-suffix">x</span>
-                    <span class="stat-label">ROI uncertainty factor</span>
+                    <span class="stat-number" data-value="30">0</span><span class="stat-suffix">%</span>
+                    <span class="stat-label">of AI projects abandoned<sup>3</sup></span>
                 </div>
+            </div>
+            <div class="stats-sources" style="margin-top: 1rem; text-align: center;">
+                <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+                    <sup>1</sup>PwC Global Investor Survey 2024 | <sup>2</sup>BCG "Where's the Value in AI?" Oct 2024 | <sup>3</sup>Gartner AI Project Forecast 2024
+                </p>
             </div>
 
             <div class="hero-actions">
-                <a href="#contact" class="btn btn-primary">Book Executive Session</a>
-                <a href="#how-i-help" class="btn btn-secondary">Learn More</a>
+                <a href="#contact" class="btn btn-primary">Request Strategy Call</a>
+                <a href="services.html" class="btn btn-secondary">Explore Advisory Services</a>
             </div>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.85rem;">
+                Submit a brief outline and I'll reply within 1 business day with a tailored agenda and calendar link.
+            </p>
                 </div>
             </div>
             <div class="hero-image">
-                <img src="images/thor-profile.jpg" alt="Thor Matthiasson">
+                <img src="images/thor-profile.jpg" alt="Thor Matthiasson" loading="lazy">
                 <div class="image-gradient"></div>
             </div>
         </div>
@@ -182,52 +229,87 @@
         </div>
     </section>
 
-    <!-- Current Thinking -->
-    <section id="thinking" class="thinking">
-        <div class="container">
-            <h2 class="section-title">Current Thinking</h2>
-            <p class="section-subtitle">Essays on AI strategy, implementation, and reality checks</p>
 
-            <div class="articles">
-                <article class="article">
-                    <time class="article-date">December 2024</time>
-                    <h3 class="article-title">Breaking Through the Silicon Ceiling</h3>
-                    <p class="article-excerpt">
-                        74% of companies can't scale AI beyond the C-suite. Learn why frontline adoption fails
-                        and how to build AI initiatives that deliver value across your entire organization.
-                    </p>
-                    <a href="articles/silicon-ceiling.html" class="article-link">Continue reading →</a>
-                </article>
+    <!-- Who This Is For -->
+    <section style="padding: 4rem 2rem; background: white;">
+        <div class="container" style="max-width: 900px;">
+            <h2 class="section-title">Who I Work With</h2>
+            <p class="section-subtitle" style="margin-bottom: 3rem;">
+                My practice focuses on leaders who need strategic clarity, not implementation teams
+            </p>
 
-                <article class="article">
-                    <time class="article-date">December 2024</time>
-                    <h3 class="article-title">From Pilot to Production: The 90-Day Framework</h3>
-                    <p class="article-excerpt">
-                        Most AI pilots are designed to impress in demos and fail in reality. Here's the exact
-                        framework for running pilots that either scale successfully or fail fast.
-                    </p>
-                    <a href="articles/ai-pilot-to-production.html" class="article-link">Continue reading →</a>
-                </article>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+                <div style="padding: 2rem; background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%); border-radius: 12px; border: 1px solid var(--border-light);">
+                    <h3 style="color: var(--accent-sage); margin-bottom: 1rem; font-size: 1.25rem;">Company Profile</h3>
+                    <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem;">
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--accent-sage);">→</span>
+                            <span>Mid-market to enterprise ($50M-$5B revenue)</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--accent-sage);">→</span>
+                            <span>B2B services, healthcare, financial services, education</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--accent-sage);">→</span>
+                            <span>US-based with remote advisory engagement</span>
+                        </li>
+                    </ul>
+                </div>
 
-                <article class="article">
-                    <time class="article-date">Coming Soon</time>
-                    <h3 class="article-title">The Real Cost of GPT-4 in Production</h3>
-                    <p class="article-excerpt">
-                        Everyone talks about the possibilities. Few discuss the economics. What it actually
-                        costs to run LLMs at scale, and why that matters for your use case.
-                    </p>
-                    <a href="articles/coming-soon.html" class="article-link">Continue reading →</a>
-                </article>
+                <div style="padding: 2rem; background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%); border-radius: 12px; border: 1px solid var(--border-light);">
+                    <h3 style="color: var(--accent-sage); margin-bottom: 1rem; font-size: 1.25rem;">Leadership Level</h3>
+                    <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem;">
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--accent-sage);">→</span>
+                            <span>CEOs navigating board AI conversations</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--accent-sage);">→</span>
+                            <span>COOs and Chief Digital Officers leading initiatives</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--accent-sage);">→</span>
+                            <span>VPs of Technology facing build-vs-buy decisions</span>
+                        </li>
+                    </ul>
+                </div>
 
-                <article class="article">
-                    <time class="article-date">Coming Soon</time>
-                    <h3 class="article-title">When NOT to Use AI: A Guide for Leaders</h3>
-                    <p class="article-excerpt">
-                        AI isn't always the answer. Sometimes a simple rule-based system, a spreadsheet,
-                        or human judgment is better. Here's how to tell the difference.
-                    </p>
-                    <a href="articles/coming-soon.html" class="article-link">Continue reading →</a>
-                </article>
+                <div style="padding: 2rem; background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%); border-radius: 12px; border: 1px solid var(--border-light);">
+                    <h3 style="color: var(--accent-sage); margin-bottom: 1rem; font-size: 1.25rem;">AI Journey Stage</h3>
+                    <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem;">
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--accent-sage);">→</span>
+                            <span>Exploring AI but unclear where to start</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--accent-sage);">→</span>
+                            <span>Stuck in pilot purgatory, struggling to scale</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--accent-sage);">→</span>
+                            <span>Need vendor-neutral guidance on AI investments</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div style="padding: 2rem; background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%); border-radius: 12px; border: 1px solid var(--border-light);">
+                    <h3 style="color: var(--accent-sage); margin-bottom: 1rem; font-size: 1.25rem;">Not Right For</h3>
+                    <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem;">
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--text-muted);">✕</span>
+                            <span style="color: var(--text-muted);">Early-stage startups or companies under $25M revenue</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--text-muted);">✕</span>
+                            <span style="color: var(--text-muted);">Organizations seeking implementation teams</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <span style="color: var(--text-muted);">✕</span>
+                            <span style="color: var(--text-muted);">Leaders looking for quick fixes or magic bullets</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
@@ -281,7 +363,7 @@
     <!-- How I Help -->
     <section id="how-i-help" class="services">
         <div class="container">
-            <h2 class="section-title">Executive AI Coaching & Advisory</h2>
+            <h2 class="section-title">AI Strategy Advisory Services</h2>
             <p class="section-subtitle">1-on-1 guidance for CEOs and senior executives navigating critical AI decisions</p>
 
             <div class="service-grid">
@@ -289,6 +371,9 @@
                     <h3>1-on-1 Executive Coaching</h3>
                     <p>Personal AI advisor to CEOs and C-suite executives. Navigate board questions, vendor decisions,
                     and strategic opportunities with complete confidentiality.</p>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                        Includes monthly 90-minute strategy sessions, executive-ready recap briefs within 24 hours, and async reviews of board materials as they evolve.
+                    </p>
                     <span class="service-format">Monthly coaching sessions</span>
                 </div>
 
@@ -296,6 +381,9 @@
                     <h3>Board Readiness Coaching</h3>
                     <p>Prepare for critical board discussions on AI. From strategy presentations to fielding
                     tough questions, I'll ensure you're ready to lead the conversation.</p>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                        We co-build a 12-slide executive deck, scenario playbooks, and an anticipated Q&amp;A memo so you walk in with proof points and crisp answers.
+                    </p>
                     <span class="service-format">Intensive prep package</span>
                 </div>
 
@@ -303,6 +391,9 @@
                     <h3>Executive AI Intensive</h3>
                     <p>Two-day deep dive for senior leaders. Understand AI capabilities, limitations,
                     and strategic implications. Leave with a clear action plan.</p>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                        Pre-workshop maturity diagnostics, two half-day working sessions, and a 90-day execution roadmap with owners, milestones, and success metrics.
+                    </p>
                     <span class="service-format">2-day intensive</span>
                 </div>
 
@@ -310,6 +401,9 @@
                     <h3>C-Suite AI Alignment</h3>
                     <p>Facilitate strategic alignment among your executive team. Build shared understanding
                     and consensus on AI priorities and investment decisions.</p>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                        Executive interviews, alignment scorecard, and a decision log that captures agreed priorities, funding thresholds, and governance guardrails.
+                    </p>
                     <span class="service-format">Leadership workshop</span>
                 </div>
 
@@ -317,6 +411,9 @@
                     <h3>Strategic AI Advisory</h3>
                     <p>Ongoing strategic counsel for CEOs. Regular check-ins, unlimited email access,
                     and on-demand guidance for critical decisions. Your AI consigliere.</p>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                        Bi-weekly executive huddles, KPI pulse reports, and vendor diligence memos so you can make confident calls without slowing the team.
+                    </p>
                     <span class="service-format">Quarterly retainer</span>
                 </div>
 
@@ -324,7 +421,37 @@
                     <h3>Crisis Advisory</h3>
                     <p>When AI decisions can't wait. Rapid response for M&A due diligence, competitive
                     threats, or urgent strategic pivots. Available 24/7 for existing clients.</p>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                        Deliverables within 24 hours: risk brief, decision tree, and recommended executive communication points tailored to your situation.
+                    </p>
                     <span class="service-format">On-demand</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Framework Preview Section -->
+    <section class="framework-preview">
+        <div class="container">
+            <div class="framework-preview-content">
+                <div class="framework-preview-text">
+                    <h2 class="section-title">Proven Framework</h2>
+                    <p class="framework-preview-intro">
+                        My AI Discovery & Maturity Assessment evaluates <strong>5 critical dimensions</strong>—from
+                        data readiness and governance to culture and value realization—giving you a clear roadmap from pilot to scale.
+                    </p>
+                    <p class="framework-preview-description">
+                        Stop guessing where to focus. This systematic approach reveals what's blocking your AI progress,
+                        identifies quick wins, and prioritizes the initiatives that will actually deliver business value.
+                    </p>
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <a href="framework.html" class="btn btn-secondary">Explore the Framework</a>
+                        <a href="services.html" class="btn btn-primary">View Advisory Options</a>
+                    </div>
+                </div>
+                <div class="framework-preview-visual" id="framework-visual">
+                    <canvas id="homepageRadar" width="400" height="400" style="width: 100%; height: auto; max-width: 400px;"></canvas>
                 </div>
             </div>
         </div>
@@ -334,7 +461,7 @@
     <section id="tools" class="tools-section">
         <div class="container">
             <div class="tools-intro">
-                <h2 class="section-title">Free AI Assessment Tools</h2>
+                <h2 class="section-title">Free AI Decision Tools</h2>
                 <p class="section-subtitle">No email required. No sales pitch. Just honest analysis to help you make better AI decisions.</p>
             </div>
 
@@ -366,19 +493,6 @@
                     </a>
                 </div>
 
-                <!-- AI Readiness Assessment -->
-                <div class="tool-card">
-                    <h3 class="tool-title">Readiness Assessment</h3>
-                    <p class="tool-tagline">Measure your AI maturity level</p>
-                    <p class="tool-description">
-                        Take a 10-question assessment across data, technical, business, and culture
-                        dimensions to get your personalized AI roadmap.
-                    </p>
-                    <a href="tools/ai-assessment.html" class="btn btn-primary">
-                        Start Assessment
-                    </a>
-                </div>
-
                 <!-- Build vs Buy Analyzer -->
                 <div class="tool-card">
                     <div class="tool-badge">New</div>
@@ -392,6 +506,131 @@
                         Analyze Options
                     </a>
                 </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Plus our comprehensive AI Maturity Assessment integrated with the Framework
+                </p>
+                <a href="tools.html" class="btn btn-secondary">View All Tools</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section style="padding: 4rem 2rem; background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);">
+        <div class="container" style="max-width: 1000px;">
+            <h2 class="section-title" style="text-align: center;">What Executives Say</h2>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">Real feedback from leaders who've worked with me</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+                <!-- Testimonial 1 -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid var(--border-light); position: relative;">
+                    <div style="color: var(--gold); font-size: 2.5rem; line-height: 1; margin-bottom: 1rem; font-family: Georgia, serif;">"</div>
+                    <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
+                        Thor's ROI calculator was incredibly helpful. It gave me a clear framework to evaluate AI investments
+                        for my practice, cutting through the noise and showing real financial impact.
+                    </p>
+                    <div>
+                        <p style="font-weight: 600; margin-bottom: 0.25rem;">Hugh M.</p>
+                        <p style="font-size: 0.875rem; color: var(--text-muted);">Partner, NYC Law Firm</p>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid var(--border-light); position: relative;">
+                    <div style="color: var(--gold); font-size: 2.5rem; line-height: 1; margin-bottom: 1rem; font-family: Georgia, serif;">"</div>
+                    <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
+                        My mind was blown. Thor's tools and frameworks transformed how we think about AI strategy in education.
+                        This is exactly what school leadership needs.
+                    </p>
+                    <div>
+                        <p style="font-weight: 600; margin-bottom: 0.25rem;">Nathan L.</p>
+                        <p style="font-size: 0.875rem; color: var(--text-muted);">CIO, Private School, California</p>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-light); text-align: center; display: flex; flex-direction: column; justify-content: center;">
+                    <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem; font-size: 1rem;">
+                        Want to understand how these engagements translate to your boardroom? Let's talk through your context and share relevant case summaries.
+                    </p>
+                    <a href="#contact" class="btn btn-primary" style="align-self: center;">Request Strategy Call</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section style="padding: 4rem 2rem; background: white;">
+        <div class="container" style="max-width: 900px;">
+            <h2 class="section-title" style="text-align: center;">Common Questions</h2>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">What executives typically ask before we start working together</p>
+
+            <div style="display: grid; gap: 1.5rem;">
+                <details style="background: var(--background); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light); cursor: pointer;">
+                    <summary style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary); cursor: pointer;">
+                        How is this different from hiring a consulting firm?
+                    </summary>
+                    <p style="margin-top: 1rem; color: var(--text-secondary); line-height: 1.7;">
+                        Consulting firms sell implementation teams and have incentive to expand scope. I provide vendor-neutral strategic
+                        counsel with no implementation arm to sell you. My only success metric is helping you make the right decisions
+                        for your organization—even if that means doing less, not more.
+                    </p>
+                </details>
+
+                <details style="background: var(--background); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light); cursor: pointer;">
+                    <summary style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary); cursor: pointer;">
+                        Do you build AI solutions or just advise?
+                    </summary>
+                    <p style="margin-top: 1rem; color: var(--text-secondary); line-height: 1.7;">
+                        I advise executives on AI strategy and can review technical architecture, but I don't take on client
+                        implementation projects. I build AI tools and systems for my own use (portfolio available by request),
+                        which keeps my advice unbiased and focused on your strategic interests, not my project revenue.
+                    </p>
+                </details>
+
+                <details style="background: var(--background); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light); cursor: pointer;">
+                    <summary style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary); cursor: pointer;">
+                        What's the time commitment for executives?
+                    </summary>
+                    <p style="margin-top: 1rem; color: var(--text-secondary); line-height: 1.7;">
+                        Discovery Assessment: 4-6 hours over 2 weeks (interviews, review sessions). Fractional engagement:
+                        2-4 hours monthly for strategy sessions, plus async communication. I design engagements to maximize
+                        insight with minimal disruption to your schedule.
+                    </p>
+                </details>
+
+                <details style="background: var(--background); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light); cursor: pointer;">
+                    <summary style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary); cursor: pointer;">
+                        How quickly can we get started?
+                    </summary>
+                    <p style="margin-top: 1rem; color: var(--text-secondary); line-height: 1.7;">
+                        Discovery assessments typically start within 1-2 weeks of initial conversation. Fractional engagements
+                        can begin immediately if there's mutual fit. I limit active engagements to maintain quality and responsiveness.
+                    </p>
+                </details>
+
+                <details style="background: var(--background); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light); cursor: pointer;">
+                    <summary style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary); cursor: pointer;">
+                        What if our team already has AI expertise?
+                    </summary>
+                    <p style="margin-top: 1rem; color: var(--text-secondary); line-height: 1.7;">
+                        Even better. I work with your technical leads to pressure-test assumptions, identify blind spots, and
+                        provide strategic air cover for tough decisions. Think of me as an experienced advisor who's seen what
+                        works (and what doesn't) across dozens of implementations.
+                    </p>
+                </details>
+
+                <details style="background: var(--background); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light); cursor: pointer;">
+                    <summary style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary); cursor: pointer;">
+                        Do you sign NDAs and work under confidentiality?
+                    </summary>
+                    <p style="margin-top: 1rem; color: var(--text-secondary); line-height: 1.7;">
+                        Yes. All engagements include standard confidentiality protections. I never share client names,
+                        details, or learnings without explicit permission. Your competitive strategies and internal
+                        challenges remain completely confidential.
+                    </p>
+                </details>
             </div>
         </div>
     </section>
@@ -408,7 +647,7 @@
                     <p>These confidential conversations are designed for senior leaders facing critical AI decisions—from
                     board presentations to vendor selection to organizational transformation.</p>
                     <p>Complete discretion. No recordings. Just strategic clarity.</p>
-                    <a href="#contact" class="btn btn-primary">Book Executive Session</a>
+                    <a href="#contact" class="btn btn-primary">Schedule Confidential Call</a>
                 </div>
                 <div class="calendar-visual">
                     <div class="calendar-week">
@@ -444,27 +683,48 @@
             <h2 class="section-title">About Thor Matthiasson</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <p>
-                        Thor helps leaders turn AI into measurable growth by designing pilots, implementation,
-                        and go-to-market strategies. He brings cross-functional insight, executive advisory
-                        experience, and a practical playbook for responsible, human-centered AI transformation.
-                    </p>
-                    <p>
-                        With deep expertise in data analytics, tech product development, and performance marketing
-                        across Europe and North America, Thor has built a reputation for delivering results that
-                        matter. His approach combines analytical rigor with strategic vision to create AI
-                        solutions that drive real business value.
-                    </p>
-                    <p>
-                        An award-winning strategist—recognized at the European Search Awards and with a Eurobest
-                        Grand Prix—Thor has shared his insights at NATO security forums and Google partner events,
-                        speaking on AI, digital media, and influence. These platforms have shaped his understanding
-                        of AI's potential and its responsible deployment.
-                    </p>
-                    <p>
-                        Thor works with organizations ready to move beyond experimentation to implementation,
-                        focusing on measurable outcomes and sustainable growth. His advisory practice emphasizes
-                        practical strategies that balance innovation with responsibility.
+                    <div style="background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <h4 style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1rem;">Key Qualifications</h4>
+                        <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem;">
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span><strong>Cross-functional business background</strong> spanning international markets, performance marketing, data analytics, and AI implementation</span>
+                            </li>
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span><strong>Agency founder background</strong> in performance marketing and analytics, understanding both business operations and technical implementation</span>
+                            </li>
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span><strong>Award-winning strategist</strong> - European Search Awards Winner, Eurobest Grand Prix</span>
+                            </li>
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span><strong>International speaker</strong> at NATO security forums and Google partner events</span>
+                            </li>
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span><strong>Proven track record</strong> across Europe and North America delivering measurable results</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p style="font-size: 1.125rem; line-height: 1.8; color: var(--text-secondary);">
+                        Thor's career spans video production, international business in China and Hong Kong, and over a decade in
+                        performance marketing and data analytics—including founding and running his own agency. In recent years, he's
+                        focused on machine learning and AI, building tools and systems while advising C-Suite leaders on separating
+                        AI reality from vendor promises. This diverse background gives him <strong>a unique perspective on how AI
+                        actually fits into business operations</strong>, not just what's technically possible.
                     </p>
                 </div>
                 <div class="about-credentials">
@@ -501,11 +761,40 @@
         </div>
     </section>
 
+    <!-- Speaking & Advisory Section -->
+    <section class="speaking-section">
+        <div class="container">
+            <h2 class="section-title">Speaking & Advisory</h2>
+            <p class="section-subtitle">Teaching leaders to navigate AI implementation</p>
+
+            <div class="speaking-grid">
+                <img src="images/speaking-workshop.jpg" alt="Thor Matthiasson presenting AI workshop to executive team" loading="lazy">
+                <img src="images/speaking-google-event.jpg" alt="Thor Matthiasson presenting at Google REWRITER event" loading="lazy">
+                <img src="images/speaking-national-security-panel.jpg" alt="Thor Matthiasson on National Security and Hybrid Threats panel" loading="lazy">
+            </div>
+
+            <div style="margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%); border-radius: 12px; border: 1px solid var(--border-light); text-align: center;">
+                <p style="font-size: 1rem; color: var(--text-secondary); margin: 0;">
+                    <strong style="color: var(--text-primary);">Technical Portfolio:</strong> Detailed case studies and project showcases available upon request for qualified prospects.
+                    <a href="index.html#contact" style="color: var(--accent-sage); text-decoration: underline; margin-left: 0.5rem;">Contact for access</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Form -->
     <section id="contact" class="contact-section">
         <div class="container">
             <h2 class="section-title">Get in Touch</h2>
-            <p class="section-subtitle">Let's discuss how AI can drive measurable growth for your organization</p>
+            <p class="section-subtitle">Share context and I'll reply within 1 business day with a tailored agenda and scheduling link</p>
+
+            <!-- Contact Photo with Hover Effect -->
+            <div class="contact-photo-wrapper">
+                <div class="contact-photo">
+                    <img src="images/thor-contact-smile.jpg" alt="Thor Matthiasson" class="photo-default" loading="lazy">
+                    <img src="images/thor-contact-thoughtful.jpg" alt="Thor Matthiasson" class="photo-hover" loading="lazy">
+                </div>
+            </div>
 
             <div class="contact-form-container">
                 <form id="contact-form" class="contact-form">
@@ -540,9 +829,12 @@
                         <textarea id="message" name="message" rows="5" required></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Send Message</button>
+                    <button type="submit" class="btn btn-primary">Request Strategy Call</button>
 
                     <div id="form-status" class="form-status"></div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1rem;">
+                        Expect a 30-minute discovery call focused on your current initiatives, executive priorities, and the outcomes you need to show your board.
+                    </p>
                 </form>
             </div>
         </div>
@@ -562,6 +854,160 @@
     </footer>
 
     <script src="script.js"></script>
+
+    <!-- Homepage Radar Chart -->
+    <script>
+    (function() {
+        const canvas = document.getElementById('homepageRadar');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size for high DPI displays
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = 400 * dpr;
+        canvas.height = 400 * dpr;
+        ctx.scale(dpr, dpr);
+
+        // 5 dimensions matching the framework page
+        const dimensions = [
+            { label: 'Data Readiness', value: 0.72 },
+            { label: 'Risk & Governance', value: 0.52 },
+            { label: 'Technical Capability', value: 0.68 },
+            { label: 'Business Alignment', value: 0.58 },
+            { label: 'Organizational Culture', value: 0.70 }
+        ];
+
+        const centerX = 200;
+        const centerY = 200;
+        const maxRadius = 120;
+        const levels = 5;
+
+        let animationProgress = 0;
+        let isAnimating = false;
+
+        // Calculate angle for each dimension
+        const angleStep = (Math.PI * 2) / dimensions.length;
+
+        // Draw the radar chart
+        function drawRadar() {
+            ctx.clearRect(0, 0, 400, 400);
+
+            // Draw grid circles with subtle style
+            ctx.strokeStyle = 'rgba(224, 224, 224, 0.5)';
+            ctx.lineWidth = 1;
+            for (let i = 1; i <= levels; i++) {
+                ctx.beginPath();
+                const radius = (maxRadius / levels) * i;
+                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Draw axis lines
+            dimensions.forEach((dim, index) => {
+                const angle = angleStep * index - Math.PI / 2;
+                const x = centerX + Math.cos(angle) * maxRadius;
+                const y = centerY + Math.sin(angle) * maxRadius;
+
+                ctx.strokeStyle = 'rgba(224, 224, 224, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+
+                // Draw dimension labels
+                const labelX = centerX + Math.cos(angle) * (maxRadius + 25);
+                const labelY = centerY + Math.sin(angle) * (maxRadius + 25);
+
+                ctx.fillStyle = '#666';
+                ctx.font = '11px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                // Adjust text alignment based on position
+                if (Math.abs(labelX - centerX) > 10) {
+                    ctx.textAlign = labelX > centerX ? 'left' : 'right';
+                }
+
+                ctx.fillText(dim.label, labelX, labelY);
+            });
+
+            // Draw data polygon
+            ctx.beginPath();
+            dimensions.forEach((dim, index) => {
+                const angle = angleStep * index - Math.PI / 2;
+                const value = dim.value * animationProgress;
+                const x = centerX + Math.cos(angle) * maxRadius * value;
+                const y = centerY + Math.sin(angle) * maxRadius * value;
+
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.closePath();
+
+            // Fill polygon with golden gradient
+            const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius);
+            gradient.addColorStop(0, 'rgba(218, 165, 32, 0.3)');
+            gradient.addColorStop(1, 'rgba(218, 165, 32, 0.1)');
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            // Stroke polygon
+            ctx.strokeStyle = 'rgba(218, 165, 32, 0.8)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw data points
+            dimensions.forEach((dim, index) => {
+                const angle = angleStep * index - Math.PI / 2;
+                const value = dim.value * animationProgress;
+                const x = centerX + Math.cos(angle) * maxRadius * value;
+                const y = centerY + Math.sin(angle) * maxRadius * value;
+
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#daa520';
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            });
+        }
+
+        // Animation loop
+        function animate() {
+            if (animationProgress < 1) {
+                animationProgress += 0.025;
+                drawRadar();
+                requestAnimationFrame(animate);
+            } else {
+                animationProgress = 1;
+                drawRadar();
+                isAnimating = false;
+            }
+        }
+
+        // Start animation when element comes into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !isAnimating) {
+                    isAnimating = true;
+                    animationProgress = 0;
+                    animate();
+                }
+            });
+        }, { threshold: 0.3 });
+
+        observer.observe(canvas);
+
+        // Initial draw
+        drawRadar();
+    })();
+    </script>
     
     <!-- PWA Service Worker Registration -->
     <script>
