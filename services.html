@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work With Thor - AI Advisory Services</title>
+    <meta name="description" content="Choose your engagement model: 2-week Discovery Assessment or ongoing Fractional AI Advisor partnership.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Service cards */
+        .service-choice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+
+        .service-choice-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: center;
+        }
+
+        .service-choice-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-sage);
+        }
+
+        .service-type-label {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: linear-gradient(135deg, #fff5ee 0%, #fdf9f4 100%);
+            border: 1px solid var(--gold-light);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--gold);
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-choice-card h3 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .service-choice-card p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .service-choice-card .btn {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .service-choice-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            margin: 2rem 0 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .comparison-table thead th {
+            padding: 1.5rem 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: white;
+            border: none;
+        }
+
+        .comparison-table thead th:first-child {
+            background: transparent;
+        }
+
+        .comparison-table thead th:nth-child(2) {
+            background: linear-gradient(135deg, var(--accent-sage), #6b8c7a);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .comparison-table thead th:nth-child(3) {
+            background: linear-gradient(135deg, #b8956a, #d4a574);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .comparison-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: rgba(90, 124, 106, 0.03);
+        }
+
+        .comparison-table tbody td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .comparison-table tbody td:first-child {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            width: 30%;
+        }
+
+        .comparison-table tbody td:nth-child(2),
+        .comparison-table tbody td:nth-child(3) {
+            color: var(--text-secondary);
+            text-align: center;
+            position: relative;
+            background: white;
+        }
+
+        .comparison-table tbody td:nth-child(2) {
+            border-left: 3px solid var(--accent-sage);
+        }
+
+        .comparison-table tbody td:nth-child(3) {
+            border-left: 3px solid var(--accent-gold);
+        }
+
+        .comparison-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tbody tr:last-child td:nth-child(2) {
+            border-radius: 0 0 0 12px;
+        }
+
+        .comparison-table tbody tr:last-child td:nth-child(3) {
+            border-radius: 0 0 12px 0;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+
+    <!-- Schema.org Service Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "serviceType": "AI Advisory Services",
+        "provider": {
+            "@type": "Person",
+            "name": "Thor Matthiasson"
+        },
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "AI Advisory Services",
+            "itemListElement": [
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Discovery & Gap Assessment",
+                        "description": "2-week structured assessment of your AI readiness with board-ready roadmap"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Fractional AI Advisor",
+                        "description": "Ongoing strategic AI guidance on retainer basis"
+                    }
+                }
+            ]
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Thor Matthiasson</a>
+            <button class="nav-menu-button" aria-label="Menu" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="nav-links">
+                <a href="thinking.html">Thinking</a>
+                <a href="services.html">Advisory</a>
+                <a href="framework.html">Framework</a>
+                <a href="tools.html">Tools</a>
+                <a href="portfolio.html">Portfolio</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero" style="min-height: 50vh; padding: 8rem 2rem 4rem;">
+        <div class="container" style="max-width: 900px;">
+            <h1 style="font-size: 3rem; font-weight: 300; margin-bottom: 1rem; color: var(--text-primary);">
+                How We Work Together
+            </h1>
+            <p style="font-size: 1.375rem; color: var(--text-secondary); line-height: 1.6;">
+                I offer two engagement models, each designed for different stages of your AI journey.
+                Choose the approach that matches your current needs and organizational readiness.
+            </p>
+        </div>
+    </header>
+
+    <!-- Service Choice Section -->
+    <section style="padding: 4rem 2rem;">
+        <div class="container" style="max-width: 1000px;">
+            <div class="service-choice-grid">
+                <!-- Discovery Assessment Card -->
+                <div class="service-choice-card">
+                    <span class="service-type-label">Fixed Project</span>
+                    <h3>Discovery & Gap Assessment</h3>
+                    <p>
+                        A structured 2-week sprint to assess your AI maturity, identify opportunities,
+                        and deliver a board-ready roadmap with prioritized initiatives.
+                    </p>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                        Week 1: leadership interviews and data readiness review. Week 2: value mapping workshop and risk scan.
+                        Deliverables include an AI maturity scorecard, 12-month investment thesis, and exec-ready board brief.
+                    </p>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2rem;">
+                        <strong>Best for:</strong> Organizations seeking clarity on where to start with AI and needing concrete guidance to brief stakeholders quickly.
+                    </p>
+                    <a href="discovery-assessment.html" class="btn btn-primary">
+                        Explore the Assessment →
+                    </a>
+                </div>
+
+                <!-- Fractional Advisor Card -->
+                <div class="service-choice-card">
+                    <span class="service-type-label">Ongoing Retainer</span>
+                    <h3>Fractional AI Advisor</h3>
+                    <p>
+                        Strategic partnership providing ongoing guidance through execution,
+                        vendor decisions, and board communications.
+                    </p>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                        Includes bi-weekly executive working sessions, on-demand vendor diligence, KPI pulse reports, and quarterly board updates.
+                        Designed to keep initiatives on track and surface issues before they reach the boardroom.
+                    </p>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2rem;">
+                        <strong>Best for:</strong> Leaders actively implementing AI initiatives who need seasoned oversight without hiring a full-time chief AI officer.
+                    </p>
+                    <a href="fractional-advisor.html" class="btn btn-secondary">
+                        Learn About Partnership →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Comparison -->
+            <div style="margin-top: 6rem; padding: 3rem; background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%); border-radius: 16px; border: 1px solid var(--border-light);">
+                <h2 style="text-align: center; font-size: 1.75rem; font-weight: 400; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    Quick Comparison
+                </h2>
+                <p style="text-align: center; font-size: 1rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                    Choose the engagement model that fits your current stage
+                </p>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Discovery Assessment</th>
+                            <th>Fractional Advisor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                Who It's For
+                            </td>
+                            <td>Executives framing their first strategic AI brief or validating investment cases</td>
+                            <td>Teams in build/evaluate mode who need experienced escalation support and decision guardrails</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                Duration
+                            </td>
+                            <td>2 weeks, fixed scope with 4–6 executive interviews and current-state analysis</td>
+                            <td>Monthly retainer with bi-weekly working sessions and rapid-turn support</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                </svg>
+                                Deliverables
+                            </td>
+                            <td>Maturity scorecard, value opportunity heatmap, 90-day action plan, board-ready summary deck</td>
+                            <td>Executive action log, KPI pulse dashboard, vendor diligence briefs, quarterly board report</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Engagement
+                            </td>
+                            <td>Intensive sprint with leadership workshops and executive playback sessions</td>
+                            <td>Regular cadence plus on-call feedback for board decks, vendor pitches, and investment cases</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                Investment
+                            </td>
+                            <td><strong>$15,000–$35,000</strong> based on company size and complexity</td>
+                            <td><strong>Custom monthly retainer</strong> tailored to scope and intensity</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Outcome
+                            </td>
+                            <td>Board-ready plan with prioritized investments, risk controls, and 90-day execution roadmap</td>
+                            <td>Confident executive decisions, faster issue escalation, and measurable progress against AI KPIs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- What We Do Together -->
+            <div style="margin-top: 4rem; padding: 3rem; background: white; border-radius: 16px; border: 1px solid var(--border-light);">
+                <h3 style="text-align: center; font-size: 1.5rem; font-weight: 400; margin-bottom: 1rem; color: var(--text-primary);">
+                    What We Do Together
+                </h3>
+                <p style="text-align: center; font-size: 1rem; color: var(--text-secondary); margin-bottom: 2.5rem;">
+                    Examples of work that happens within these engagements
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+                    <div style="text-align: center;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <h4 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            Board Preparation
+                        </h4>
+                        <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
+                            Co-build presentation decks, anticipate questions, and develop scenario playbooks
+                        </p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                            <path d="M12 12L9 9m3 3l3-3"></path>
+                        </svg>
+                        <h4 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            Vendor Evaluation
+                        </h4>
+                        <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
+                            Join demo calls, ask hard questions, and provide unbiased technical diligence
+                        </p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                        <h4 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            Team Alignment
+                        </h4>
+                        <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
+                            Facilitate C-suite workshops to build shared understanding and consensus
+                        </p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                        <h4 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            Build vs. Buy Analysis
+                        </h4>
+                        <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
+                            Help you make the critical decision based on capabilities and strategic goals
+                        </p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                        </svg>
+                        <h4 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            Implementation Oversight
+                        </h4>
+                        <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
+                            Review technical plans, spot risks early, and keep pilots on track to production
+                        </p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <h4 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            Crisis Response
+                        </h4>
+                        <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
+                            Rapid analysis and recommendations when AI decisions can't wait
+                        </p>
+                    </div>
+                </div>
+
+                <p style="text-align: center; font-size: 0.9375rem; color: var(--text-muted); margin-top: 2rem; font-style: italic;">
+                    These are common activities. Each engagement is tailored to your organization's specific challenges and goals.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guiding Principles -->
+    <section style="padding: 6rem 2rem; background: white;">
+        <div class="container" style="max-width: 900px;">
+            <h2 style="text-align: center; font-size: 2rem; font-weight: 300; margin-bottom: 1rem;">
+                My Guiding Principles
+            </h2>
+            <p style="text-align: center; font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 3rem;">
+                How I approach every engagement, regardless of format
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+                <div style="padding: 2rem; background: var(--background); border-radius: 8px;">
+                    <h4 style="color: var(--accent-sage); margin-bottom: 0.75rem;">Strategy First, Technology Second</h4>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">
+                        We start with your business goals, not a list of tools. Technology choices follow strategy.
+                    </p>
+                </div>
+
+                <div style="padding: 2rem; background: var(--background); border-radius: 8px;">
+                    <h4 style="color: var(--accent-sage); margin-bottom: 0.75rem;">Focus on Asymmetric Upside</h4>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">
+                        Identify where small AI investments yield disproportionately large business impact.
+                    </p>
+                </div>
+
+                <div style="padding: 2rem; background: var(--background); border-radius: 8px;">
+                    <h4 style="color: var(--accent-sage); margin-bottom: 0.75rem;">Clarity Over Complexity</h4>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">
+                        Turn AI from a black box into a predictable tool for growth your team understands.
+                    </p>
+                </div>
+
+                <div style="padding: 2rem; background: var(--background); border-radius: 8px;">
+                    <h4 style="color: var(--accent-sage); margin-bottom: 0.75rem;">Vendor-Neutral, Always</h4>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">
+                        No implementation teams to sell. My only incentive is your success.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section style="padding: 4rem 2rem; background: var(--background);">
+        <div class="container" style="max-width: 700px; text-align: center;">
+            <h2 style="font-size: 2rem; font-weight: 300; margin-bottom: 1rem;">
+                Not Sure Which Is Right?
+            </h2>
+            <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                Let's have a brief conversation about your situation and objectives.
+                I'll help you determine the best path forward.
+            </p>
+            <a href="index.html#contact" class="btn btn-primary">Schedule a Conversation</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="https://www.linkedin.com/in/thor-matthiasson-647a9415/" target="_blank">LinkedIn</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
