@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build vs Buy: The Question You're Asking Wrong - Thor Matthiasson</title>
+    <meta name="description" content="Why the build vs buy decision for AI isn't about capability—it's about competitive advantage and strategic differentiation">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        .article-hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .article-container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .article-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--accent-sage);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-subtitle {
+            font-size: 1.375rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-style: italic;
+            font-family: 'Crimson Text', serif;
+        }
+
+        .article-content {
+            padding: 4rem 2rem;
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            font-size: 1.875rem;
+            font-weight: 400;
+            margin: 3rem 0 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .article-content h3 {
+            font-size: 1.375rem;
+            font-weight: 500;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        .article-content blockquote {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%);
+            border-left: 4px solid var(--accent-sage);
+            font-style: italic;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .article-content .highlight {
+            background: linear-gradient(135deg, #fff5ee 0%, #fdf9f4 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 1px solid var(--gold-light);
+        }
+
+        .decision-matrix {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 2rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .decision-matrix table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .decision-matrix th {
+            background: var(--background);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .decision-matrix td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .decision-matrix tr:last-child td {
+            border-bottom: none;
+        }
+
+        .build-marker {
+            color: var(--accent-sage);
+            font-weight: 600;
+        }
+
+        .buy-marker {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .article-footer {
+            padding: 4rem 2rem;
+            background: var(--background);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .author-bio {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+
+        .author-bio img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .next-steps {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .next-steps h2 {
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .next-steps p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-subtitle {
+                font-size: 1.125rem;
+            }
+
+            .article-content {
+                font-size: 1rem;
+            }
+
+            .decision-matrix {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">Thor Matthiasson</a>
+            <button class="nav-menu-button" aria-label="Menu" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="nav-links">
+                <a href="../thinking.html">Thinking</a>
+                <a href="../services.html">Advisory</a>
+                <a href="../framework.html">Framework</a>
+                <a href="../tools.html">Tools</a>
+                <a href="../portfolio.html">Portfolio</a>
+                <a href="../index.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article Hero -->
+    <header class="article-hero">
+        <div class="article-container">
+            <div class="article-meta">
+                <span class="article-date">April 2025</span>
+                <span class="article-category">Strategy</span>
+            </div>
+            <h1 class="article-title">Build vs Buy: The Question You're Asking Wrong</h1>
+            <p class="article-subtitle">It's not about capability—it's about competitive advantage</p>
+        </div>
+    </header>
+
+    <!-- Article Content -->
+    <article class="article-content">
+        <div class="article-container">
+            <p>
+                <strong>"Should we build this AI capability ourselves or buy it from a vendor?"</strong> I hear this question weekly. And every time, I know we're about to have the wrong conversation.
+            </p>
+
+            <p>
+                The problem isn't the question itself—it's that it's being asked in a vacuum. Build vs. buy isn't a technical decision. It's not even a financial decision. It's a strategic decision about where your company's differentiation comes from.
+            </p>
+
+            <p>
+                Yet most organizations approach it like they're buying office furniture: get three quotes, compare features, pick the cheapest option that meets requirements. This thinking is why 70% of AI initiatives fail to deliver value.
+            </p>
+
+            <h2>The Real Question Nobody Asks</h2>
+
+            <p>
+                Before you evaluate a single vendor or sketch a single architecture diagram, answer this: <strong>What would happen if your competitor had exactly the same capability?</strong>
+            </p>
+
+            <p>
+                If your answer is "nothing much," you should buy. If your answer is "we'd lose our edge," you should build. It really is that simple.
+            </p>
+
+            <p>
+                But simple doesn't mean easy. Let me show you how this plays out in practice.
+            </p>
+
+            <h2>The Differentiation Matrix</h2>
+
+            <div class="decision-matrix">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Capability Type</th>
+                            <th>Strategic Impact</th>
+                            <th>Default Decision</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Core to your value proposition</td>
+                            <td>Customers choose you for this</td>
+                            <td><span class="build-marker">BUILD</span></td>
+                        </tr>
+                        <tr>
+                            <td>Enhances your core offering</td>
+                            <td>Makes your core better</td>
+                            <td><span class="build-marker">BUILD</span> (or deep partnership)</td>
+                        </tr>
+                        <tr>
+                            <td>Industry standard capability</td>
+                            <td>Everyone needs this</td>
+                            <td><span class="buy-marker">BUY</span></td>
+                        </tr>
+                        <tr>
+                            <td>Supporting infrastructure</td>
+                            <td>Necessary but not differentiating</td>
+                            <td><span class="buy-marker">BUY</span></td>
+                        </tr>
+                        <tr>
+                            <td>Experimental/uncertain value</td>
+                            <td>Still figuring out impact</td>
+                            <td><span class="buy-marker">BUY</span> (then build if it works)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Case Study: The $30M Mistake</h2>
+
+            <p>
+                A financial services client spent $30 million building their own customer service chatbot. Eighteen months, 50 engineers, countless meetings. The result? A chatbot that was 5% better than off-the-shelf solutions that cost $50K/year.
+            </p>
+
+            <p>
+                Why did they build? "We have unique requirements." Every company thinks they do. But their actual differentiation wasn't in how they answered customer questions—it was in their investment algorithms. They built the wrong thing.
+            </p>
+
+            <p>
+                Meanwhile, their competitor licensed a chatbot for customer service and invested their engineering resources in building proprietary portfolio optimization AI. Guess who's winning?
+            </p>
+
+            <blockquote>
+                "Your unique requirements are rarely as unique as you think. Your competitive advantages are rarely where you think."
+            </blockquote>
+
+            <h2>The Hidden Costs Nobody Calculates</h2>
+
+            <h3>When You Build:</h3>
+            <ul>
+                <li><strong>The Talent Tax:</strong> You need to hire, train, and retain AI engineers (current market rate: $350K+)</li>
+                <li><strong>The Maintenance Mortgage:</strong> Every model needs retraining, monitoring, updating</li>
+                <li><strong>The Innovation Burden:</strong> You now need to keep pace with OpenAI, Google, and every startup</li>
+                <li><strong>The Distraction Penalty:</strong> Your best people working on this aren't working on your core business</li>
+            </ul>
+
+            <h3>When You Buy:</h3>
+            <ul>
+                <li><strong>The Vendor Lock-in:</strong> Switching costs grow exponentially over time</li>
+                <li><strong>The Customization Ceiling:</strong> You'll hit limits when you need that one critical feature</li>
+                <li><strong>The Data Dependency:</strong> Your data trains their models, benefiting their other customers</li>
+                <li><strong>The Commodity Trap:</strong> If everyone can buy it, it's not a differentiator</li>
+            </ul>
+
+            <div class="highlight">
+                <h3>The Strategic Framework</h3>
+                <p>Here's the framework I use with every client facing this decision:</p>
+
+                <ol>
+                    <li><strong>Map Your Value Chain:</strong> What actually drives customer choice and pricing power?</li>
+                    <li><strong>Identify AI Leverage Points:</strong> Where could AI create 10x improvement, not 10%?</li>
+                    <li><strong>Assess Build Capability:</strong> Do you have the talent, data, and patience to build?</li>
+                    <li><strong>Calculate True TCO:</strong> Include opportunity cost, not just development cost</li>
+                    <li><strong>Design for Optionality:</strong> Can you start one way and switch later?</li>
+                </ol>
+            </div>
+
+            <h2>The Hybrid Path Everyone Ignores</h2>
+
+            <p>
+                The build vs. buy debate creates a false binary. The smartest companies are doing neither—or both. They're building where it matters and buying everything else. But more importantly, they're structuring their architecture for flexibility.
+            </p>
+
+            <p>
+                Here's what this looks like in practice:
+            </p>
+
+            <ul>
+                <li><strong>Buy the Foundation:</strong> Use commercial LLMs, cloud infrastructure, standard tools</li>
+                <li><strong>Build the Differentiator:</strong> Custom models trained on your proprietary data</li>
+                <li><strong>Partner for Scale:</strong> Deep integrations with vendors who become strategic partners</li>
+                <li><strong>Invest in Integration:</strong> The glue between components becomes your IP</li>
+            </ul>
+
+            <h2>The Questions to Ask Instead</h2>
+
+            <p>
+                Stop asking "Should we build or buy?" Start asking:
+            </p>
+
+            <ol>
+                <li>What would we do if this capability was free and perfect?</li>
+                <li>How would our business change if competitors had this exact capability?</li>
+                <li>What unique data or expertise do we have that others don't?</li>
+                <li>Where do we want to be world-class vs. just good enough?</li>
+                <li>What capabilities will matter in 3 years that don't exist today?</li>
+            </ol>
+
+            <h2>The Decision That Actually Matters</h2>
+
+            <p>
+                The build vs. buy decision isn't really about AI at all. It's about strategic focus. Every dollar and hour spent building commodity capabilities is a dollar and hour not spent strengthening your actual differentiation.
+            </p>
+
+            <p>
+                The companies winning with AI aren't the ones with the most sophisticated technology. They're the ones with the clearest understanding of what makes them unique and the discipline to invest accordingly.
+            </p>
+
+            <p>
+                <strong>Build what makes you special. Buy everything else. And have the wisdom to know the difference.</strong>
+            </p>
+
+            <p>
+                That's not just good AI strategy. That's good business strategy. The technology is just an accelerator for decisions you should be making anyway.
+            </p>
+        </div>
+    </article>
+
+    <!-- Article Footer -->
+    <footer class="article-footer">
+        <div class="article-container">
+            <div class="author-bio">
+                <img src="../images/thor-profile.jpg" alt="Thor Matthiasson" loading="lazy">
+                <div class="author-info">
+                    <h3>Thor Matthiasson</h3>
+                    <p>AI Strategy Advisor helping companies make strategic technology decisions. 25+ years of experience in technology strategy and digital transformation.</p>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>Facing a Build vs Buy Decision?</h2>
+                <p>Let's analyze your specific situation and find the strategic path forward.</p>
+                <a href="../index.html#contact" class="btn btn-primary">Schedule a Conversation</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="https://www.linkedin.com/in/thor-matthiasson-647a9415/" target="_blank">LinkedIn</a>
+                    <a href="../index.html#contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+</body>
+</html>

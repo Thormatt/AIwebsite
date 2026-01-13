@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Survey Admin - Thor AI Advisory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .admin-header h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-box, .admin-panel {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2.5rem;
+        }
+
+        .login-box {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a574 0%, #b8935f 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .session-card {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .session-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .session-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-in_progress {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-completed {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .link-box {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .link-box input {
+            flex: 1;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .copy-btn {
+            padding: 0.5rem 1rem;
+            background: #5a7c6a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .copy-btn:hover {
+            background: #4a6c5a;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .actions button {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+
+        .create-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .create-section h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 1rem;
+            }
+
+            .session-header {
+                flex-direction: column;
+            }
+
+            .actions {
+                width: 100%;
+            }
+
+            .actions button {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>📊 Pulse Survey Admin</h1>
+            <p style="color: #6b7280;">Create and manage organization-wide AI readiness surveys</p>
+        </div>
+
+        <!-- Login -->
+        <div id="login-view" class="login-box">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Admin Login</h2>
+            <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" placeholder="thor@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" required>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">Sign In</button>
+            <p style="text-align: center; color: #6b7280; margin-top: 1rem; font-size: 0.875rem;">
+                Or <a href="#" onclick="switchToMagicLink(); return false;" style="color: #5a7c6a;">use magic link</a>
+            </p>
+        </div>
+
+        <!-- Admin Panel -->
+        <div id="admin-view" style="display: none;">
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-total">0</div>
+                    <div class="stat-label">Total Surveys</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-active">0</div>
+                    <div class="stat-label">Active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-responses">0</div>
+                    <div class="stat-label">Total Responses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-completion">0%</div>
+                    <div class="stat-label">Avg. Completion</div>
+                </div>
+            </div>
+
+            <!-- Create New Survey -->
+            <div class="create-section">
+                <h2>Create New Pulse Survey</h2>
+                <form onsubmit="createSurvey(event)">
+                    <div class="form-group">
+                        <label for="org-name">Organization Name *</label>
+                        <input type="text" id="org-name" placeholder="Acme Corp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="survey-title">Survey Title *</label>
+                        <input type="text" id="survey-title" placeholder="Q4 2025 AI Readiness Pulse" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="survey-description">Description (Optional)</label>
+                        <textarea id="survey-description" rows="3" placeholder="Help us understand how AI adoption is progressing across the organization..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="expires-days">Survey Duration (Days)</label>
+                        <select id="expires-days">
+                            <option value="7">7 days</option>
+                            <option value="14" selected>14 days</option>
+                            <option value="30">30 days</option>
+                            <option value="60">60 days</option>
+                            <option value="">No expiration</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Survey</button>
+                </form>
+            </div>
+
+            <!-- Existing Surveys -->
+            <div class="admin-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="margin: 0;">Your Surveys</h2>
+                    <button class="btn btn-secondary" onclick="loadSurveys()">
+                        <span>⟳</span> Refresh
+                    </button>
+                </div>
+                <div id="surveys-list">
+                    <p style="color: #6b7280;">Loading surveys...</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-secondary" onclick="logout()">Sign Out</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const SUPABASE_URL = 'https://hzverggjspltpopivtgc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6dmVyZ2dqc3BsdHBvcGl2dGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzUxMDQsImV4cCI6MjA3NTI1MTEwNH0.n8S0BHP33VAP8KMEkHIBHcDdTapBOfnqwB8D1qf9pv4';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+
+        // Check auth state on load
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                currentUser = session.user;
+                showAdminPanel();
+            } else {
+                showLoginPanel();
+            }
+        });
+
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                if (error) throw error;
+                // onAuthStateChange will handle the UI update
+            } catch (err) {
+                alert('Login failed: ' + err.message);
+            }
+        }
+
+        function switchToMagicLink() {
+            const email = prompt('Enter your email for magic link:');
+            if (!email) return;
+
+            supabase.auth.signInWithOtp({
+                email,
+                options: {
+                    emailRedirectTo: window.location.href
+                }
+            }).then(({ error }) => {
+                if (error) {
+                    alert('Error: ' + error.message);
+                } else {
+                    alert('Check your email for the magic link!');
+                }
+            });
+        }
+
+        function logout() {
+            supabase.auth.signOut();
+        }
+
+        function showLoginPanel() {
+            document.getElementById('login-view').style.display = 'block';
+            document.getElementById('admin-view').style.display = 'none';
+        }
+
+        function showAdminPanel() {
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('admin-view').style.display = 'block';
+            loadSurveys();
+            loadStats();
+        }
+
+        function generateAccessCode() {
+            return 'pulse_' + Math.random().toString(36).substr(2, 9) + Math.random().toString(36).substr(2, 9);
+        }
+
+        async function createSurvey(event) {
+            event.preventDefault();
+
+            const orgName = document.getElementById('org-name').value;
+            const title = document.getElementById('survey-title').value;
+            const description = document.getElementById('survey-description').value;
+            const expiresDays = document.getElementById('expires-days').value;
+
+            let expiresAt = null;
+            if (expiresDays) {
+                expiresAt = new Date();
+                expiresAt.setDate(expiresAt.getDate() + parseInt(expiresDays));
+            }
+
+            try {
+                // Create or find organization
+                let orgId;
+                const { data: existingOrg } = await supabase
+                    .from('organizations')
+                    .select('id')
+                    .eq('name', orgName)
+                    .single();
+
+                if (existingOrg) {
+                    orgId = existingOrg.id;
+                } else {
+                    const { data: newOrg, error: orgError } = await supabase
+                        .from('organizations')
+                        .insert({ name: orgName })
+                        .select()
+                        .single();
+
+                    if (orgError) throw orgError;
+                    orgId = newOrg.id;
+                }
+
+                // Create session
+                const { data: session, error: sessionError } = await supabase
+                    .from('assessment_sessions')
+                    .insert({
+                        organization_id: orgId,
+                        type: 'pulse',
+                        status: 'in_progress',
+                        title: title,
+                        description: description,
+                        access_code: generateAccessCode(),
+                        created_by: currentUser.id,
+                        expires_at: expiresAt ? expiresAt.toISOString() : null
+                    })
+                    .select()
+                    .single();
+
+                if (sessionError) throw sessionError;
+
+                alert('✅ Survey created successfully!');
+
+                // Reset form
+                event.target.reset();
+
+                // Reload surveys
+                loadSurveys();
+                loadStats();
+
+            } catch (err) {
+                console.error('Error creating survey:', err);
+                alert('Error creating survey: ' + err.message);
+            }
+        }
+
+        async function loadStats() {
+            try {
+                // Get all sessions for current user
+                const { data: sessions, error } = await supabase
+                    .from('assessment_sessions')
+                    .select(`
+                        id,
+                        status,
+                        participants (
+                            id,
+                            completed_at
+                        )
+                    `)
+                    .eq('type', 'pulse')
+                    .eq('created_by', currentUser.id);
+
+                if (error) throw error;
+
+                const total = sessions.length;
+                const active = sessions.filter(s => s.status === 'in_progress').length;
+
+                let totalResponses = 0;
+                let completedResponses = 0;
+
+                sessions.forEach(session => {
+                    if (session.participants) {
+                        totalResponses += session.participants.length;
+                        completedResponses += session.participants.filter(p => p.completed_at).length;
+                    }
+                });
+
+                const avgCompletion = totalResponses > 0 ? Math.round((completedResponses / totalResponses) * 100) : 0;
+
+                document.getElementById('stat-total').textContent = total;
+                document.getElementById('stat-active').textContent = active;
+                document.getElementById('stat-responses').textContent = completedResponses;
+                document.getElementById('stat-completion').textContent = avgCompletion + '%';
+
+            } catch (err) {
+                console.error('Error loading stats:', err);
+            }
+        }
+
+        async function loadSurveys() {
+            try {
+                const { data: sessions, error } = await supabase
+                    .from('assessment_sessions')
+                    .select(`
+                        *,
+                        organizations (name),
+                        participants (id, completed_at)
+                    `)
+                    .eq('type', 'pulse')
+                    .eq('created_by', currentUser.id)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!sessions || sessions.length === 0) {
+                    document.getElementById('surveys-list').innerHTML =
+                        '<p style="color: #6b7280;">No surveys yet. Create your first one above!</p>';
+                    return;
+                }
+
+                const surveysHTML = sessions.map(session => {
+                    const totalParticipants = session.participants?.length || 0;
+                    const completedParticipants = session.participants?.filter(p => p.completed_at).length || 0;
+                    const completionRate = totalParticipants > 0
+                        ? Math.round((completedParticipants / totalParticipants) * 100)
+                        : 0;
+
+                    // Generate absolute file path
+                    const currentPath = window.location.pathname;
+                    const directory = currentPath.substring(0, currentPath.lastIndexOf('/'));
+                    const surveyUrl = `${window.location.protocol}//${window.location.host}${directory}/pulse-survey.html?code=${session.access_code}`;
+
+                    return `
+                        <div class="session-card">
+                            <div class="session-header">
+                                <div>
+                                    <div class="session-title">${session.title || 'Untitled Survey'}</div>
+                                    <div style="color: #6b7280; font-size: 0.875rem;">
+                                        ${session.organizations?.name || 'No organization'}
+                                    </div>
+                                </div>
+                                <span class="status-badge status-${session.status}">
+                                    ${session.status.replace('_', ' ')}
+                                </span>
+                            </div>
+
+                            <div class="session-meta">
+                                <span>📅 Created: ${new Date(session.created_at).toLocaleDateString()}</span>
+                                <span>👥 Responses: ${completedParticipants} / ${totalParticipants}</span>
+                                <span>📊 ${completionRate}% complete</span>
+                            </div>
+
+                            ${session.description ? `<p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 1rem;">${session.description}</p>` : ''}
+
+                            <div class="link-box">
+                                <input type="text" id="link-${session.id}" value="${surveyUrl}" readonly>
+                                <button class="copy-btn" onclick="copyLink('${session.id}')">Copy</button>
+                            </div>
+
+                            <div class="actions">
+                                <button class="btn btn-success" onclick="viewResults('${session.id}')">
+                                    View Results
+                                </button>
+                                ${session.status === 'in_progress' ? `
+                                    <button class="btn btn-secondary" onclick="closeSurvey('${session.id}')">
+                                        Close Survey
+                                    </button>
+                                ` : ''}
+                                <button class="btn btn-danger" onclick="deleteSurvey('${session.id}')">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('surveys-list').innerHTML = surveysHTML;
+
+            } catch (err) {
+                console.error('Error loading surveys:', err);
+                document.getElementById('surveys-list').innerHTML =
+                    '<p style="color: #dc2626;">Error loading surveys</p>';
+            }
+        }
+
+        function copyLink(sessionId) {
+            const input = document.getElementById('link-' + sessionId);
+            input.select();
+            document.execCommand('copy');
+
+            const btn = event.target;
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+            }, 2000);
+        }
+
+        function viewResults(sessionId) {
+            window.location.href = `pulse-results.html?session=${sessionId}`;
+        }
+
+        async function closeSurvey(sessionId) {
+            if (!confirm('Close this survey? No more responses will be accepted.')) return;
+
+            try {
+                const { error } = await supabase
+                    .from('assessment_sessions')
+                    .update({
+                        status: 'completed',
+                        completed_at: new Date().toISOString()
+                    })
+                    .eq('id', sessionId);
+
+                if (error) throw error;
+
+                loadSurveys();
+                loadStats();
+            } catch (err) {
+                console.error('Error closing survey:', err);
+                alert('Error closing survey');
+            }
+        }
+
+        async function deleteSurvey(sessionId) {
+            if (!confirm('Delete this survey? This cannot be undone.')) return;
+
+            try {
+                const { error } = await supabase
+                    .from('assessment_sessions')
+                    .delete()
+                    .eq('id', sessionId);
+
+                if (error) throw error;
+
+                loadSurveys();
+                loadStats();
+            } catch (err) {
+                console.error('Error deleting survey:', err);
+                alert('Error deleting survey');
+            }
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                currentUser = session.user;
+                showAdminPanel();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free AI Tools - Thor Matthiasson</title>
+    <meta name="description" content="Free tools to assess AI readiness, calculate ROI, detect vendor BS, and make build vs buy decisions. No email required.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Tools page specific styles */
+        .tools-hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+            text-align: center;
+        }
+
+        .tools-hero h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .tools-hero p {
+            font-size: 1.375rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-sage);
+        }
+
+        .tool-card.featured {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #fff 0%, #fafafa 100%);
+            border: 2px solid var(--gold-light);
+        }
+
+        .tool-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--accent-sage) 0%, #7a9c8a 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .tool-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--gold);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .tool-title {
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-tagline {
+            font-size: 1.125rem;
+            color: var(--accent-sage);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .tool-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .tool-features {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+
+        .tool-features li {
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .tool-features li svg {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .tool-cta {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background: var(--accent-sage);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .tool-cta:hover {
+            background: #4a6d5c;
+            transform: translateY(-2px);
+        }
+
+        .featured .tool-cta {
+            background: var(--gold);
+        }
+
+        .featured .tool-cta:hover {
+            background: #d4a574;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 4rem 2rem;
+            background: var(--background);
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .faq-question {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-answer {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .tools-hero h1 {
+                font-size: 2rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Thor Matthiasson</a>
+            <button class="nav-menu-button" aria-label="Menu" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="nav-links">
+                <a href="thinking.html">Thinking</a>
+                <a href="services.html">Advisory</a>
+                <a href="tools.html">Tools</a>
+                <a href="portfolio.html">Portfolio</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="tools-hero">
+        <div class="container">
+            <h1>AI Decision Tools</h1>
+            <p>
+                Most tools are free with no email required. Premium tools like our sophisticated ROI Calculator
+                are available to advisory clients. All designed to help you make better AI decisions.
+            </p>
+        </div>
+    </header>
+
+    <!-- Tools Grid -->
+    <section class="tools-section">
+        <div class="tools-grid">
+            <!-- Featured: Assessment Tool -->
+            <div class="tool-card featured">
+                <div class="tool-badge">Free</div>
+                <h2 class="tool-title">AI Strategy Clarity Assessment</h2>
+                <p class="tool-tagline">Get your personal readiness score across 5 strategic decision areas</p>
+                <p class="tool-description">
+                    A quick 10-minute assessment to evaluate your clarity on critical AI strategy decisions.
+                    Not about your organization's technical capabilities—about whether you're ready to make
+                    confident AI decisions. Get instant results showing where you need more clarity before committing resources.
+                </p>
+                <ul class="tool-features">
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>10 questions focused on your decision clarity, not org maturity</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Visual radar chart showing which decision areas need attention</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Recommendations for getting clarity before you commit budget</span>
+                    </li>
+                </ul>
+                <a href="tools/ai-assessment.html" class="tool-cta">Take the Assessment</a>
+            </div>
+
+            <!-- BS Detector Tool -->
+            <div class="tool-card">
+                <div class="tool-badge">Most Popular</div>
+                <div class="tool-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </div>
+                <h3 class="tool-title">Vendor BS Detector</h3>
+                <p class="tool-tagline">Decode the marketing fluff instantly</p>
+                <p class="tool-description">
+                    Paste any vendor's pitch, marketing copy, or technical documentation. Our algorithm analyzes
+                    buzzword density, identifies vague claims, and translates the jargon into plain English.
+                    Get a reality check on what they're actually offering.
+                </p>
+                <ul class="tool-features">
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Buzzword density analysis</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Vague claim detection</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Plain English translation</span>
+                    </li>
+                </ul>
+                <a href="tools/bs-detector.html" class="tool-cta">Launch Detector</a>
+            </div>
+
+            <!-- ROI Calculator -->
+            <div class="tool-card">
+                <div class="tool-badge" style="background: linear-gradient(135deg, var(--accent-sage) 0%, #d4a574 100%);">FREE + PREMIUM</div>
+                <div class="tool-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <h3 class="tool-title">AI ROI Calculator</h3>
+                <p class="tool-tagline">Free calculator + premium CFO-grade analysis</p>
+                <p class="tool-description">
+                    <strong>Start free:</strong> Get directional ROI with S-curve adoption modeling, realization rates, and TCO-based calculations.
+                    <strong>Premium upgrade:</strong> Unlock advanced NPV/IRR analysis, scenario planning (Conservative/Base/Aggressive), AI-specific cost modeling
+                    (LLM tokens, embeddings, compliance), and board-ready deliverables. Premium features available to advisory clients or via one-time access fee.
+                </p>
+                <div style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%); border-radius: 8px; border: 1px solid var(--border-light);">
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0;">
+                        <strong style="color: var(--accent-sage);">Premium Access:</strong> Included with Discovery Assessment or Fractional Advisory engagements. Contact for standalone access.
+                    </p>
+                </div>
+                <ul class="tool-features">
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span><strong>Free:</strong> S-curve adoption, realization rate, break-even, 1/3-year ROI</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span><strong>Premium:</strong> NPV/IRR, hurdle rate testing, payback period analysis</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span><strong>Premium:</strong> Scenarios, usage-based LLM costing, board-ready PDFs</span>
+                    </li>
+                </ul>
+                <a href="tools/roi-calculator.html" class="tool-cta">Start Free Calculator</a>
+            </div>
+
+            <!-- Build vs Buy Analyzer -->
+            <div class="tool-card">
+                <div class="tool-badge">New</div>
+                <div class="tool-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"></path>
+                    </svg>
+                </div>
+                <h3 class="tool-title">Build vs Buy Analyzer</h3>
+                <p class="tool-tagline">Make the right AI decision</p>
+                <p class="tool-description">
+                    Should you build custom AI solutions or buy existing tools? This analyzer evaluates your
+                    technical capabilities, budget constraints, timeline, and strategic needs to provide a
+                    data-driven recommendation with confidence scores.
+                </p>
+                <ul class="tool-features">
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Capability assessment</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Total cost comparison</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Risk-weighted recommendations</span>
+                    </li>
+                </ul>
+                <a href="tools/build-vs-buy.html" class="tool-cta">Analyze Options</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">Common Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3 class="faq-question">Why are these tools free?</h3>
+                    <p class="faq-answer">
+                        They demonstrate our expertise and provide immediate value. If you find them helpful,
+                        you might consider our advisory services for deeper engagement.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Do you store my data?</h3>
+                    <p class="faq-answer">
+                        No. All calculations and assessments run entirely in your browser. We don't collect,
+                        store, or transmit any of your inputs or results.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">How accurate are the results?</h3>
+                    <p class="faq-answer">
+                        These tools provide directional guidance based on common patterns from real implementations.
+                        Your specific situation may vary, which is why human judgment remains essential.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Can I share results with my team?</h3>
+                    <p class="faq-answer">
+                        Yes. Each tool provides downloadable or shareable results. You can export PDFs,
+                        copy summaries, or screenshot visualizations for presentations.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container" style="max-width: 700px; text-align: center;">
+            <h2 class="section-title">Need Deeper Analysis?</h2>
+            <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                These tools provide a starting point. For strategic decisions,
+                consider a comprehensive assessment or ongoing advisory support.
+            </p>
+            <div class="hero-actions">
+                <a href="services.html" class="btn btn-primary">Explore Advisory Services</a>
+                <a href="index.html#contact" class="btn btn-secondary">Ask a Question</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="https://www.linkedin.com/in/thor-matthiasson-647a9415/" target="_blank">LinkedIn</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

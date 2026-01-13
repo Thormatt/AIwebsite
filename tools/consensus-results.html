@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-Suite Consensus Results - Thor AI Advisory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        .results-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .results-header h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .summary-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .summary-card .label {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .alert-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .alert-box.success {
+            background: #d1fae5;
+            border-left-color: #10b981;
+        }
+
+        .alert-box h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-section h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .executive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .executive-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+        }
+
+        .executive-card.highlighted {
+            border-color: #5a7c6a;
+        }
+
+        .executive-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .executive-role {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .executive-score {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #5a7c6a;
+        }
+
+        .dimension-comparison {
+            margin-bottom: 2rem;
+        }
+
+        .dimension-row {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .dimension-name {
+            flex: 0 0 150px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .dimension-bars {
+            flex: 1;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .exec-bar {
+            position: relative;
+            height: 30px;
+            background: linear-gradient(90deg, #5a7c6a, #4a6c5a);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 40px;
+        }
+
+        .misalignment-score {
+            flex: 0 0 80px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .misalignment-score.low {
+            color: #10b981;
+        }
+
+        .misalignment-score.medium {
+            color: #f59e0b;
+        }
+
+        .misalignment-score.high {
+            color: #ef4444;
+        }
+
+        .insights-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .insight-item {
+            padding: 1rem;
+            background: #f9fafb;
+            border-left: 4px solid #5a7c6a;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .insight-item h4 {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .results-container {
+                padding: 1rem;
+            }
+
+            .chart-container {
+                height: 300px;
+                max-width: 100%;
+            }
+
+            .dimension-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .dimension-name {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="results-container">
+        <div class="results-header">
+            <h1 id="session-title">C-Suite Consensus Analysis</h1>
+            <p id="organization-name" style="color: #6b7280; font-size: 1.125rem;"></p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="value" id="total-executives">0</div>
+                <div class="label">Executives Responded</div>
+            </div>
+            <div class="summary-card">
+                <div class="value" id="avg-score">0</div>
+                <div class="label">Average Alignment Score</div>
+            </div>
+            <div class="summary-card">
+                <div class="value" id="consensus-level">0%</div>
+                <div class="label">Consensus Level</div>
+            </div>
+            <div class="summary-card">
+                <div class="value" id="divergence-areas">0</div>
+                <div class="label">Areas of Divergence</div>
+            </div>
+        </div>
+
+        <!-- Alert Box -->
+        <div id="alert-box" class="alert-box" style="display: none;">
+            <h3 id="alert-title"></h3>
+            <p id="alert-message"></p>
+        </div>
+
+        <!-- Executive Cards -->
+        <div class="chart-section">
+            <h2>Executive Responses</h2>
+            <div class="executive-grid" id="executive-cards"></div>
+        </div>
+
+        <!-- Comparison Radar Chart -->
+        <div class="chart-section">
+            <h2>Executive Alignment Radar</h2>
+            <div class="chart-container">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+            <div class="legend" id="legend"></div>
+        </div>
+
+        <!-- Dimension Comparison -->
+        <div class="chart-section">
+            <h2>Dimension-by-Dimension Analysis</h2>
+            <div class="dimension-comparison" id="dimension-comparison"></div>
+        </div>
+
+        <!-- Insights -->
+        <div class="insights-section">
+            <h2 style="font-size: 1.5rem; color: #2c3e50; margin-bottom: 1.5rem;">Key Insights</h2>
+            <div id="insights-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://hzverggjspltpopivtgc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6dmVyZ2dqc3BsdHBvcGl2dGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzUxMDQsImV4cCI6MjA3NTI1MTEwNH0.n8S0BHP33VAP8KMEkHIBHcDdTapBOfnqwB8D1qf9pv4';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let sessionData = null;
+        let responsesData = [];
+        let comparisonChart = null;
+
+        const EXECUTIVE_COLORS = [
+            '#ef4444', // Red
+            '#3b82f6', // Blue
+            '#10b981', // Green
+            '#f59e0b', // Orange
+            '#8b5cf6', // Purple
+        ];
+
+        async function loadResults() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session');
+
+            if (!sessionId) {
+                alert('No session ID provided');
+                return;
+            }
+
+            try {
+                // Load session info
+                const { data: session, error: sessionError } = await supabase
+                    .from('assessment_sessions')
+                    .select('*, organizations(name)')
+                    .eq('id', sessionId)
+                    .single();
+
+                if (sessionError) throw sessionError;
+                sessionData = session;
+
+                document.getElementById('session-title').textContent = session.title || 'C-Suite Consensus Analysis';
+                document.getElementById('organization-name').textContent = session.organizations?.name || '';
+
+                // Load responses
+                const { data: responses, error: responsesError } = await supabase
+                    .from('consensus_responses')
+                    .select('*')
+                    .eq('session_id', sessionId);
+
+                if (responsesError) throw responsesError;
+                responsesData = responses || [];
+
+                if (responsesData.length === 0) {
+                    showAlert('No Responses Yet', 'Waiting for executives to complete their assessments.', 'alert');
+                    return;
+                }
+
+                renderSummary();
+                renderExecutiveCards();
+                renderComparisonChart();
+                renderDimensionComparison();
+                renderInsights();
+
+            } catch (error) {
+                console.error('Error loading results:', error);
+                alert('Error loading results: ' + error.message);
+            }
+        }
+
+        function renderSummary() {
+            const totalExecs = responsesData.length;
+            const avgScore = responsesData.reduce((sum, r) => sum + (r.results?.overallScore || 0), 0) / totalExecs;
+            const consensusLevel = calculateConsensusLevel();
+            const divergenceAreas = calculateDivergenceAreas();
+
+            document.getElementById('total-executives').textContent = totalExecs;
+            document.getElementById('avg-score').textContent = Math.round(avgScore) + '%';
+            document.getElementById('consensus-level').textContent = consensusLevel + '%';
+            document.getElementById('divergence-areas').textContent = divergenceAreas;
+
+            // Show alert based on consensus level
+            if (consensusLevel >= 75) {
+                showAlert('Strong Alignment', 'Your leadership team shows strong consensus on AI strategy.', 'success');
+            } else if (consensusLevel < 50) {
+                showAlert('Significant Misalignment Detected', 'Major strategic gaps exist between executives. This requires immediate attention.', 'alert');
+            }
+        }
+
+        function calculateConsensusLevel() {
+            if (responsesData.length < 2) return 100;
+
+            const dimensions = ['Data Readiness', 'Risk & Governance', 'Technical Infrastructure', 'Business Strategy', 'Culture & Change'];
+            let totalVariance = 0;
+
+            dimensions.forEach(dim => {
+                const scores = responsesData.map(r => r.results?.dimensionScores?.[dim] || 0);
+                const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
+                const variance = scores.reduce((sum, score) => sum + Math.pow(score - mean, 2), 0) / scores.length;
+                totalVariance += variance;
+            });
+
+            const avgVariance = totalVariance / dimensions.length;
+            const consensusLevel = Math.max(0, 100 - (avgVariance / 10));
+            return Math.round(consensusLevel);
+        }
+
+        function calculateDivergenceAreas() {
+            if (responsesData.length < 2) return 0;
+
+            const dimensions = ['Data Readiness', 'Risk & Governance', 'Technical Infrastructure', 'Business Strategy', 'Culture & Change'];
+            let divergentCount = 0;
+
+            dimensions.forEach(dim => {
+                const scores = responsesData.map(r => r.results?.dimensionScores?.[dim] || 0);
+                const max = Math.max(...scores);
+                const min = Math.min(...scores);
+                if (max - min > 20) { // More than 20 point difference
+                    divergentCount++;
+                }
+            });
+
+            return divergentCount;
+        }
+
+        function renderExecutiveCards() {
+            const container = document.getElementById('executive-cards');
+            container.innerHTML = responsesData.map((response, index) => {
+                const score = response.results?.overallScore || 0;
+                const role = response.respondent_role || response.respondent_title || 'Executive';
+                const name = response.respondent_name || 'Anonymous';
+
+                return `
+                    <div class="executive-card">
+                        <div class="executive-name">${name}</div>
+                        <div class="executive-role">${role}</div>
+                        <div class="executive-score">${Math.round(score)}%</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderComparisonChart() {
+            const ctx = document.getElementById('comparisonChart');
+            const dimensions = ['Data', 'Governance', 'Technical', 'Business', 'Culture'];
+
+            const fullDimensions = {
+                'Data': 'Data Readiness',
+                'Governance': 'Risk & Governance',
+                'Technical': 'Technical Infrastructure',
+                'Business': 'Business Strategy',
+                'Culture': 'Culture & Change'
+            };
+
+            const datasets = responsesData.map((response, index) => {
+                const role = response.respondent_role || response.respondent_title || `Exec ${index + 1}`;
+                const dimScores = response.results?.dimensionScores || {};
+
+                return {
+                    label: role,
+                    data: dimensions.map(dim => dimScores[fullDimensions[dim]] || 0),
+                    borderColor: EXECUTIVE_COLORS[index % EXECUTIVE_COLORS.length],
+                    backgroundColor: EXECUTIVE_COLORS[index % EXECUTIVE_COLORS.length] + '20',
+                    borderWidth: 2,
+                    pointBackgroundColor: EXECUTIVE_COLORS[index % EXECUTIVE_COLORS.length],
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4
+                };
+            });
+
+            comparisonChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: dimensions,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Render legend
+            const legendContainer = document.getElementById('legend');
+            legendContainer.innerHTML = datasets.map((dataset, index) => `
+                <div class="legend-item">
+                    <div class="legend-color" style="background: ${EXECUTIVE_COLORS[index % EXECUTIVE_COLORS.length]}"></div>
+                    <span>${dataset.label}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderDimensionComparison() {
+            const container = document.getElementById('dimension-comparison');
+            const dimensions = ['Data Readiness', 'Risk & Governance', 'Technical Infrastructure', 'Business Strategy', 'Culture & Change'];
+
+            container.innerHTML = dimensions.map(dim => {
+                const scores = responsesData.map(r => r.results?.dimensionScores?.[dim] || 0);
+                const max = Math.max(...scores);
+                const min = Math.min(...scores);
+                const variance = max - min;
+
+                let misalignmentClass = 'low';
+                let misalignmentText = 'Aligned';
+                if (variance > 30) {
+                    misalignmentClass = 'high';
+                    misalignmentText = 'Divergent';
+                } else if (variance > 15) {
+                    misalignmentClass = 'medium';
+                    misalignmentText = 'Mixed';
+                }
+
+                const bars = responsesData.map((response, index) => {
+                    const score = response.results?.dimensionScores?.[dim] || 0;
+                    const role = response.respondent_role || response.respondent_title || `Exec ${index + 1}`;
+                    return `
+                        <div class="exec-bar" style="width: ${score}%; background: ${EXECUTIVE_COLORS[index % EXECUTIVE_COLORS.length]}" title="${role}: ${Math.round(score)}%">
+                            ${Math.round(score)}%
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="dimension-row">
+                        <div class="dimension-name">${dim.replace(' Readiness', '').replace(' Infrastructure', '')}</div>
+                        <div class="dimension-bars">
+                            ${bars}
+                        </div>
+                        <div class="misalignment-score ${misalignmentClass}">
+                            ${misalignmentText}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderInsights() {
+            const container = document.getElementById('insights-list');
+            const insights = generateInsights();
+
+            container.innerHTML = insights.map(insight => `
+                <div class="insight-item">
+                    <h4>${insight.title}</h4>
+                    <p>${insight.message}</p>
+                </div>
+            `).join('');
+        }
+
+        function generateInsights() {
+            const insights = [];
+            const dimensions = ['Data Readiness', 'Risk & Governance', 'Technical Infrastructure', 'Business Strategy', 'Culture & Change'];
+
+            // Find biggest divergence
+            let maxDivergence = 0;
+            let maxDivergenceDim = '';
+            dimensions.forEach(dim => {
+                const scores = responsesData.map(r => r.results?.dimensionScores?.[dim] || 0);
+                const variance = Math.max(...scores) - Math.min(...scores);
+                if (variance > maxDivergence) {
+                    maxDivergence = variance;
+                    maxDivergenceDim = dim;
+                }
+            });
+
+            if (maxDivergence > 20) {
+                insights.push({
+                    title: `Critical Misalignment in ${maxDivergenceDim}`,
+                    message: `Executives show a ${Math.round(maxDivergence)}-point difference in ${maxDivergenceDim}. This suggests fundamental disagreement on priorities and approach.`
+                });
+            }
+
+            // Find strongest consensus
+            let minDivergence = 100;
+            let minDivergenceDim = '';
+            dimensions.forEach(dim => {
+                const scores = responsesData.map(r => r.results?.dimensionScores?.[dim] || 0);
+                const variance = Math.max(...scores) - Math.min(...scores);
+                if (variance < minDivergence) {
+                    minDivergence = variance;
+                    minDivergenceDim = dim;
+                }
+            });
+
+            if (minDivergence < 10) {
+                insights.push({
+                    title: `Strong Consensus on ${minDivergenceDim}`,
+                    message: `The leadership team is well-aligned on ${minDivergenceDim} (${Math.round(minDivergence)}-point variance). Build on this strength.`
+                });
+            }
+
+            // Overall score variance
+            const overallScores = responsesData.map(r => r.results?.overallScore || 0);
+            const overallVariance = Math.max(...overallScores) - Math.min(...overallScores);
+            if (overallVariance > 25) {
+                insights.push({
+                    title: 'Leadership Gap on AI Readiness',
+                    message: `Overall readiness scores range from ${Math.round(Math.min(...overallScores))}% to ${Math.round(Math.max(...overallScores))}%. This suggests some executives may need additional context or education.`
+                });
+            }
+
+            return insights;
+        }
+
+        function showAlert(title, message, type) {
+            const alertBox = document.getElementById('alert-box');
+            alertBox.className = type === 'success' ? 'alert-box success' : 'alert-box';
+            document.getElementById('alert-title').textContent = title;
+            document.getElementById('alert-message').textContent = message;
+            alertBox.style.display = 'block';
+        }
+
+        // Initialize
+        loadResults();
+    </script>
+</body>
+</html>

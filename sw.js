@@ -91,7 +91,9 @@ self.addEventListener('fetch', event => {
 // Optional: Handle background sync for forms
 self.addEventListener('sync', event => {
   if (event.tag === 'sync-forms') {
-    event.waitUntil(syncFormData());
+    // Define syncFormData function or comment out for now
+    // event.waitUntil(syncFormData());
+    console.log('Background sync triggered but not implemented');
   }
 });
 

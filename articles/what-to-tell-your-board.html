@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What to Tell Your Board About AI - Thor Matthiasson</title>
+    <meta name="description" content="A practical script for the AI conversation every CEO is dreading with their board">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        .article-hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .article-container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .article-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--accent-sage);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-subtitle {
+            font-size: 1.375rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-style: italic;
+            font-family: 'Crimson Text', serif;
+        }
+
+        .article-content {
+            padding: 4rem 2rem;
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            font-size: 1.875rem;
+            font-weight: 400;
+            margin: 3rem 0 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .article-content h3 {
+            font-size: 1.375rem;
+            font-weight: 500;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        .article-content blockquote {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%);
+            border-left: 4px solid var(--accent-sage);
+            font-style: italic;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .article-content .highlight {
+            background: linear-gradient(135deg, #fff5ee 0%, #fdf9f4 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 1px solid var(--gold-light);
+        }
+
+        .article-footer {
+            padding: 4rem 2rem;
+            background: var(--background);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .author-bio {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+
+        .author-bio img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .next-steps {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .next-steps h2 {
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .next-steps p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .board-script {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            margin: 2rem 0;
+        }
+
+        .board-script h3 {
+            color: var(--accent-sage);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-subtitle {
+                font-size: 1.125rem;
+            }
+
+            .article-content {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">Thor Matthiasson</a>
+            <button class="nav-menu-button" aria-label="Menu" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="nav-links">
+                <a href="../thinking.html">Thinking</a>
+                <a href="../services.html">Advisory</a>
+                <a href="../framework.html">Framework</a>
+                <a href="../tools.html">Tools</a>
+                <a href="../portfolio.html">Portfolio</a>
+                <a href="../index.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article Hero -->
+    <header class="article-hero">
+        <div class="article-container">
+            <div class="article-meta">
+                <span class="article-date">July 2025</span>
+                <span class="article-category">Leadership</span>
+            </div>
+            <h1 class="article-title">What to Tell Your Board About AI</h1>
+            <p class="article-subtitle">A script for the conversation you're dreading</p>
+        </div>
+    </header>
+
+    <!-- Article Content -->
+    <article class="article-content">
+        <div class="article-container">
+            <p>
+                <strong>They've read the headlines. They've heard from peers. They want to know your "AI strategy."</strong> And you're sitting there wondering how to have this conversation without overpromising, looking behind, or triggering a spending spree you'll regret in 18 months.
+            </p>
+
+            <p>
+                Here's the truth: Your board doesn't actually want an AI strategy. They want reassurance that you're not missing something important. They want to know you're thoughtful, not reactive. They want confidence, not hype.
+            </p>
+
+            <p>
+                After sitting through dozens of these board conversations—on both sides of the table—I've developed a framework that works. It's honest, strategic, and most importantly, it doesn't commit you to decisions you'll regret.
+            </p>
+
+            <h2>The Opening Move</h2>
+
+            <div class="board-script">
+                <h3>What You Say:</h3>
+                <p>
+                    "I appreciate the board's interest in AI. Let me share three things: where we are today, what we're learning, and how we're approaching this strategically."
+                </p>
+            </div>
+
+            <p>
+                This immediately signals that you're in control, you've thought about this, and you're not just reacting to market pressure. It also buys you time to frame the conversation on your terms.
+            </p>
+
+            <h2>Part 1: Where We Are Today</h2>
+
+            <div class="board-script">
+                <h3>What You Say:</h3>
+                <p>
+                    "We're already using AI in several areas—probably more than you realize. Our customer service team uses it for ticket routing. Marketing uses it for content optimization. Finance uses it for anomaly detection. These aren't headline-grabbing initiatives, but they're delivering measurable value."
+                </p>
+            </div>
+
+            <p>
+                Every company is using AI somewhere, even if it's just Gmail's Smart Compose. Start with what's working. This establishes that you're not behind—you're being thoughtful about expansion.
+            </p>
+
+            <h2>Part 2: What We're Learning</h2>
+
+            <div class="board-script">
+                <h3>What You Say:</h3>
+                <p>
+                    "We're running three pilot programs to understand where AI can create asymmetric value for our business. Not efficiency plays—transformation opportunities. We're measuring not just ROI, but also organizational readiness and competitive differentiation."
+                </p>
+            </div>
+
+            <p>
+                The key phrase here is "asymmetric value." Boards love this. It shows you're not just following the crowd—you're looking for unique advantages. Even if your "three pilots" are still being defined, this positions you as experimental but disciplined.
+            </p>
+
+            <h2>Part 3: Our Strategic Approach</h2>
+
+            <blockquote>
+                "The winners in AI won't be the companies that spend the most. They'll be the ones who learn the fastest."
+            </blockquote>
+
+            <div class="board-script">
+                <h3>What You Say:</h3>
+                <p>
+                    "Our approach is 'fast follower with selective leadership.' We're not trying to be first in everything—that's expensive and risky. But in areas core to our competitive advantage, we're moving aggressively. We're building capability, not just buying tools."
+                </p>
+            </div>
+
+            <p>
+                This is the money quote. It shows sophistication, pragmatism, and strategy. You're not a laggard, but you're not gambling the company either.
+            </p>
+
+            <h2>Handling the Tough Questions</h2>
+
+            <h3>"What's our AI budget?"</h3>
+            <div class="board-script">
+                <p>
+                    "We're not creating a separate AI budget—that leads to science projects. Instead, we're embedding AI into our existing initiatives with clear ROI requirements. Each business unit owner is responsible for their AI investments."
+                </p>
+            </div>
+
+            <h3>"What about ChatGPT/Claude/[Latest Tool]?"</h3>
+            <div class="board-script">
+                <p>
+                    "We're testing it in controlled environments. The technology is powerful but the governance questions are complex. We're moving thoughtfully to capture value while managing risk."
+                </p>
+            </div>
+
+            <h3>"Are we behind our competitors?"</h3>
+            <div class="board-script">
+                <p>
+                    "Based on our analysis, everyone's claiming AI leadership but few are showing measurable results. We're focused on being ahead on impact, not press releases."
+                </p>
+            </div>
+
+            <h3>"Should we hire a Chief AI Officer?"</h3>
+            <div class="board-script">
+                <p>
+                    "We're evaluating whether we need new roles or new capabilities in existing roles. The risk with a CAO is creating another silo. We're focused on embedding AI thinking throughout the organization."
+                </p>
+            </div>
+
+            <div class="highlight">
+                <h3>The Close That Works</h3>
+                <p>
+                    "I'd like to propose we establish three principles for our AI initiatives:
+                </p>
+                <ol>
+                    <li><strong>Value-first:</strong> Every AI investment must have clear, measurable business outcomes</li>
+                    <li><strong>Risk-aware:</strong> We'll move fast in low-risk areas, carefully in high-risk ones</li>
+                    <li><strong>Capability-building:</strong> We're investing in our people, not just technology</li>
+                </ol>
+                <p>
+                    I'll report back quarterly on our progress against these principles."
+                </p>
+            </div>
+
+            <h2>What Not to Say</h2>
+
+            <p>
+                Avoid these phrases that trigger board anxiety:
+            </p>
+            <ul>
+                <li>"We're still figuring it out" (sounds unprepared)</li>
+                <li>"Everyone's doing it" (sounds reactive)</li>
+                <li>"We need to transform everything" (sounds expensive)</li>
+                <li>"We're way behind" (triggers panic)</li>
+                <li>"It's too early to tell" (sounds dismissive)</li>
+            </ul>
+
+            <h2>The Secret Weapon</h2>
+
+            <p>
+                End with a question that shifts the dynamic:
+            </p>
+
+            <div class="board-script">
+                <h3>What You Ask:</h3>
+                <p>
+                    "As board members, you see across multiple industries and companies. What AI applications have you seen that created real value? What mistakes should we avoid?"
+                </p>
+            </div>
+
+            <p>
+                This does three things: It makes them partners not judges, it gathering intelligence, and it shows humility and wisdom.
+            </p>
+
+            <h2>The Reality Check</h2>
+
+            <p>
+                Your board doesn't need you to be an AI expert. They need you to be a thoughtful leader who's balancing opportunity with risk, innovation with execution, and promise with reality.
+            </p>
+
+            <p>
+                The script above works because it demonstrates exactly that. You're neither behind nor recklessly ahead. You're exactly where a responsible leader should be: informed, strategic, and moving with purpose.
+            </p>
+
+            <p>
+                <strong>Remember: The board's AI anxiety isn't really about AI. It's about competitiveness, innovation, and strategic thinking. Address those concerns, and the AI conversation takes care of itself.</strong>
+            </p>
+        </div>
+    </article>
+
+    <!-- Article Footer -->
+    <footer class="article-footer">
+        <div class="article-container">
+            <div class="author-bio">
+                <img src="../images/thor-profile.jpg" alt="Thor Matthiasson" loading="lazy">
+                <div class="author-info">
+                    <h3>Thor Matthiasson</h3>
+                    <p>AI Strategy Advisor helping leaders navigate boardroom conversations about artificial intelligence. 25+ years of experience in executive advisory and digital transformation.</p>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>Need Help Preparing for Your Board?</h2>
+                <p>Let's craft your specific AI narrative and board strategy together.</p>
+                <a href="../index.html#contact" class="btn btn-primary">Schedule a Conversation</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="https://www.linkedin.com/in/thor-matthiasson-647a9415/" target="_blank">LinkedIn</a>
+                    <a href="../index.html#contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+</body>
+</html>

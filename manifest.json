@@ -57,19 +57,5 @@
       "purpose": "maskable any"
     }
   ],
-  "categories": ["business", "education", "productivity"],
-  "screenshots": [
-    {
-      "src": "/screenshots/desktop.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "platform": "wide"
-    },
-    {
-      "src": "/screenshots/mobile.png",
-      "sizes": "750x1334",
-      "type": "image/png",
-      "platform": "narrow"
-    }
-  ]
+  "categories": ["business", "education", "productivity"]
 }

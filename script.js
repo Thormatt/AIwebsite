@@ -1,3 +1,38 @@
+// Mobile menu toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const menuButton = document.querySelector('.nav-menu-button');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (menuButton && navLinks) {
+        menuButton.addEventListener('click', function() {
+            const isOpen = navLinks.classList.toggle('active');
+            menuButton.setAttribute('aria-expanded', String(isOpen));
+            if (isOpen) {
+                const firstLink = navLinks.querySelector('a');
+                if (firstLink) {
+                    firstLink.focus();
+                }
+            }
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuButton.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!menuButton.contains(event.target) && !navLinks.contains(event.target)) {
+                navLinks.classList.remove('active');
+                menuButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+});
+
 // Smooth scrolling for navigation links (but not for external links)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     // Skip if it's actually pointing to a file
@@ -22,17 +57,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Animate numbers on scroll
-function animateValue(element, start, end, duration) {
-    let startTimestamp = null;
-    const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        element.textContent = Math.floor(progress * (end - start) + start);
-        if (progress < 1) {
-            window.requestAnimationFrame(step);
-        }
-    };
-    window.requestAnimationFrame(step);
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function animateValue(element, start, end) {
+    element.textContent = end;
 }
 
 // Animate stats on page load
@@ -40,7 +68,7 @@ window.addEventListener('load', () => {
     const statNumbers = document.querySelectorAll('.stat-number');
     statNumbers.forEach(stat => {
         const finalValue = parseInt(stat.getAttribute('data-value'));
-        animateValue(stat, 0, finalValue, 1500);
+        animateValue(stat, 0, finalValue);
     });
 });
 
@@ -184,9 +212,10 @@ if (contactForm) {
             }
 
             // Log for debugging
-            console.log('Email sent:', result);
+            // Email sent successfully
 
             // Show success message with debug info
+            formStatus.style.display = 'block'; // Reset display before adding class
             formStatus.className = 'form-status success';
             formStatus.textContent = result.debug
                 ? `Thank you! Email sent to ${result.to}. ${result.debug}`
@@ -195,12 +224,14 @@ if (contactForm) {
 
             // Hide message after 5 seconds
             setTimeout(() => {
-                formStatus.style.display = 'none';
+                formStatus.style.display = '';  // Clear inline style instead of setting to 'none'
+                formStatus.className = 'form-status'; // Reset class
             }, 5000);
 
         } catch (error) {
             // Show error message
             console.error('Contact form error:', error);
+            formStatus.style.display = 'block'; // Reset display before adding class
             formStatus.className = 'form-status error';
 
             // Show more specific error if available
@@ -258,7 +289,35 @@ document.querySelectorAll('.stat-card').forEach((card, index) => {
     card.style.animationDelay = `${index * 0.2}s`;
 });
 
-console.log('Thor - AI Strategy Without the Hype');
+// Thor - AI Strategy Without the Hype
+
+// Lazy loading for images
+if ('loading' in HTMLImageElement.prototype) {
+    // Native lazy loading is supported
+    const images = document.querySelectorAll('img[loading="lazy"]');
+    images.forEach(img => {
+        // Browser handles it automatically
+    });
+} else {
+    // Fallback for older browsers
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+    document.body.appendChild(script);
+}
+
+// Animate framework preview on scroll
+const frameworkVisual = document.getElementById('framework-visual');
+if (frameworkVisual) {
+    const frameworkObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, { threshold: 0.3 });
+
+    frameworkObserver.observe(frameworkVisual);
+}
 
 // Add parallax effect to imperative section
 window.addEventListener('scroll', () => {

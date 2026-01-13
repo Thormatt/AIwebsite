@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consensus Assessment Admin - Thor AI Advisory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .admin-header h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-box, .admin-panel {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2.5rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .admin-panel {
+            max-width: 900px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a574 0%, #b8935f 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .session-card {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .session-link {
+            background: #f0f9ff;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #bae6fd;
+            margin-top: 1rem;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .copy-btn {
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .copy-btn:hover {
+            background: #0284c7;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-completed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-expired {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="../tools.html" class="back-link">← Back to Tools</a>
+
+        <div class="admin-header">
+            <h1>Consensus Assessment Admin</h1>
+            <p style="color: #6b7280;">Create and manage C-Suite assessment sessions</p>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="login-screen" class="login-box">
+            <h2 style="color: #2c3e50; margin-bottom: 1rem;">Admin Login</h2>
+            <p style="color: #6b7280; margin-bottom: 2rem;">Enter your admin password to continue</p>
+
+            <div class="form-group">
+                <label for="admin-password">Password</label>
+                <input type="password" id="admin-password" placeholder="Enter admin password">
+            </div>
+
+            <button class="btn btn-primary" onclick="login()" style="width: 100%;">Login</button>
+            <p id="login-error" style="color: #dc2626; margin-top: 1rem; display: none;">Incorrect password</p>
+        </div>
+
+        <!-- Admin Panel -->
+        <div id="admin-panel" class="hidden">
+            <!-- Create New Session -->
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+                <h2 style="color: #2c3e50; margin-bottom: 1.5rem;">Create New Assessment Session</h2>
+
+                <div class="form-group">
+                    <label for="company-name">Company Name *</label>
+                    <input type="text" id="company-name" placeholder="e.g., Acme Corporation" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="session-notes">Notes (optional)</label>
+                    <textarea id="session-notes" rows="3" placeholder="e.g., Q1 2025 strategic review"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="expires-days">Link Expiration (optional)</label>
+                    <select id="expires-days" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px;">
+                        <option value="">No expiration</option>
+                        <option value="7">7 days</option>
+                        <option value="14">14 days</option>
+                        <option value="30">30 days</option>
+                        <option value="60">60 days</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="createSession()">Generate Assessment Link</button>
+            </div>
+
+            <!-- Sessions List -->
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 2rem;">
+                <h2 style="color: #2c3e50; margin-bottom: 1.5rem;">Active Sessions</h2>
+                <div id="sessions-list">
+                    <p style="color: #6b7280;">Loading sessions...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const SUPABASE_URL = 'https://hzverggjspltpopivtgc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6dmVyZ2dqc3BsdHBvcGl2dGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzUxMDQsImV4cCI6MjA3NTI1MTEwNH0.n8S0BHP33VAP8KMEkHIBHcDdTapBOfnqwB8D1qf9pv4';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Simple password protection (you can change this password)
+        const ADMIN_PASSWORD = 'thor2025';
+
+        function login() {
+            const password = document.getElementById('admin-password').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                loadSessions();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+
+        // Allow Enter key to login
+        document.getElementById('admin-password')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
+
+        function generateSessionCode() {
+            // Generate a short, URL-friendly code
+            return Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+        }
+
+        async function createSession() {
+            const companyName = document.getElementById('company-name').value.trim();
+            const notes = document.getElementById('session-notes').value.trim();
+            const expiresDays = document.getElementById('expires-days').value;
+
+            if (!companyName) {
+                alert('Please enter a company name');
+                return;
+            }
+
+            const sessionCode = generateSessionCode();
+            let expiresAt = null;
+
+            if (expiresDays) {
+                expiresAt = new Date();
+                expiresAt.setDate(expiresAt.getDate() + parseInt(expiresDays));
+            }
+
+            // Create or find organization
+            let orgId;
+            const { data: existingOrg } = await supabase
+                .from('organizations')
+                .select('id')
+                .eq('name', companyName)
+                .single();
+
+            if (existingOrg) {
+                orgId = existingOrg.id;
+            } else {
+                const { data: newOrg, error: orgError } = await supabase
+                    .from('organizations')
+                    .insert({ name: companyName })
+                    .select()
+                    .single();
+                if (orgError) throw orgError;
+                orgId = newOrg.id;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('assessment_sessions')
+                    .insert([
+                        {
+                            organization_id: orgId,
+                            type: 'consensus',
+                            status: 'in_progress',
+                            title: `C-Suite Consensus - ${companyName}`,
+                            description: notes || null,
+                            access_code: sessionCode,
+                            expires_at: expiresAt ? expiresAt.toISOString() : null
+                        }
+                    ])
+                    .select();
+
+                if (error) {
+                    console.error('Error creating session:', error);
+                    alert('Error creating session: ' + error.message);
+                    return;
+                }
+
+                // Clear form
+                document.getElementById('company-name').value = '';
+                document.getElementById('session-notes').value = '';
+                document.getElementById('expires-days').value = '';
+
+                // Reload sessions
+                loadSessions();
+
+                alert('Assessment link created successfully!');
+            } catch (err) {
+                console.error('Error:', err);
+                alert('Error creating session');
+            }
+        }
+
+        async function loadSessions() {
+            try {
+                const { data, error } = await supabase
+                    .from('assessment_sessions')
+                    .select('*, organizations(name)')
+                    .eq('type', 'consensus')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    console.error('Error loading sessions:', error);
+                    document.getElementById('sessions-list').innerHTML =
+                        '<p style="color: #dc2626;">Error loading sessions</p>';
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    document.getElementById('sessions-list').innerHTML =
+                        '<p style="color: #6b7280;">No sessions yet. Create your first assessment above.</p>';
+                    return;
+                }
+
+                const sessionsHTML = data.map(session => {
+                    const assessmentURL = `${window.location.origin}${window.location.pathname.replace('consensus-admin.html', 'consensus-assessment.html')}?session=${session.access_code}`;
+                    const statusClass = `status-${session.status}`;
+                    const createdDate = new Date(session.created_at).toLocaleDateString();
+                    const expiresText = session.expires_at
+                        ? `Expires: ${new Date(session.expires_at).toLocaleDateString()}`
+                        : 'No expiration';
+
+                    return `
+                        <div class="session-card">
+                            <div class="session-header">
+                                <div>
+                                    <h3 style="color: #2c3e50; margin: 0 0 0.5rem 0;">${session.organizations?.name || 'Unknown Organization'}</h3>
+                                    <p style="color: #6b7280; margin: 0; font-size: 0.875rem;">
+                                        Created: ${createdDate} • ${expiresText}
+                                    </p>
+                                    ${session.description ? `<p style="color: #6b7280; margin: 0.5rem 0 0 0; font-size: 0.875rem;">${session.description}</p>` : ''}
+                                </div>
+                                <span class="status-badge ${statusClass}">${session.status}</span>
+                            </div>
+
+                            <div style="color: #6b7280; font-size: 0.875rem; margin-bottom: 0.5rem;">
+                                <span id="response-count-${session.id}">Loading responses...</span>
+                            </div>
+
+                            <div class="session-link">
+                                <div style="margin-bottom: 0.5rem; font-weight: 500; color: #374151;">Assessment Link:</div>
+                                <div id="link-${session.id}">${assessmentURL}</div>
+                                <button class="copy-btn" onclick="copyLink('${assessmentURL}', '${session.id}')">
+                                    📋 Copy Link
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('sessions-list').innerHTML = sessionsHTML;
+
+                // Load response counts for each session
+                data.forEach(async (session) => {
+                    const { count, error } = await supabase
+                        .from('consensus_responses')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('session_id', session.id);
+
+                    if (!error) {
+                        const countEl = document.getElementById(`response-count-${session.id}`);
+                        if (countEl) {
+                            countEl.textContent = `Responses: ${count || 0} / 5 executives`;
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error('Error:', err);
+                document.getElementById('sessions-list').innerHTML =
+                    '<p style="color: #dc2626;">Error loading sessions</p>';
+            }
+        }
+
+        function copyLink(url, sessionId) {
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                btn.style.background = '#10b981';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '#0ea5e9';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

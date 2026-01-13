@@ -1,0 +1,3149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium AI ROI Calculator - Advisory Session Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <style>
+        :root {
+            /* Brand Colors - Shared Design System */
+            --color-primary: #d4a574;
+            --color-primary-dark: #c19560;
+            --color-primary-darker: #a8824e;
+            --color-accent: #daa520;
+
+            /* Neutrals */
+            --color-text-primary: #1f2937;
+            --color-text-secondary: #6b7280;
+            --color-text-tertiary: #9ca3af;
+            --color-background: #ffffff;
+            --color-background-alt: #f9fafb;
+            --color-background-dark: #f5f5f5;
+
+            /* Semantic Colors */
+            --color-success: #10b981;
+            --color-success-light: #d1fae5;
+            --color-error: #ef4444;
+            --color-error-light: #fee2e2;
+            --color-warning: #f59e0b;
+            --color-info: #6366f1;
+
+            /* Borders & Shadows */
+            --border-color: #e5e7eb;
+            --border-color-hover: #d1d5db;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.15);
+
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+
+            /* Border Radius */
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 9999px;
+
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-base: 200ms ease;
+            --transition-slow: 300ms ease;
+            --transition-slower: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #f9fafb 100%);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .calculator-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .calculator-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .calculator-header p {
+            font-size: 1.125rem;
+            color: #6b7280;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1200px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.2s;
+        }
+
+        .input-section:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .input-section h2 {
+            font-size: 1.375rem;
+            color: #1f2937;
+            margin-bottom: 1.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .input-section h2 svg {
+            color: #d4a574;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 0.875rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #fafafa;
+            transition: all 0.2s;
+        }
+
+        .input-group input:hover,
+        .input-group select:hover {
+            border-color: #d1d5db;
+            background: #ffffff;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #d4a574;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+
+        .input-helper {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .input-warning {
+            font-size: 0.875rem;
+            color: #f59e0b;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .input-warning.active {
+            display: block;
+        }
+
+        .toggle-section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .toggle-section:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-color: #d4a574;
+        }
+
+        .toggle-section h3 {
+            font-size: 1.125rem;
+            color: #1f2937;
+            flex: 1;
+        }
+
+        .toggle-section svg {
+            color: #d4a574;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .toggle-section.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-content {
+            display: none;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            padding: 2rem;
+            margin-top: -12px;
+            margin-bottom: 1rem;
+        }
+
+        .toggle-content.active {
+            display: block;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 1.125rem;
+            background: linear-gradient(135deg, #d4a574 0%, #c19560 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.25);
+        }
+
+        .calculate-btn:hover {
+            background: linear-gradient(135deg, #c19560 0%, #a8824e 100%);
+            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .results-section h2 {
+            font-size: 1.875rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .results-section h2 svg {
+            color: #d4a574;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .metric:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #d4a574;
+        }
+
+        .metric-value.positive {
+            color: #10b981;
+        }
+
+        .metric-value.negative {
+            color: #ef4444;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .bar-chart {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            height: 250px;
+            padding: 1rem 0;
+        }
+
+        .bar-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bar {
+            width: 100%;
+            border-radius: 6px 6px 0 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 10px;
+            position: relative;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .bar-label {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .scenario-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .scenario-table th {
+            background: rgba(212, 165, 116, 0.2);
+            color: white;
+            padding: 0.875rem 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 2px solid rgba(212, 165, 116, 0.3);
+            white-space: nowrap;
+        }
+
+        .scenario-table td {
+            padding: 0.875rem 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        /* Sticky first column for better UX */
+        .scenario-table th:first-child,
+        .scenario-table td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: rgba(45, 55, 72, 0.95);
+            backdrop-filter: blur(8px);
+        }
+
+        .scenario-table tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scenario-table tr:hover td:first-child {
+            background: rgba(45, 55, 72, 0.98);
+        }
+
+        .alert-box {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            color: #10b981;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .export-btn {
+            padding: 0.75rem 1.5rem;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 1rem;
+            margin-top: 1rem;
+            transition: all 0.2s;
+        }
+
+        .export-btn:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .waterfall-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.5rem;
+            height: 200px;
+            padding: 1rem 0;
+        }
+
+        .waterfall-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .waterfall-block {
+            width: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .tornado-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .tornado-label {
+            width: 150px;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .tornado-bars {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            position: relative;
+            height: 32px;
+        }
+
+        .tornado-bar-low {
+            position: absolute;
+            right: 50%;
+            height: 100%;
+            background: #ef4444;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .tornado-bar-high {
+            position: absolute;
+            left: 50%;
+            height: 100%;
+            background: #10b981;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .tornado-center-line {
+            position: absolute;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .tornado-value {
+            position: absolute;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ===== TOOLBAR STYLES ===== */
+
+        .calculator-toolbar {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: var(--spacing-lg);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .toolbar-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+        }
+
+        .toolbar-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: white;
+            color: var(--color-text-primary);
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .toolbar-select:hover {
+            border-color: var(--color-primary);
+        }
+
+        .toolbar-select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border-color);
+        }
+
+        /* ===== WIZARD/STEP NAVIGATION STYLES ===== */
+
+        .wizard-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+            min-height: 100vh;
+        }
+
+        /* Progress Stepper */
+        .progress-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-xl) 0;
+            background: var(--color-background);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .step-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 3px solid var(--border-color);
+            background: var(--color-background);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-text-tertiary);
+            transition: all var(--transition-slow);
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle.completed {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .step-circle.active {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.2);
+            transform: scale(1.1);
+        }
+
+        .step-circle.completed svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .step-line {
+            width: 80px;
+            height: 3px;
+            background: var(--border-color);
+            margin: 0 -4px;
+            transition: all var(--transition-slow);
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-line.completed {
+            background: var(--color-success);
+        }
+
+        .step-label {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: var(--spacing-sm);
+            font-size: 0.75rem;
+            color: var(--color-text-tertiary);
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .step-label.active {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Step Content */
+        .step-content {
+            display: none;
+            animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .step-card {
+            background: var(--color-background);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .step-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .step-number {
+            display: inline-block;
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .step-title {
+            font-size: 2rem;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+            font-weight: 700;
+        }
+
+        .step-description {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Step Navigation Buttons */
+        .step-navigation {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: space-between;
+            margin-top: var(--spacing-2xl);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary-darker) 100%);
+            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--color-background-alt);
+            color: var(--color-text-primary);
+            border: 1.5px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-background);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Animations */
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes checkmark {
+            0% {
+                stroke-dashoffset: 50;
+            }
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Enhanced Input Styles */
+        .input-group-enhanced {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .input-group-enhanced label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-text-primary);
+            font-size: 0.9375rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input,
+        .input-wrapper select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            background: var(--color-background-alt);
+            transition: all var(--transition-base);
+        }
+
+        .input-wrapper input:hover,
+        .input-wrapper select:hover {
+            border-color: var(--border-color-hover);
+            background: var(--color-background);
+        }
+
+        .input-wrapper input:focus,
+        .input-wrapper select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            background: var(--color-background);
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.15);
+        }
+
+        .input-wrapper .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-success);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+
+        .input-wrapper.valid .input-icon {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .wizard-container {
+                padding: var(--spacing-md);
+            }
+
+            .progress-stepper {
+                padding: var(--spacing-md);
+                overflow-x: auto;
+            }
+
+            .step-line {
+                width: 40px;
+            }
+
+            .step-card {
+                padding: var(--spacing-xl);
+            }
+
+            .step-navigation {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wizard-container">
+        <!-- Toolbar -->
+        <div class="calculator-toolbar">
+            <div class="toolbar-group">
+                <span class="toolbar-label">Horizon:</span>
+                <select id="horizonSelect" class="toolbar-select" onchange="onHorizonChange()">
+                    <option value="12">12 months</option>
+                    <option value="24">24 months</option>
+                    <option value="36" selected>36 months</option>
+                    <option value="60">60 months</option>
+                </select>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-group">
+                <span class="toolbar-label">Currency:</span>
+                <select id="currencySelect" class="toolbar-select" onchange="onCurrencyChange()">
+                    <option value="USD" selected>USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="CAD">CAD (C$)</option>
+                    <option value="AUD">AUD (A$)</option>
+                    <option value="JPY">JPY (¥)</option>
+                    <option value="INR">INR (₹)</option>
+                </select>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-group">
+                <span class="toolbar-label">Scenario:</span>
+                <select id="scenarioSelect" class="toolbar-select" onchange="onScenarioLoad()">
+                    <option value="">Load...</option>
+                    <option value="A">Scenario A</option>
+                    <option value="B">Scenario B</option>
+                    <option value="C">Scenario C</option>
+                </select>
+                <button class="toolbar-select" onclick="saveScenario('A')" style="padding: 0.5rem 0.75rem;">Save A</button>
+                <button class="toolbar-select" onclick="saveScenario('B')" style="padding: 0.5rem 0.75rem;">Save B</button>
+                <button class="toolbar-select" onclick="saveScenario('C')" style="padding: 0.5rem 0.75rem;">Save C</button>
+            </div>
+        </div>
+
+        <!-- Progress Stepper -->
+        <div class="progress-stepper">
+            <div class="progress-step">
+                <div class="step-circle active" id="stepCircle1">1</div>
+                <span class="step-label active">Industry & Basics</span>
+            </div>
+            <div class="step-line" id="stepLine1"></div>
+            <div class="progress-step">
+                <div class="step-circle" id="stepCircle2">2</div>
+                <span class="step-label">Costs & Investment</span>
+            </div>
+            <div class="step-line" id="stepLine2"></div>
+            <div class="progress-step">
+                <div class="step-circle" id="stepCircle3">3</div>
+                <span class="step-label">Performance</span>
+            </div>
+            <div class="step-line" id="stepLine3"></div>
+            <div class="progress-step">
+                <div class="step-circle" id="stepCircle4">4</div>
+                <span class="step-label">Advanced Benefits</span>
+            </div>
+            <div class="step-line" id="stepLine4"></div>
+            <div class="progress-step">
+                <div class="step-circle" id="stepCircle5">5</div>
+                <span class="step-label">Results</span>
+            </div>
+        </div>
+
+        <!-- Step 1: Industry & Basics -->
+        <div class="step-content active" id="step1">
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">Step 1 of 5</div>
+                    <h2 class="step-title">Industry & Basics</h2>
+                    <p class="step-description">Let's start with your industry context and basic project parameters</p>
+                </div>
+
+        <!-- Industry Preset -->
+        <div class="input-section" style="grid-column: 1 / -1;">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                Industry Preset
+            </h2>
+            <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 1.5rem;">Pre-fills assumptions for a fast, credible first pass. These are starter defaults, not industry averages - adjust to your client's specifics.</p>
+            <div class="calculator-grid" style="gap: 1rem;">
+                <div class="input-group">
+                    <label>Industry</label>
+                    <select id="industrySelect" oninput="saveInputs()">
+                        <option value="">Select Industry</option>
+                    </select>
+                    <span class="input-helper">Choose the closest industry vertical</span>
+                </div>
+                <div class="input-group">
+                    <label>Operating Profile</label>
+                    <select id="profileSelect" oninput="saveInputs()">
+                        <option value="">Select Profile</option>
+                    </select>
+                    <span class="input-helper">Pick the closest operating model</span>
+                </div>
+                <div class="input-group">
+                    <label>&nbsp;</label>
+                    <button id="applyPresetBtn" type="button" style="width: 100%; padding: 0.875rem; background: linear-gradient(135deg, #d4a574 0%, #c19560 100%); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        Apply Preset
+                    </button>
+                    <span class="input-helper">Overwrites current inputs (you can adjust after)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Basic Inputs -->
+        <div class="input-section" style="grid-column: 1 / -1;">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                Project Basics
+            </h2>
+            <div class="calculator-grid" style="gap: 1rem;">
+                <div class="input-group">
+                    <label>Use Case Type</label>
+                    <select id="useCase" oninput="saveInputs()">
+                        <option value="customer-service">Customer Service Automation</option>
+                        <option value="content-generation">Content Generation</option>
+                        <option value="data-analysis">Data Analysis & Insights</option>
+                        <option value="process-automation">Process Automation</option>
+                        <option value="predictive-analytics">Predictive Analytics</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Company Size (Employees)</label>
+                    <input type="number" id="companySize" value="500" min="1" oninput="saveInputs()">
+                </div>
+                <div class="input-group">
+                    <label>Affected Employees</label>
+                    <input type="number" id="affectedEmployees" value="50" min="1" oninput="saveInputs()">
+                    <span class="input-helper">Who will use the AI system</span>
+                </div>
+                <div class="input-group">
+                    <label>Average Annual Salary ($)</label>
+                    <input type="number" id="avgSalary" value="75000" min="0" oninput="saveInputs()">
+                    <span class="input-helper">Of affected employees</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-navigation">
+            <div></div>
+            <button class="btn btn-primary" onclick="nextStep()">
+                Next: Performance
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Step 2: Performance Parameters -->
+<div class="step-content" id="step2">
+    <div class="step-card">
+        <div class="step-header">
+            <div class="step-number">Step 2 of 5</div>
+            <h2 class="step-title">Performance & Implementation</h2>
+            <p class="step-description">Define expected efficiency gains and implementation approach</p>
+        </div>
+
+        <div class="input-section" style="grid-column: 1 / -1;">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+                Performance Parameters
+            </h2>
+            <div class="calculator-grid" style="gap: 1rem;">
+                <div class="input-group">
+                    <label>Efficiency Gain (%)</label>
+                    <input type="number" id="efficiencyGain" value="20" min="0" max="80" oninput="validateEfficiency()">
+                    <span class="input-helper">Time saved per employee</span>
+                    <span class="input-warning" id="efficiencyWarning">⚠ Efficiency gains above 80% are uncommon - value clamped</span>
+                </div>
+                <div class="input-group">
+                    <label>Realization Rate (%)</label>
+                    <input type="number" id="realizationRate" value="60" min="0" max="100" oninput="validateRealization()">
+                    <span class="input-helper">% of time saved that converts to actual value (60-70% typical)</span>
+                    <span class="input-warning" id="realizationWarning">⚠ Realization rate must be between 0-100% - value clamped</span>
+                </div>
+                <div class="input-group">
+                    <label>Ramp-up Time (months)</label>
+                    <input type="number" id="rampTime" value="6" min="1" max="24">
+                    <span class="input-helper">Time to reach full efficiency</span>
+                </div>
+                <div class="input-group">
+                    <label>Implementation Type</label>
+                    <select id="implementationType">
+                        <option value="saas">SaaS (Fast adoption)</option>
+                        <option value="hybrid">Hybrid (Medium)</option>
+                        <option value="custom">Custom Build (Slow)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-navigation">
+            <button class="btn btn-secondary" onclick="prevStep()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Back
+            </button>
+            <button class="btn btn-primary" onclick="nextStep()">
+                Next: Costs
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Step 3: Cost Estimates & Finance -->
+<div class="step-content" id="step3">
+    <div class="step-card">
+        <div class="step-header">
+            <div class="step-number">Step 3 of 5</div>
+            <h2 class="step-title">Cost Estimates & Finance</h2>
+            <p class="step-description">Define your investment, operating costs, and financial parameters</p>
+        </div>
+
+        <div class="calculator-grid">
+            <div class="input-section">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    Cost Estimates
+                </h2>
+                <div class="input-group">
+                    <label>Initial Investment ($)</label>
+                    <input type="number" id="initialInvestment" value="50000" min="0">
+                    <span class="input-helper">Setup, integration, licenses</span>
+                </div>
+                <div class="input-group">
+                    <label>Training & Change Management ($)</label>
+                    <input type="number" id="trainingCost" value="15000" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Fixed Monthly Operating Cost ($)</label>
+                    <input type="number" id="fixedMonthlyCost" value="5000" min="0">
+                    <span class="input-helper">Platform fees, infrastructure</span>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Finance Parameters
+                </h2>
+                <div class="input-group">
+                    <label>Discount Rate / Hurdle Rate (%)</label>
+                    <input type="number" id="discountRate" value="12" min="0" max="50" oninput="validateDiscountRate()">
+                    <span class="input-helper">WACC or corporate hurdle rate</span>
+                    <span class="input-warning" id="discountWarning">⚠ Discount rate should be 0-50% - value clamped</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-navigation">
+            <button class="btn btn-secondary" onclick="prevStep()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Back
+            </button>
+            <button class="btn btn-primary" onclick="nextStep()">
+                Next: Advanced Benefits
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Step 4: Advanced Benefits (Optional) -->
+<div class="step-content" id="step4">
+    <div class="step-card">
+        <div class="step-header">
+            <div class="step-number">Step 4 of 5 - Optional</div>
+            <h2 class="step-title">Advanced Benefits</h2>
+            <p class="step-description">Fine-tune your ROI with advanced benefit calculations (optional but recommended)</p>
+        </div>
+
+        <!-- Advanced Sections (Toggleable) -->
+        <div class="toggle-section" onclick="toggleSection('usageCosts')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"></path>
+            </svg>
+            <h3>Usage-Based Costs (LLM/API)</h3>
+            <svg class="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+        <div id="usageCosts" class="toggle-content">
+            <div class="calculator-grid">
+                <div class="input-group">
+                    <label>Monthly Transaction Volume</label>
+                    <input type="number" id="monthlyVolume" value="10000" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Avg Input Tokens</label>
+                    <input type="number" id="avgInputTokens" value="800" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Avg Output Tokens</label>
+                    <input type="number" id="avgOutputTokens" value="400" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Input Price ($/1K tokens)</label>
+                    <input type="number" id="inputPrice" value="0.01" step="0.001" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Output Price ($/1K tokens)</label>
+                    <input type="number" id="outputPrice" value="0.03" step="0.001" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Cache Hit Rate (%)</label>
+                    <input type="number" id="cacheHitRate" value="30" min="0" max="100">
+                </div>
+                <div class="input-group">
+                    <label>Rerun/Retry Rate (%)</label>
+                    <input type="number" id="rerunRate" value="10" min="0" max="100">
+                </div>
+            </div>
+        </div>
+
+        <div class="toggle-section" onclick="toggleSection('qualityBenefits')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+            <h3>Quality & Revenue Benefits</h3>
+            <svg class="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+        <div id="qualityBenefits" class="toggle-content">
+            <div class="calculator-grid">
+                <div class="input-group">
+                    <label>Baseline Errors per Month</label>
+                    <input type="number" id="baselineErrors" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Cost per Error ($)</label>
+                    <input type="number" id="costPerError" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Error Reduction Rate (%)</label>
+                    <input type="number" id="errorReduction" value="0" min="0" max="100">
+                </div>
+                <div class="input-group">
+                    <label>New Opportunities per Month</label>
+                    <input type="number" id="newOpportunities" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Conversion Lift (%)</label>
+                    <input type="number" id="conversionLift" value="0" min="0" max="100">
+                </div>
+                <div class="input-group">
+                    <label>Average Deal Margin ($)</label>
+                    <input type="number" id="dealMargin" value="0" min="0">
+                </div>
+            </div>
+        </div>
+
+        <div class="toggle-section" onclick="toggleSection('complianceCosts')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <h3>Compliance & Risk Costs</h3>
+            <svg class="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+        <div id="complianceCosts" class="toggle-content">
+            <div class="calculator-grid">
+                <div class="input-group">
+                    <label>Compliance Audit Costs ($/year)</label>
+                    <input type="number" id="complianceAudit" value="0" min="0">
+                    <span class="input-helper">SOC2, HIPAA, etc.</span>
+                </div>
+                <div class="input-group">
+                    <label>Legal/DPA Costs ($/year)</label>
+                    <input type="number" id="legalCosts" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Human Review Minutes per Transaction</label>
+                    <input type="number" id="reviewMinutes" value="0" min="0" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Reviewer Hourly Rate ($)</label>
+                    <input type="number" id="reviewerRate" value="50" min="0">
+                </div>
+            </div>
+        </div>
+
+        <div class="step-navigation">
+            <button class="btn btn-secondary" onclick="prevStep()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Back
+            </button>
+            <button class="btn btn-primary" onclick="nextStep()">
+                View Results
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Step 5: Results -->
+<div class="step-content" id="step5">
+    <div class="step-card" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white;">
+        <!-- Results -->
+        <div id="results" class="results-section">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                Executive Summary
+            </h2>
+
+            <!-- Methodology Drawer -->
+            <div style="margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; overflow: hidden;">
+                <div onclick="toggleMethodology()" style="padding: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05);">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4a574" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                        </svg>
+                        <strong>Methodology & Formulas</strong>
+                        <span style="opacity: 0.7; font-size: 0.85rem;">(Model v1.0 - Jan 2025)</span>
+                    </div>
+                    <svg id="methodologyIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div id="methodologyContent" style="display: none; padding: 1.5rem; background: rgba(0,0,0,0.2); font-size: 0.9rem; line-height: 1.6;">
+                    <h4 style="color: #d4a574; margin-bottom: 1rem;">Key Financial Metrics</h4>
+                    <p><strong>Net Present Value (NPV):</strong> NPV = Σ(CFₜ / (1 + r)ᵗ) where CFₜ = cashflow at time t, r = discount rate</p>
+                    <p><strong>Internal Rate of Return (IRR):</strong> Rate r where NPV = 0</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Algorithm: Newton-Raphson method with bisection fallback for robustness</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Returns "N/A" if no sign change in cashflows (no valid IRR exists)</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Convergence tolerance: 0.01% on iterative refinement</p>
+                    <p><strong>Modified IRR (MIRR):</strong> (FV of positive CFs / PV of negative CFs)^(1/n) - 1</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Uses discount rate as both finance rate (for costs) and reinvestment rate (for benefits)</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• More conservative than IRR, assumes realistic reinvestment returns</p>
+                    <p><strong>3-Year ROI (undiscounted):</strong> (Total Gross Benefits - Total Costs) / Total Costs × 100%</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Calculated using gross benefits (not net cashflows) to avoid double-counting</p>
+
+                    <h4 style="color: #d4a574; margin-top: 1.5rem; margin-bottom: 1rem;">Adoption & Benefits Model</h4>
+                    <p><strong>S-Curve Adoption:</strong> A(t) = 1 / (1 + e^(-k(t - m))) where k = steepness, m = midpoint</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• SaaS: k=0.9 (fast adoption), Hybrid: k=0.6 (medium), Custom: k=0.4 (slow)</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Midpoint at ramp-time/2 (50% adoption at halfway point)</p>
+                    <p><strong>Labor Savings:</strong> Employees × 173.2 hrs/mo × Efficiency × (Salary × 1.3 / 2080) × Realization × Adoption(t)</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• 173.2 hrs/mo = 40 hrs/wk × 4.33 wks/mo average</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Burden rate 1.3× adds 30% for benefits, facilities, overhead</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• 2080 annual hours = 52 weeks × 40 hours</p>
+
+                    <h4 style="color: #d4a574; margin-top: 1.5rem; margin-bottom: 1rem;">LLM Cost Model</h4>
+                    <p><strong>Base Token Cost:</strong> Volume × [(Input/1K) × Input$ + (Output/1K) × Output$]</p>
+                    <p><strong>Cache Adjustment:</strong> × (1 - Cache Hit Rate) - reduces cost for cached responses</p>
+                    <p><strong>Rerun Adjustment:</strong> × (1 + Rerun Rate) - increases cost for retries/failures</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Full formula: Monthly Cost = Volume × Token Cost × (1 - Cache) × (1 + Reruns)</p>
+
+                    <h4 style="color: #d4a574; margin-top: 1.5rem; margin-bottom: 1rem;">Model Validation & Assumptions</h4>
+                    <ul style="margin-left: 1.5rem; opacity: 0.9;">
+                        <li>All cashflows monthly over 36-month period (standard project horizon)</li>
+                        <li>Realization rate 60-70% typical (accounts for organizational friction, not all time saved = value created)</li>
+                        <li>Scenarios vary benefit assumptions by ±15%, costs held constant (asymmetric risk profile)</li>
+                        <li>Quality benefits and revenue lift scale with adoption curve (assumes benefit realization tracks deployment)</li>
+                        <li>Model validated against: NPV convergence, IRR edge cases, MIRR consistency, adoption curve realism</li>
+                        <li>Version 1.0 - January 2025</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value" id="npv">$0</div>
+                    <div class="metric-label">Net Present Value</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="irr">0%</div>
+                    <div class="metric-label">Internal Rate of Return</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="mirr">0%</div>
+                    <div class="metric-label">Modified IRR</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="payback">0</div>
+                    <div class="metric-label">Payback Period (months)</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="roiH">0%</div>
+                    <div class="metric-label" id="roiHLabel">ROI</div>
+                </div>
+            </div>
+            <div id="hurdleTest" class="alert-box"></div>
+
+            <!-- Assessment-Based Conversion CTA -->
+            <div id="assessment-cta" style="display: none; background: linear-gradient(135deg, rgba(212, 165, 116, 0.15) 0%, rgba(44, 62, 80, 0.15) 100%); border: 2px solid #d4a574; border-radius: 12px; padding: 2rem; margin: 2rem 0;">
+                <div style="display: flex; align-items: start; gap: 1.5rem;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d4a574" stroke-width="2" style="flex-shrink: 0;">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <div style="flex: 1;">
+                        <h3 style="color: #d4a574; margin-bottom: 0.75rem; font-size: 1.5rem;">This Analysis Reflects Your Perspective Alone</h3>
+                        <p style="opacity: 0.95; line-height: 1.6; margin-bottom: 1rem;">
+                            You've calculated ROI based on <strong>your assessment</strong> of AI readiness. But what if your CEO, CTO, and CFO each see different numbers? What if your employees are facing challenges leadership doesn't see?
+                        </p>
+                        <p style="opacity: 0.95; line-height: 1.6; margin-bottom: 1.5rem;">
+                            <strong>The real risk isn't in the numbers above—it's in the hidden misalignments</strong> between leadership perception, technical reality, and employee experience. These gaps cost companies millions in failed pilots, duplicated work, and compliance risk.
+                        </p>
+                        <div style="background: rgba(0,0,0,0.2); border-left: 4px solid #d4a574; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
+                            <strong>Our AI Alignment Diagnostic reveals:</strong>
+                            <ul style="margin: 0.5rem 0 0 1.5rem; opacity: 0.95;">
+                                <li>Where your C-suite disagrees on AI readiness (consensus gaps)</li>
+                                <li>What your employees actually experience vs. what leadership believes (reality gaps)</li>
+                                <li>The financial cost of these misalignments ($M range)</li>
+                                <li>A 90-day roadmap to close the gaps</li>
+                            </ul>
+                        </div>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <a href="../index.html#contact" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; background: linear-gradient(135deg, #d4a574 0%, #c19560 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s; box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                                Book AI Alignment Diagnostic
+                            </a>
+                            <a href="../framework.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; background: rgba(255,255,255,0.1); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.2);">
+                                Learn About the Framework
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Cost Waterfall (Year 1)</div>
+                <div class="waterfall-chart" id="waterfallChart"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Cumulative Cash Flow (36 months)</div>
+                <div class="bar-chart" id="cashflowChart"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Scenario Analysis</div>
+                <p style="opacity: 0.9; margin-bottom: 1rem; font-size: 0.9rem;">Conservative/Aggressive scenarios scale <strong>benefit assumptions</strong> by ±15% (labor savings, quality gains, revenue lift)</p>
+                <table class="scenario-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Conservative (-15% benefits)</th>
+                            <th>Base Case</th>
+                            <th>Aggressive (+15% benefits)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scenarioTable"></tbody>
+                </table>
+            </div>
+
+            <div class="chart-container" id="scenarioComparisonContainer" style="display: none;">
+                <div class="chart-title">Saved Scenario Comparison</div>
+                <p style="opacity: 0.9; margin-bottom: 1rem; font-size: 0.9rem;">Compare current results against saved scenarios (use toolbar to save/load scenarios A/B/C)</p>
+                <div style="overflow-x: auto; width: 100%; max-width: 100%; -webkit-overflow-scrolling: touch;">
+                    <table class="scenario-table" style="table-layout: auto; max-width: none;">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Current</th>
+                                <th>Scenario A</th>
+                                <th>Δ vs Current</th>
+                                <th>Scenario B</th>
+                                <th>Δ vs Current</th>
+                                <th>Scenario C</th>
+                                <th>Δ vs Current</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scenarioComparisonTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Sensitivity Analysis - NPV Impact (±20% variation)</div>
+                <p style="opacity: 0.9; margin-bottom: 1rem; font-size: 0.9rem;">Shows how NPV changes when each driver varies by ±20% (all other factors held constant)</p>
+                <div id="tornadoChart"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Monte Carlo Risk Analysis</div>
+                <p style="opacity: 0.9; margin-bottom: 1rem; font-size: 0.9rem;">1000-run simulation with triangular distributions to model NPV uncertainty</p>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: inline-flex; align-items: center; margin-right: 1.5rem; cursor: pointer;">
+                        <input type="checkbox" id="mc_efficiency" checked style="margin-right: 0.5rem;">
+                        <span>Efficiency Gain (±20%)</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; margin-right: 1.5rem; cursor: pointer;">
+                        <input type="checkbox" id="mc_realization" checked style="margin-right: 0.5rem;">
+                        <span>Realization Rate (±20%)</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; margin-right: 1.5rem; cursor: pointer;">
+                        <input type="checkbox" id="mc_volume" checked style="margin-right: 0.5rem;">
+                        <span>Monthly Volume (±30%)</span>
+                    </label>
+                    <label style="display: inline-flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" id="mc_prices" checked style="margin-right: 0.5rem;">
+                        <span>Unit Prices (±30%)</span>
+                    </label>
+                </div>
+
+                <button class="export-btn" onclick="runMonteCarlo()" style="background: #6366f1; margin-bottom: 1.5rem;">
+                    🎲 Run Monte Carlo Simulation
+                </button>
+
+                <div id="monteCarloResults" style="display: none;">
+                    <table class="scenario-table" style="margin-bottom: 1rem;">
+                        <thead>
+                            <tr>
+                                <th>P10 (Pessimistic)</th>
+                                <th>P50 (Median)</th>
+                                <th>P90 (Optimistic)</th>
+                                <th>Mean</th>
+                                <th>P(NPV > 0)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="mc_p10">-</td>
+                                <td id="mc_p50">-</td>
+                                <td id="mc_p90">-</td>
+                                <td id="mc_mean">-</td>
+                                <td id="mc_prob">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="opacity: 0.8; font-size: 0.85rem; font-style: italic;">
+                        P10 = 10th percentile (only 10% chance NPV will be worse), P90 = 90th percentile (only 10% chance NPV will be better)
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <button class="export-btn" onclick="exportToExcel()" style="background: #10b981;">📊 Export to Excel (Complete Analysis)</button>
+                <button class="export-btn" style="background: #ef4444;" onclick="exportToPowerPoint()">📊 Export to PowerPoint (Board-Ready Deck)</button>
+            </div>
+
+            <!-- Data Privacy & Validation -->
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <h4 style="color: #d4a574; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            Data Privacy
+                        </h4>
+                        <p style="font-size: 0.875rem; opacity: 0.9; line-height: 1.5;">
+                            All calculations run <strong>100% client-side</strong> in your browser. No data is transmitted to any server, stored, or shared.
+                            Your financial information remains completely private and secure.
+                        </p>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                        <h4 style="color: #d4a574; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            Model Validation
+                        </h4>
+                        <p style="font-size: 0.875rem; opacity: 0.9; line-height: 1.5;">
+                            This model has been validated against standard finance frameworks. Key checks: NPV convergence, IRR bisection fallback,
+                            MIRR reinvestment consistency, adoption curve realism, and scenario independence.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-navigation" style="margin-top: 2rem;">
+            <button class="btn btn-secondary" onclick="prevStep()" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); color: white;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Back to Advanced
+            </button>
+            <button class="btn btn-primary" onclick="goToStep(1)" style="background: linear-gradient(135deg, rgba(212, 165, 116, 0.3) 0%, rgba(193, 149, 96, 0.3) 100%); border: 1.5px solid rgba(212, 165, 116, 0.5); color: white;">
+                Start New Analysis
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="1 4 1 10 7 10"></polyline>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+</div> <!-- Close wizard-container -->
+
+    <script>
+        let calculationData = {};
+        let currentHorizon = 36; // months
+        let currentCurrency = 'USD';
+
+        // Currency symbols and Excel format codes
+        const CURRENCIES = {
+            USD: { symbol: '$', format: '$#,##0', name: 'USD' },
+            EUR: { symbol: '€', format: '€#,##0', name: 'EUR' },
+            GBP: { symbol: '£', format: '£#,##0', name: 'GBP' },
+            CAD: { symbol: 'C$', format: '"C$"#,##0', name: 'CAD' },
+            AUD: { symbol: 'A$', format: '"A$"#,##0', name: 'AUD' },
+            JPY: { symbol: '¥', format: '¥#,##0', name: 'JPY' },
+            INR: { symbol: '₹', format: '₹#,##0', name: 'INR' }
+        };
+
+        // Industry Preset Library (starter defaults)
+        const PRESETS = {
+            healthcare: {
+                label: 'Healthcare',
+                profiles: {
+                    hospital: {
+                        label: 'Hospital (Provider)',
+                        values: {
+                            affectedEmployees: 80, avgSalary: 90000, efficiencyGain: 15, realizationRate: 60,
+                            rampTime: 9, implementationType: 'hybrid', discountRate: 10,
+                            monthlyVolume: 15000, avgInputTokens: 900, avgOutputTokens: 450, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 25, rerunRate: 12,
+                            baselineErrors: 200, costPerError: 75, errorReduction: 30,
+                            newOpportunities: 0, conversionLift: 0, dealMargin: 0,
+                            complianceAudit: 80000, legalCosts: 25000, reviewMinutes: 2.5, reviewerRate: 60,
+                            initialInvestment: 120000, trainingCost: 50000, fixedMonthlyCost: 12000
+                        }
+                    },
+                    payer: {
+                        label: 'Payer / Insurer',
+                        values: {
+                            affectedEmployees: 60, avgSalary: 100000, efficiencyGain: 16, realizationRate: 60,
+                            rampTime: 8, implementationType: 'hybrid', discountRate: 10,
+                            monthlyVolume: 12000, avgInputTokens: 950, avgOutputTokens: 450, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 35, rerunRate: 10,
+                            baselineErrors: 120, costPerError: 90, errorReduction: 25,
+                            newOpportunities: 0, conversionLift: 0, dealMargin: 0,
+                            complianceAudit: 70000, legalCosts: 30000, reviewMinutes: 2.0, reviewerRate: 85,
+                            initialInvestment: 140000, trainingCost: 60000, fixedMonthlyCost: 14000
+                        }
+                    }
+                }
+            },
+            finance: {
+                label: 'Financial Services',
+                profiles: {
+                    bank: {
+                        label: 'Retail/Commercial Bank',
+                        values: {
+                            affectedEmployees: 60, avgSalary: 110000, efficiencyGain: 18, realizationRate: 65,
+                            rampTime: 8, implementationType: 'hybrid', discountRate: 12,
+                            monthlyVolume: 12000, avgInputTokens: 1000, avgOutputTokens: 500, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 40, rerunRate: 8,
+                            baselineErrors: 100, costPerError: 120, errorReduction: 25,
+                            newOpportunities: 50, conversionLift: 2, dealMargin: 900,
+                            complianceAudit: 60000, legalCosts: 30000, reviewMinutes: 1.5, reviewerRate: 90,
+                            initialInvestment: 180000, trainingCost: 70000, fixedMonthlyCost: 15000
+                        }
+                    }
+                }
+            },
+            retail: {
+                label: 'Retail / E-commerce',
+                profiles: {
+                    ecommerce: {
+                        label: 'E-commerce Operations',
+                        values: {
+                            affectedEmployees: 50, avgSalary: 55000, efficiencyGain: 20, realizationRate: 60,
+                            rampTime: 6, implementationType: 'saas', discountRate: 12,
+                            monthlyVolume: 30000, avgInputTokens: 700, avgOutputTokens: 350, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 35, rerunRate: 10,
+                            baselineErrors: 80, costPerError: 50, errorReduction: 30,
+                            newOpportunities: 120, conversionLift: 1.5, dealMargin: 40,
+                            complianceAudit: 20000, legalCosts: 10000, reviewMinutes: 1.0, reviewerRate: 40,
+                            initialInvestment: 60000, trainingCost: 20000, fixedMonthlyCost: 8000
+                        }
+                    }
+                }
+            },
+            manufacturing: {
+                label: 'Manufacturing',
+                profiles: {
+                    discrete: {
+                        label: 'Discrete Manufacturing',
+                        values: {
+                            affectedEmployees: 70, avgSalary: 70000, efficiencyGain: 22, realizationRate: 60,
+                            rampTime: 9, implementationType: 'hybrid', discountRate: 11,
+                            monthlyVolume: 12000, avgInputTokens: 800, avgOutputTokens: 400, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 30, rerunRate: 12,
+                            baselineErrors: 60, costPerError: 150, errorReduction: 20,
+                            newOpportunities: 30, conversionLift: 1, dealMargin: 600,
+                            complianceAudit: 30000, legalCosts: 15000, reviewMinutes: 2.0, reviewerRate: 55,
+                            initialInvestment: 150000, trainingCost: 50000, fixedMonthlyCost: 10000
+                        }
+                    }
+                }
+            },
+            saas: {
+                label: 'SaaS / Tech',
+                profiles: {
+                    b2b: {
+                        label: 'B2B Software',
+                        values: {
+                            affectedEmployees: 40, avgSalary: 120000, efficiencyGain: 25, realizationRate: 70,
+                            rampTime: 5, implementationType: 'saas', discountRate: 10,
+                            monthlyVolume: 20000, avgInputTokens: 800, avgOutputTokens: 400, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 45, rerunRate: 8,
+                            baselineErrors: 50, costPerError: 80, errorReduction: 25,
+                            newOpportunities: 60, conversionLift: 2.5, dealMargin: 1200,
+                            complianceAudit: 15000, legalCosts: 10000, reviewMinutes: 0.5, reviewerRate: 80,
+                            initialInvestment: 80000, trainingCost: 30000, fixedMonthlyCost: 9000
+                        }
+                    }
+                }
+            }
+        };
+
+        // Currency formatting helper
+        function formatCurrency(value, decimals = 0) {
+            const symbol = CURRENCIES[currentCurrency].symbol;
+            const formatted = Math.round(value).toLocaleString('en-US', {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            });
+            return `${symbol}${formatted}`;
+        }
+
+        // Horizon change handler
+        function onHorizonChange() {
+            currentHorizon = parseInt(document.getElementById('horizonSelect').value);
+            if (calculationData && calculationData.baseCase) {
+                calculateROI(); // Recalculate with new horizon
+            }
+        }
+
+        // Currency change handler
+        function onCurrencyChange() {
+            currentCurrency = document.getElementById('currencySelect').value;
+            if (calculationData && calculationData.baseCase) {
+                displayResults(); // Re-render with new currency
+            }
+        }
+
+        // Scenario save
+        function saveScenario(slot) {
+            const scenarioData = {
+                inputs: {},
+                horizon: currentHorizon,
+                currency: currentCurrency
+            };
+
+            // Capture all input values
+            document.querySelectorAll('input, select').forEach(el => {
+                if (el.id && el.id !== 'horizonSelect' && el.id !== 'currencySelect' && el.id !== 'scenarioSelect') {
+                    scenarioData.inputs[el.id] = el.value;
+                }
+            });
+
+            localStorage.setItem(`roiScenario${slot}`, JSON.stringify(scenarioData));
+            alert(`Scenario ${slot} saved successfully!`);
+        }
+
+        // Scenario load
+        function onScenarioLoad() {
+            const slot = document.getElementById('scenarioSelect').value;
+            if (!slot) return;
+
+            const saved = localStorage.getItem(`roiScenario${slot}`);
+            if (saved) {
+                const scenarioData = JSON.parse(saved);
+
+                // Restore horizon and currency
+                currentHorizon = scenarioData.horizon || 36;
+                currentCurrency = scenarioData.currency || 'USD';
+                document.getElementById('horizonSelect').value = currentHorizon;
+                document.getElementById('currencySelect').value = currentCurrency;
+
+                // Restore all inputs
+                Object.keys(scenarioData.inputs).forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = scenarioData.inputs[id];
+                });
+
+                alert(`Scenario ${slot} loaded successfully!`);
+                calculateROI(); // Recalculate with loaded scenario
+            } else {
+                alert(`No saved scenario ${slot} found.`);
+            }
+
+            // Reset selector
+            document.getElementById('scenarioSelect').value = '';
+        }
+
+        // LocalStorage persistence
+        function saveInputs() {
+            const inputs = {
+                useCase: document.getElementById('useCase').value,
+                companySize: document.getElementById('companySize').value,
+                affectedEmployees: document.getElementById('affectedEmployees').value,
+                avgSalary: document.getElementById('avgSalary').value,
+                efficiencyGain: document.getElementById('efficiencyGain').value,
+                realizationRate: document.getElementById('realizationRate').value,
+                rampTime: document.getElementById('rampTime').value,
+                implementationType: document.getElementById('implementationType').value,
+                initialInvestment: document.getElementById('initialInvestment').value,
+                trainingCost: document.getElementById('trainingCost').value,
+                fixedMonthlyCost: document.getElementById('fixedMonthlyCost').value,
+                discountRate: document.getElementById('discountRate').value,
+                monthlyVolume: document.getElementById('monthlyVolume').value,
+                avgInputTokens: document.getElementById('avgInputTokens').value,
+                avgOutputTokens: document.getElementById('avgOutputTokens').value,
+                inputPrice: document.getElementById('inputPrice').value,
+                outputPrice: document.getElementById('outputPrice').value,
+                cacheHitRate: document.getElementById('cacheHitRate').value,
+                rerunRate: document.getElementById('rerunRate').value,
+                baselineErrors: document.getElementById('baselineErrors').value,
+                costPerError: document.getElementById('costPerError').value,
+                errorReduction: document.getElementById('errorReduction').value,
+                newOpportunities: document.getElementById('newOpportunities').value,
+                conversionLift: document.getElementById('conversionLift').value,
+                dealMargin: document.getElementById('dealMargin').value,
+                complianceAudit: document.getElementById('complianceAudit').value,
+                legalCosts: document.getElementById('legalCosts').value,
+                reviewMinutes: document.getElementById('reviewMinutes').value,
+                reviewerRate: document.getElementById('reviewerRate').value
+            };
+            localStorage.setItem('roiCalculatorInputs', JSON.stringify(inputs));
+        }
+
+        function loadInputs() {
+            const saved = localStorage.getItem('roiCalculatorInputs');
+            if (saved) {
+                const inputs = JSON.parse(saved);
+                Object.keys(inputs).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) element.value = inputs[key];
+                });
+            }
+        }
+
+        function clearInputs() {
+            localStorage.removeItem('roiCalculatorInputs');
+            location.reload();
+        }
+
+        // Initialize industry presets
+        function initPresets() {
+            const industrySel = document.getElementById('industrySelect');
+            const profileSel = document.getElementById('profileSelect');
+            const stored = JSON.parse(localStorage.getItem('roi_preset_v1') || 'null');
+
+            // Populate industries
+            industrySel.innerHTML = '<option value="">Select Industry</option>' +
+                Object.entries(PRESETS).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+
+            function populateProfiles(indKey) {
+                if (!indKey) {
+                    profileSel.innerHTML = '<option value="">Select Profile</option>';
+                    return;
+                }
+                const profiles = PRESETS[indKey].profiles;
+                profileSel.innerHTML = '<option value="">Select Profile</option>' +
+                    Object.entries(profiles).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+            }
+
+            // Initial population
+            if (stored?.industry && PRESETS[stored.industry]) {
+                industrySel.value = stored.industry;
+                populateProfiles(stored.industry);
+                if (stored.profile && PRESETS[stored.industry].profiles[stored.profile]) {
+                    profileSel.value = stored.profile;
+                }
+            }
+
+            industrySel.addEventListener('change', () => {
+                populateProfiles(industrySel.value);
+                saveInputs();
+            });
+
+            document.getElementById('applyPresetBtn').addEventListener('click', applySelectedPreset);
+        }
+
+        function applySelectedPreset() {
+            const industrySel = document.getElementById('industrySelect');
+            const profileSel = document.getElementById('profileSelect');
+
+            if (!industrySel.value || !profileSel.value) {
+                alert('Please select both an industry and profile before applying preset.');
+                return;
+            }
+
+            const preset = PRESETS[industrySel.value].profiles[profileSel.value].values;
+
+            // Map preset values to input fields
+            const fieldMap = {
+                affectedEmployees: 'affectedEmployees',
+                avgSalary: 'avgSalary',
+                efficiencyGain: 'efficiencyGain',
+                realizationRate: 'realizationRate',
+                rampTime: 'rampTime',
+                implementationType: 'implementationType',
+                discountRate: 'discountRate',
+                initialInvestment: 'initialInvestment',
+                trainingCost: 'trainingCost',
+                fixedMonthlyCost: 'fixedMonthlyCost',
+                monthlyVolume: 'monthlyVolume',
+                avgInputTokens: 'avgInputTokens',
+                avgOutputTokens: 'avgOutputTokens',
+                inputPrice: 'inputPrice',
+                outputPrice: 'outputPrice',
+                cacheHitRate: 'cacheHitRate',
+                rerunRate: 'rerunRate',
+                baselineErrors: 'baselineErrors',
+                costPerError: 'costPerError',
+                errorReduction: 'errorReduction',
+                newOpportunities: 'newOpportunities',
+                conversionLift: 'conversionLift',
+                dealMargin: 'dealMargin',
+                complianceAudit: 'complianceAudit',
+                legalCosts: 'legalCosts',
+                reviewMinutes: 'reviewMinutes',
+                reviewerRate: 'reviewerRate'
+            };
+
+            Object.entries(fieldMap).forEach(([presetKey, inputId]) => {
+                const element = document.getElementById(inputId);
+                if (element && preset[presetKey] !== undefined) {
+                    element.value = preset[presetKey];
+                }
+            });
+
+            // Save preset selection
+            localStorage.setItem('roi_preset_v1', JSON.stringify({
+                industry: industrySel.value,
+                profile: profileSel.value
+            }));
+
+            // Save all inputs
+            saveInputs();
+
+            // Show confirmation and scroll to top
+            alert(`✓ Applied ${PRESETS[industrySel.value].label} - ${PRESETS[industrySel.value].profiles[profileSel.value].label} preset.\n\nReview and adjust the pre-filled values, then click Calculate.`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Load saved inputs on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check for assessment data from ai-assessment.html
+            const assessmentData = sessionStorage.getItem('assessment_to_roi');
+
+            if (assessmentData) {
+                try {
+                    const data = JSON.parse(assessmentData);
+
+                    // Pre-populate form fields with assessment data
+                    if (data.baselineAssumptions) {
+                        const assumptions = data.baselineAssumptions;
+
+                        // Basic inputs
+                        if (assumptions.avgSalary) {
+                            document.getElementById('avgSalary').value = assumptions.avgSalary;
+                        }
+
+                        // Initial investment + gap penalties
+                        if (assumptions.platformCost && data.penalties) {
+                            const totalInitialCost = assumptions.platformCost + (data.penalties.additionalCost || 0);
+                            document.getElementById('initialInvestment').value = totalInitialCost;
+                        }
+
+                        // Monthly costs
+                        if (assumptions.platformCost) {
+                            // Estimate monthly cost as 10% of platform cost annually, divided by 12
+                            const estimatedMonthlyCost = Math.round((assumptions.platformCost * 0.10) / 12);
+                            document.getElementById('fixedMonthlyCost').value = estimatedMonthlyCost;
+                        }
+
+                        // Implementation timeline with gap penalties
+                        if (assumptions.implementationMonths && data.penalties) {
+                            const totalMonths = assumptions.implementationMonths + (data.penalties.timelineMonths || 0);
+                            document.getElementById('rampTime').value = totalMonths;
+                        }
+
+                        // Discount rate (if available)
+                        if (assumptions.discountRate) {
+                            document.getElementById('discountRate').value = assumptions.discountRate * 100; // Convert to percentage
+                        }
+                    }
+
+                    // Store the full assessment data for later use
+                    window.assessmentData = data;
+
+                    // Show welcome message
+                    const gapCount = data.controlGaps ? data.controlGaps.length : 0;
+                    const totalPenaltyCost = data.penalties ? data.penalties.additionalCost : 0;
+                    const totalPenaltyMonths = data.penalties ? data.penalties.timelineMonths : 0;
+
+                    setTimeout(() => {
+                        alert(`✅ Assessment data loaded!\n\n` +
+                              `Maturity: ${data.maturityScore}%\n` +
+                              `Industry: ${data.industryLabel || data.industry}\n` +
+                              `Critical/High Gaps: ${gapCount}\n` +
+                              `Gap Penalties: $${(totalPenaltyCost/1000).toFixed(0)}K, +${totalPenaltyMonths} months\n\n` +
+                              `Form has been pre-populated. Review and adjust values, then calculate your ROI.`);
+                    }, 500);
+
+                    // Clear sessionStorage after loading (prevent reload issues)
+                    sessionStorage.removeItem('assessment_to_roi');
+
+                } catch (error) {
+                    console.error('Error loading assessment data:', error);
+                }
+            }
+
+            loadInputs();
+            initPresets();
+
+            // Global persistence: listen to ALL inputs and selects
+            document.querySelectorAll('input, select').forEach(el => {
+                el.addEventListener('input', saveInputs);
+                el.addEventListener('change', saveInputs);
+            });
+        });
+
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            const parent = section.previousElementSibling;
+            section.classList.toggle('active');
+            parent.classList.toggle('active');
+        }
+
+        function toggleMethodology() {
+            const content = document.getElementById('methodologyContent');
+            const icon = document.getElementById('methodologyIcon');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.display = 'none';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function validateEfficiency() {
+            const input = document.getElementById('efficiencyGain');
+            const warning = document.getElementById('efficiencyWarning');
+            let value = parseFloat(input.value) || 0;
+
+            if (value > 80) {
+                input.value = 80;
+                warning.classList.add('active');
+            } else if (value < 0) {
+                input.value = 0;
+                warning.classList.add('active');
+            } else {
+                warning.classList.remove('active');
+            }
+            saveInputs();
+        }
+
+        function validateRealization() {
+            const input = document.getElementById('realizationRate');
+            const warning = document.getElementById('realizationWarning');
+            let value = parseFloat(input.value) || 0;
+
+            if (value > 100) {
+                input.value = 100;
+                warning.classList.add('active');
+            } else if (value < 0) {
+                input.value = 0;
+                warning.classList.add('active');
+            } else {
+                warning.classList.remove('active');
+            }
+            saveInputs();
+        }
+
+        function validateDiscountRate() {
+            const input = document.getElementById('discountRate');
+            const warning = document.getElementById('discountWarning');
+            let value = parseFloat(input.value) || 0;
+
+            if (value > 50) {
+                input.value = 50;
+                warning.classList.add('active');
+            } else if (value < 0) {
+                input.value = 0;
+                warning.classList.add('active');
+            } else {
+                warning.classList.remove('active');
+            }
+            saveInputs();
+        }
+
+        function calculateROI() {
+            const inputs = {
+                affectedEmployees: parseFloat(document.getElementById('affectedEmployees').value),
+                avgSalary: parseFloat(document.getElementById('avgSalary').value),
+                efficiencyGain: parseFloat(document.getElementById('efficiencyGain').value) / 100,
+                realizationRate: parseFloat(document.getElementById('realizationRate').value) / 100,
+                initialInvestment: parseFloat(document.getElementById('initialInvestment').value),
+                trainingCost: parseFloat(document.getElementById('trainingCost').value),
+                fixedMonthlyCost: parseFloat(document.getElementById('fixedMonthlyCost').value),
+                rampTime: parseFloat(document.getElementById('rampTime').value),
+                discountRate: parseFloat(document.getElementById('discountRate').value) / 100,
+                implementationType: document.getElementById('implementationType').value,
+                monthlyVolume: parseFloat(document.getElementById('monthlyVolume').value) || 0,
+                avgInputTokens: parseFloat(document.getElementById('avgInputTokens').value) || 0,
+                avgOutputTokens: parseFloat(document.getElementById('avgOutputTokens').value) || 0,
+                inputPrice: parseFloat(document.getElementById('inputPrice').value) || 0,
+                outputPrice: parseFloat(document.getElementById('outputPrice').value) || 0,
+                cacheHitRate: parseFloat(document.getElementById('cacheHitRate').value) / 100 || 0,
+                rerunRate: parseFloat(document.getElementById('rerunRate').value) / 100 || 0,
+                baselineErrors: parseFloat(document.getElementById('baselineErrors').value) || 0,
+                costPerError: parseFloat(document.getElementById('costPerError').value) || 0,
+                errorReduction: parseFloat(document.getElementById('errorReduction').value) / 100 || 0,
+                newOpportunities: parseFloat(document.getElementById('newOpportunities').value) || 0,
+                conversionLift: parseFloat(document.getElementById('conversionLift').value) / 100 || 0,
+                dealMargin: parseFloat(document.getElementById('dealMargin').value) || 0,
+                complianceAudit: parseFloat(document.getElementById('complianceAudit').value) || 0,
+                legalCosts: parseFloat(document.getElementById('legalCosts').value) || 0,
+                reviewMinutes: parseFloat(document.getElementById('reviewMinutes').value) || 0,
+                reviewerRate: parseFloat(document.getElementById('reviewerRate').value) || 0
+            };
+
+            const baseCase = calculateScenario(inputs, 1.0);
+            const conservative = calculateScenario(inputs, 0.85);
+            const aggressive = calculateScenario(inputs, 1.15);
+
+            calculationData = { inputs, baseCase, conservative, aggressive };
+
+            displayResults(baseCase);
+            displayScenarios(conservative, baseCase, aggressive);
+            displayScenarioComparison();
+            displayCharts(baseCase);
+            displayTornadoChart(inputs, baseCase.npv);
+
+            document.getElementById('results').classList.add('active');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calculateScenario(inputs, factor) {
+            const burdenRate = 1.3;
+            const steepness = { saas: 0.9, hybrid: 0.6, custom: 0.4 }[inputs.implementationType] || 0.6;
+
+            const hourlyRate = (inputs.avgSalary * burdenRate) / (52 * 40);
+            const monthlyHoursSaved = inputs.affectedEmployees * (40 * 4.33 * inputs.efficiencyGain * factor);
+            const peakLaborSavings = monthlyHoursSaved * hourlyRate * inputs.realizationRate;
+
+            const llmCost = inputs.monthlyVolume * (
+                (inputs.avgInputTokens / 1000) * inputs.inputPrice +
+                (inputs.avgOutputTokens / 1000) * inputs.outputPrice
+            ) * (1 - inputs.cacheHitRate) * (1 + inputs.rerunRate);
+
+            const humanReviewCost = inputs.monthlyVolume * (inputs.reviewMinutes / 60) * inputs.reviewerRate;
+            const totalMonthlyCost = inputs.fixedMonthlyCost + llmCost + humanReviewCost +
+                (inputs.complianceAudit / 12) + (inputs.legalCosts / 12);
+
+            const qualitySavings = inputs.baselineErrors * inputs.costPerError * inputs.errorReduction * factor;
+            const revenueLift = inputs.newOpportunities * inputs.conversionLift * inputs.dealMargin * factor;
+            const totalMonthlyBenefit = peakLaborSavings + qualitySavings + revenueLift;
+
+            const totalInitialCost = inputs.initialInvestment + inputs.trainingCost;
+            let cashflows = [-totalInitialCost];
+            let cumulativeValue = -totalInitialCost;
+            let paybackMonth = 0;
+
+            const adoptionCurve = (month) => {
+                const midpoint = inputs.rampTime / 2;
+                return 1 / (1 + Math.exp(-steepness * (month - midpoint)));
+            };
+
+            for (let month = 1; month <= currentHorizon; month++) {
+                const adoption = adoptionCurve(month);
+                const monthlyBenefit = totalMonthlyBenefit * adoption;
+                const netCashflow = monthlyBenefit - totalMonthlyCost;
+                cashflows.push(netCashflow);
+                cumulativeValue += netCashflow;
+                if (cumulativeValue > 0 && paybackMonth === 0) {
+                    paybackMonth = month;
+                }
+            }
+
+            const npv = cashflows.reduce((sum, cf, t) => sum + cf / Math.pow(1 + inputs.discountRate, t), 0);
+
+            // IRR Calculation with robustness checks
+            let irr = null;
+            const hasPositiveCF = cashflows.some(cf => cf > 0);
+            const hasNegativeCF = cashflows.some(cf => cf < 0);
+
+            if (!hasPositiveCF || !hasNegativeCF) {
+                // No sign change in cashflows = no IRR exists
+                irr = null;
+            } else {
+                // Try Newton-Raphson method
+                irr = 0.2;
+                let converged = false;
+                for (let i = 0; i < 50; i++) {
+                    const f = cashflows.reduce((sum, cf, t) => sum + cf / Math.pow(1 + irr, t), 0);
+                    const fp = cashflows.reduce((sum, cf, t) => sum - t * cf / Math.pow(1 + irr, t + 1), 0);
+                    if (Math.abs(fp) < 1e-10) break; // Derivative too small
+                    const newIrr = irr - f / fp;
+                    if (Math.abs(newIrr - irr) < 0.0001) {
+                        converged = true;
+                        break;
+                    }
+                    irr = newIrr;
+                }
+
+                // Bisection fallback if Newton-Raphson failed
+                if (!converged || isNaN(irr) || !isFinite(irr)) {
+                    let low = -0.99, high = 5.0;
+                    const npvAtLow = cashflows.reduce((sum, cf, t) => sum + cf / Math.pow(1 + low, t), 0);
+                    const npvAtHigh = cashflows.reduce((sum, cf, t) => sum + cf / Math.pow(1 + high, t), 0);
+
+                    if (npvAtLow * npvAtHigh > 0) {
+                        irr = null; // No IRR in reasonable range
+                    } else {
+                        for (let i = 0; i < 100; i++) {
+                            irr = (low + high) / 2;
+                            const npvAtMid = cashflows.reduce((sum, cf, t) => sum + cf / Math.pow(1 + irr, t), 0);
+                            if (Math.abs(npvAtMid) < 0.01) break;
+                            if (npvAtMid * npvAtLow < 0) {
+                                high = irr;
+                            } else {
+                                low = irr;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Calculate gross benefits over horizon (not net cashflows)
+            const grossBenefitsH = Array.from({length: currentHorizon}, (_, i) => {
+                const month = i + 1;
+                const adoption = adoptionCurve(month);
+                return totalMonthlyBenefit * adoption;
+            }).reduce((a, b) => a + b, 0);
+
+            const totalCostH = totalInitialCost + (totalMonthlyCost * currentHorizon);
+            const roiH = ((grossBenefitsH - totalCostH) / totalCostH) * 100;
+
+            // Calculate MIRR (Modified IRR)
+            let mirr = null;
+            const reinvestmentRate = inputs.discountRate; // Use discount rate as reinvestment rate
+            const financeRate = inputs.discountRate;
+
+            // Separate positive and negative cashflows
+            const pvNegative = cashflows.reduce((sum, cf, t) => {
+                if (cf < 0) return sum + Math.abs(cf) / Math.pow(1 + financeRate, t);
+                return sum;
+            }, 0);
+
+            const fvPositive = cashflows.reduce((sum, cf, t) => {
+                if (cf > 0) return sum + cf * Math.pow(1 + reinvestmentRate, currentHorizon - t);
+                return sum;
+            }, 0);
+
+            if (pvNegative > 0 && fvPositive > 0) {
+                mirr = (Math.pow(fvPositive / pvNegative, 1/currentHorizon) - 1) * 100;
+            }
+
+            return {
+                npv, irr: irr !== null ? irr * 100 : null, mirr, paybackMonth, roiH, cashflows,
+                totalInitialCost, totalMonthlyCost, totalMonthlyBenefit,
+                llmCost, humanReviewCost, qualitySavings, revenueLift, peakLaborSavings
+            };
+        }
+
+        function displayResults(data) {
+            document.getElementById('npv').textContent = formatCurrency(data.npv);
+            document.getElementById('npv').className = 'metric-value ' + (data.npv > 0 ? 'positive' : 'negative');
+
+            if (data.irr !== null) {
+                document.getElementById('irr').textContent = data.irr.toFixed(1) + '%';
+                document.getElementById('irr').className = 'metric-value ' + (data.irr > calculationData.inputs.discountRate * 100 ? 'positive' : 'negative');
+            } else {
+                document.getElementById('irr').textContent = 'N/A';
+                document.getElementById('irr').className = 'metric-value';
+            }
+
+            if (data.mirr !== null) {
+                document.getElementById('mirr').textContent = data.mirr.toFixed(1) + '%';
+                document.getElementById('mirr').className = 'metric-value ' + (data.mirr > calculationData.inputs.discountRate * 100 ? 'positive' : 'negative');
+            } else {
+                document.getElementById('mirr').textContent = 'N/A';
+                document.getElementById('mirr').className = 'metric-value';
+            }
+
+            document.getElementById('payback').textContent = data.paybackMonth > 0 ? data.paybackMonth + ' mo' : 'No payback';
+            document.getElementById('roiH').textContent = data.roiH.toFixed(0) + '%';
+            document.getElementById('roiHLabel').textContent = `${currentHorizon}-Month ROI`;
+
+            const hurdleTest = document.getElementById('hurdleTest');
+            const hurdleRate = calculationData.inputs.discountRate * 100;
+            if (data.irr === null) {
+                hurdleTest.innerHTML = `<strong>⚠ Unable to calculate IRR:</strong> No valid internal rate of return exists for these cashflows`;
+                hurdleTest.className = 'alert-box alert-error';
+            } else if (data.irr > hurdleRate) {
+                hurdleTest.innerHTML = `<strong>✓ Project passes hurdle test:</strong> IRR (${data.irr.toFixed(1)}%) > Hurdle Rate (${hurdleRate}%)`;
+                hurdleTest.className = 'alert-box alert-success';
+            } else {
+                hurdleTest.innerHTML = `<strong>✗ Project fails hurdle test:</strong> IRR (${data.irr.toFixed(1)}%) < Hurdle Rate (${hurdleRate}%)`;
+                hurdleTest.className = 'alert-box alert-error';
+            }
+
+            // Show conversion CTA if user came from assessment
+            if (window.assessmentData) {
+                document.getElementById('assessment-cta').style.display = 'block';
+            }
+        }
+
+        function displayScenarios(conservative, base, aggressive) {
+            const formatIRR = (irr) => irr !== null ? `${irr.toFixed(1)}%` : 'N/A';
+            document.getElementById('scenarioTable').innerHTML = `
+                <tr><td><strong>NPV</strong></td><td>$${formatNumber(Math.round(conservative.npv))}</td><td>$${formatNumber(Math.round(base.npv))}</td><td>$${formatNumber(Math.round(aggressive.npv))}</td></tr>
+                <tr><td><strong>IRR</strong></td><td>${formatIRR(conservative.irr)}</td><td>${formatIRR(base.irr)}</td><td>${formatIRR(aggressive.irr)}</td></tr>
+                <tr><td><strong>MIRR</strong></td><td>${formatIRR(conservative.mirr)}</td><td>${formatIRR(base.mirr)}</td><td>${formatIRR(aggressive.mirr)}</td></tr>
+                <tr><td><strong>Payback Period</strong></td><td>${conservative.paybackMonth} mo</td><td>${base.paybackMonth} mo</td><td>${aggressive.paybackMonth} mo</td></tr>
+                <tr><td><strong>${currentHorizon}-Month ROI</strong></td><td>${conservative.roiH.toFixed(0)}%</td><td>${base.roiH.toFixed(0)}%</td><td>${aggressive.roiH.toFixed(0)}%</td></tr>
+            `;
+        }
+
+        function displayScenarioComparison() {
+            const container = document.getElementById('scenarioComparisonContainer');
+            const tableBody = document.getElementById('scenarioComparisonTable');
+
+            // Check if any scenarios are saved
+            const hasScenarios = ['A', 'B', 'C'].some(slot => localStorage.getItem(`roiScenario${slot}`));
+
+            if (!hasScenarios || !calculationData || !calculationData.baseCase) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'block';
+
+            const current = calculationData.baseCase;
+            const scenarios = {};
+
+            // Load and calculate saved scenarios
+            ['A', 'B', 'C'].forEach(slot => {
+                const saved = localStorage.getItem(`roiScenario${slot}`);
+                if (saved) {
+                    const scenarioData = JSON.parse(saved);
+                    const savedHorizon = scenarioData.horizon || 36;
+                    const savedCurrency = scenarioData.currency || 'USD';
+
+                    // Temporarily set horizon/currency for calculation
+                    const tempHorizon = currentHorizon;
+                    const tempCurrency = currentCurrency;
+                    currentHorizon = savedHorizon;
+                    currentCurrency = savedCurrency;
+
+                    // Build inputs object
+                    const inputs = {
+                        avgSalary: parseFloat(scenarioData.inputs.avgSalary) || 0,
+                        affectedEmployees: parseFloat(scenarioData.inputs.affectedEmployees) || 0,
+                        efficiencyGain: parseFloat(scenarioData.inputs.efficiencyGain) / 100 || 0,
+                        realizationRate: parseFloat(scenarioData.inputs.realizationRate) / 100 || 0,
+                        rampTime: parseFloat(scenarioData.inputs.rampTime) || 0,
+                        implementationType: scenarioData.inputs.implementationType || 'hybrid',
+                        initialInvestment: parseFloat(scenarioData.inputs.initialInvestment) || 0,
+                        trainingCost: parseFloat(scenarioData.inputs.trainingCost) || 0,
+                        fixedMonthlyCost: parseFloat(scenarioData.inputs.fixedMonthlyCost) || 0,
+                        discountRate: parseFloat(scenarioData.inputs.discountRate) / 100 || 0,
+                        monthlyVolume: parseFloat(scenarioData.inputs.monthlyVolume) || 0,
+                        avgInputTokens: parseFloat(scenarioData.inputs.avgInputTokens) || 0,
+                        avgOutputTokens: parseFloat(scenarioData.inputs.avgOutputTokens) || 0,
+                        inputPrice: parseFloat(scenarioData.inputs.inputPrice) || 0,
+                        outputPrice: parseFloat(scenarioData.inputs.outputPrice) || 0,
+                        cacheHitRate: parseFloat(scenarioData.inputs.cacheHitRate) / 100 || 0,
+                        rerunRate: parseFloat(scenarioData.inputs.rerunRate) / 100 || 0,
+                        baselineErrors: parseFloat(scenarioData.inputs.baselineErrors) || 0,
+                        costPerError: parseFloat(scenarioData.inputs.costPerError) || 0,
+                        errorReduction: parseFloat(scenarioData.inputs.errorReduction) / 100 || 0,
+                        newOpportunities: parseFloat(scenarioData.inputs.newOpportunities) || 0,
+                        conversionLift: parseFloat(scenarioData.inputs.conversionLift) / 100 || 0,
+                        dealMargin: parseFloat(scenarioData.inputs.dealMargin) || 0,
+                        complianceAudit: parseFloat(scenarioData.inputs.complianceAudit) || 0,
+                        legalCosts: parseFloat(scenarioData.inputs.legalCosts) || 0,
+                        reviewMinutes: parseFloat(scenarioData.inputs.reviewMinutes) || 0,
+                        reviewerRate: parseFloat(scenarioData.inputs.reviewerRate) || 0
+                    };
+
+                    scenarios[slot] = {
+                        result: calculateScenario(inputs, 1.0),
+                        horizon: savedHorizon,
+                        currency: savedCurrency
+                    };
+
+                    // Restore current horizon/currency
+                    currentHorizon = tempHorizon;
+                    currentCurrency = tempCurrency;
+                }
+            });
+
+            const formatDelta = (current, saved) => {
+                const delta = current - saved;
+                const sign = delta >= 0 ? '+' : '';
+                return `${sign}${formatCurrency(delta)}`;
+            };
+
+            const formatPercentDelta = (current, saved) => {
+                if (saved === null || current === null) return 'N/A';
+                const delta = current - saved;
+                const sign = delta >= 0 ? '+' : '';
+                return `${sign}${delta.toFixed(1)}%`;
+            };
+
+            const formatIRR = (irr) => irr !== null ? `${irr.toFixed(1)}%` : 'N/A';
+
+            let html = `
+                <tr>
+                    <td><strong>NPV</strong></td>
+                    <td>${formatCurrency(current.npv)}</td>
+                    ${scenarios.A ? `<td>${CURRENCIES[scenarios.A.currency].symbol}${Math.round(scenarios.A.result.npv).toLocaleString()}</td><td>${formatDelta(current.npv, scenarios.A.result.npv)}</td>` : '<td colspan="2">Not saved</td>'}
+                    ${scenarios.B ? `<td>${CURRENCIES[scenarios.B.currency].symbol}${Math.round(scenarios.B.result.npv).toLocaleString()}</td><td>${formatDelta(current.npv, scenarios.B.result.npv)}</td>` : '<td colspan="2">Not saved</td>'}
+                    ${scenarios.C ? `<td>${CURRENCIES[scenarios.C.currency].symbol}${Math.round(scenarios.C.result.npv).toLocaleString()}</td><td>${formatDelta(current.npv, scenarios.C.result.npv)}</td>` : '<td colspan="2">Not saved</td>'}
+                </tr>
+                <tr>
+                    <td><strong>IRR</strong></td>
+                    <td>${formatIRR(current.irr)}</td>
+                    ${scenarios.A ? `<td>${formatIRR(scenarios.A.result.irr)}</td><td>${formatPercentDelta(current.irr, scenarios.A.result.irr)}</td>` : '<td colspan="2">Not saved</td>'}
+                    ${scenarios.B ? `<td>${formatIRR(scenarios.B.result.irr)}</td><td>${formatPercentDelta(current.irr, scenarios.B.result.irr)}</td>` : '<td colspan="2">Not saved</td>'}
+                    ${scenarios.C ? `<td>${formatIRR(scenarios.C.result.irr)}</td><td>${formatPercentDelta(current.irr, scenarios.C.result.irr)}</td>` : '<td colspan="2">Not saved</td>'}
+                </tr>
+                <tr>
+                    <td><strong>Payback</strong></td>
+                    <td>${current.paybackMonth} mo</td>
+                    ${scenarios.A ? `<td>${scenarios.A.result.paybackMonth} mo</td><td>${current.paybackMonth - scenarios.A.result.paybackMonth} mo</td>` : '<td colspan="2">Not saved</td>'}
+                    ${scenarios.B ? `<td>${scenarios.B.result.paybackMonth} mo</td><td>${current.paybackMonth - scenarios.B.result.paybackMonth} mo</td>` : '<td colspan="2">Not saved</td>'}
+                    ${scenarios.C ? `<td>${scenarios.C.result.paybackMonth} mo</td><td>${current.paybackMonth - scenarios.C.result.paybackMonth} mo</td>` : '<td colspan="2">Not saved</td>'}
+                </tr>
+                <tr>
+                    <td><strong>ROI</strong></td>
+                    <td>${current.roiH.toFixed(0)}% (${currentHorizon}mo)</td>
+                    ${scenarios.A ? `<td>${scenarios.A.result.roiH.toFixed(0)}% (${scenarios.A.horizon}mo)</td><td>${formatPercentDelta(current.roiH, scenarios.A.result.roiH)}</td>` : '<td colspan="2">Not saved</td>'}
+                    ${scenarios.B ? `<td>${scenarios.B.result.roiH.toFixed(0)}% (${scenarios.B.horizon}mo)</td><td>${formatPercentDelta(current.roiH, scenarios.B.result.roiH)}</td>` : '<td colspan="2">Not saved</td>'}
+                    ${scenarios.C ? `<td>${scenarios.C.result.roiH.toFixed(0)}% (${scenarios.C.horizon}mo)</td><td>${formatPercentDelta(current.roiH, scenarios.C.result.roiH)}</td>` : '<td colspan="2">Not saved</td>'}
+                </tr>
+            `;
+
+            tableBody.innerHTML = html;
+        }
+
+        function displayCharts(data) {
+            const totalCost = Math.max(data.totalInitialCost + (data.totalMonthlyCost * 12), 1); // Prevent division by zero
+            const totalBenefit = Math.max(data.totalMonthlyBenefit * 12, 1); // Prevent division by zero
+
+            // Build waterfall bars - only show if value > 0
+            const bars = [];
+
+            // Costs (red bars)
+            if (data.totalInitialCost > 0) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((data.totalInitialCost / (totalCost || 1) * 180), 30)}px; background: #ef4444;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(data.totalInitialCost))}</div>
+                        </div>
+                        <div class="bar-label">Initial Investment</div>
+                    </div>
+                `);
+            }
+
+            const fixedCostYear = (data.totalMonthlyCost - data.llmCost - data.humanReviewCost) * 12;
+            if (fixedCostYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((fixedCostYear / (totalCost || 1) * 180), 30)}px; background: #f59e0b;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(fixedCostYear))}</div>
+                        </div>
+                        <div class="bar-label">Fixed Operating</div>
+                    </div>
+                `);
+            }
+
+            const llmCostYear = data.llmCost * 12;
+            if (llmCostYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((llmCostYear / (totalCost || 1) * 180), 30)}px; background: #f59e0b;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(llmCostYear))}</div>
+                        </div>
+                        <div class="bar-label">LLM Usage</div>
+                    </div>
+                `);
+            }
+
+            const reviewCostYear = data.humanReviewCost * 12;
+            if (reviewCostYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((reviewCostYear / (totalCost || 1) * 180), 30)}px; background: #f59e0b;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(reviewCostYear))}</div>
+                        </div>
+                        <div class="bar-label">Human Review</div>
+                    </div>
+                `);
+            }
+
+            // Benefits (green bars)
+            const laborSavingsYear = data.peakLaborSavings * 12;
+            if (laborSavingsYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((laborSavingsYear / (totalBenefit || 1) * 180), 30)}px; background: #10b981;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(laborSavingsYear))}</div>
+                        </div>
+                        <div class="bar-label">Labor Savings</div>
+                    </div>
+                `);
+            }
+
+            const qualitySavingsYear = data.qualitySavings * 12;
+            if (qualitySavingsYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((qualitySavingsYear / (totalBenefit || 1) * 180), 30)}px; background: #10b981;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(qualitySavingsYear))}</div>
+                        </div>
+                        <div class="bar-label">Quality Gains</div>
+                    </div>
+                `);
+            }
+
+            const revenueLiftYear = data.revenueLift * 12;
+            if (revenueLiftYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((revenueLiftYear / (totalBenefit || 1) * 180), 30)}px; background: #10b981;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(revenueLiftYear))}</div>
+                        </div>
+                        <div class="bar-label">Revenue Lift</div>
+                    </div>
+                `);
+            }
+
+            document.getElementById('waterfallChart').innerHTML = bars.length > 0 ? bars.join('') : '<p style="text-align: center; opacity: 0.7;">No significant cost or benefit components to display</p>';
+
+            // Calculate cumulative cashflows for display with safety guards
+            const cumulativeCF = [6, 12, 18, 24, 30, 36].map(month =>
+                data.cashflows.slice(0, month + 1).reduce((a, b) => a + b, 0)
+            );
+
+            const maxCF = Math.max(...cumulativeCF, 0);
+            const minCF = Math.min(...cumulativeCF, 0);
+            const rangeCF = Math.max(Math.abs(maxCF - minCF), 1); // Ensure non-zero range
+
+            // Check if all values are flat (no variation)
+            const isFlat = rangeCF < 0.01;
+
+            document.getElementById('cashflowChart').innerHTML = [6, 12, 18, 24, 30, 36].map((month, idx) => {
+                const value = cumulativeCF[idx];
+                let height;
+                if (isFlat) {
+                    height = 100; // Default height for flat data
+                } else {
+                    const normalized = Math.max(0, Math.min(1, (value - minCF) / rangeCF)); // Clamp 0-1
+                    height = Math.min(Math.max(normalized * 200, 10), 200); // 10-200px range
+                }
+                const color = value > 0 ? '#10b981' : value < 0 ? '#ef4444' : '#6b7280';
+                return `
+                    <div class="bar-wrapper">
+                        <div class="bar" style="height: ${height}px; background: ${color};">
+                            <div class="bar-value">$${formatNumber(Math.round(value / 1000))}K</div>
+                        </div>
+                        <div class="bar-label">${month} mo</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function displayTornadoChart(inputs, baseNPV) {
+            // Test each driver at ±20%
+            const drivers = [
+                { name: 'Efficiency Gain', mutate: (inp, f) => ({ ...inp, efficiencyGain: inp.efficiencyGain * f }) },
+                { name: 'Realization Rate', mutate: (inp, f) => ({ ...inp, realizationRate: inp.realizationRate * f }) },
+                { name: 'Avg Salary', mutate: (inp, f) => ({ ...inp, avgSalary: inp.avgSalary * f }) },
+                { name: 'LLM Unit Prices', mutate: (inp, f) => ({ ...inp, inputPrice: inp.inputPrice * f, outputPrice: inp.outputPrice * f }) },
+                { name: 'Monthly Volume', mutate: (inp, f) => ({ ...inp, monthlyVolume: Math.round(inp.monthlyVolume * f) }) },
+                { name: 'Initial Investment', mutate: (inp, f) => ({ ...inp, initialInvestment: inp.initialInvestment * f }) },
+                { name: 'Discount Rate', mutate: (inp, f) => ({ ...inp, discountRate: inp.discountRate * f }) }
+            ];
+
+            const results = drivers.map(driver => {
+                const inputsLow = driver.mutate({ ...inputs }, 0.8);
+                const inputsHigh = driver.mutate({ ...inputs }, 1.2);
+                const npvLow = calculateScenario(inputsLow, 1.0).npv;
+                const npvHigh = calculateScenario(inputsHigh, 1.0).npv;
+                return {
+                    name: driver.name,
+                    impactLow: npvLow - baseNPV,
+                    impactHigh: npvHigh - baseNPV,
+                    range: Math.abs(npvHigh - npvLow)
+                };
+            });
+
+            // Sort by range (largest impact first)
+            results.sort((a, b) => b.range - a.range);
+
+            const maxImpact = Math.max(...results.map(r => Math.max(Math.abs(r.impactLow), Math.abs(r.impactHigh))));
+
+            const html = results.map(r => {
+                const lowWidth = (Math.abs(r.impactLow) / maxImpact) * 45; // 45% max width
+                const highWidth = (Math.abs(r.impactHigh) / maxImpact) * 45;
+                return `
+                    <div class="tornado-row">
+                        <div class="tornado-label">${r.name}</div>
+                        <div class="tornado-bars">
+                            <div class="tornado-center-line"></div>
+                            <div class="tornado-bar-low" style="width: ${lowWidth}%;">
+                                <span class="tornado-value" style="right: 100%; margin-right: 0.5rem;">$${formatNumber(Math.round(r.impactLow / 1000))}K</span>
+                            </div>
+                            <div class="tornado-bar-high" style="width: ${highWidth}%;">
+                                <span class="tornado-value" style="left: 100%; margin-left: 0.5rem;">$${formatNumber(Math.round(r.impactHigh / 1000))}K</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('tornadoChart').innerHTML = html;
+        }
+
+        // Triangular distribution random number generator
+        function triangular(min, mode, max) {
+            const u = Math.random();
+            const f = (mode - min) / (max - min);
+            if (u < f) {
+                return min + Math.sqrt(u * (max - min) * (mode - min));
+            } else {
+                return max - Math.sqrt((1 - u) * (max - min) * (max - mode));
+            }
+        }
+
+        function runMonteCarlo() {
+            if (!calculationData || !calculationData.inputs) {
+                alert('Please run the calculation first before Monte Carlo simulation.');
+                return;
+            }
+
+            const { inputs } = calculationData;
+            const runs = 1000;
+            const npvResults = [];
+
+            // Get which drivers to vary
+            const varyEfficiency = document.getElementById('mc_efficiency').checked;
+            const varyRealization = document.getElementById('mc_realization').checked;
+            const varyVolume = document.getElementById('mc_volume').checked;
+            const varyPrices = document.getElementById('mc_prices').checked;
+
+            for (let i = 0; i < runs; i++) {
+                const simInputs = { ...inputs };
+
+                if (varyEfficiency) {
+                    const min = inputs.efficiencyGain * 0.8;
+                    const max = inputs.efficiencyGain * 1.2;
+                    simInputs.efficiencyGain = triangular(min, inputs.efficiencyGain, max);
+                }
+
+                if (varyRealization) {
+                    const min = inputs.realizationRate * 0.8;
+                    const max = inputs.realizationRate * 1.2;
+                    simInputs.realizationRate = triangular(min, inputs.realizationRate, max);
+                }
+
+                if (varyVolume) {
+                    const min = inputs.monthlyVolume * 0.7;
+                    const max = inputs.monthlyVolume * 1.3;
+                    simInputs.monthlyVolume = Math.round(triangular(min, inputs.monthlyVolume, max));
+                }
+
+                if (varyPrices) {
+                    const minInput = inputs.inputPrice * 0.7;
+                    const maxInput = inputs.inputPrice * 1.3;
+                    simInputs.inputPrice = triangular(minInput, inputs.inputPrice, maxInput);
+
+                    const minOutput = inputs.outputPrice * 0.7;
+                    const maxOutput = inputs.outputPrice * 1.3;
+                    simInputs.outputPrice = triangular(minOutput, inputs.outputPrice, maxOutput);
+                }
+
+                const result = calculateScenario(simInputs, 1.0);
+                npvResults.push(result.npv);
+            }
+
+            // Sort results
+            npvResults.sort((a, b) => a - b);
+
+            // Calculate statistics
+            const p10 = npvResults[Math.floor(runs * 0.1)];
+            const p50 = npvResults[Math.floor(runs * 0.5)];
+            const p90 = npvResults[Math.floor(runs * 0.9)];
+            const mean = npvResults.reduce((a, b) => a + b, 0) / runs;
+            const probPositive = (npvResults.filter(npv => npv > 0).length / runs) * 100;
+
+            // Display results
+            document.getElementById('mc_p10').textContent = formatCurrency(p10);
+            document.getElementById('mc_p50').textContent = formatCurrency(p50);
+            document.getElementById('mc_p90').textContent = formatCurrency(p90);
+            document.getElementById('mc_mean').textContent = formatCurrency(mean);
+            document.getElementById('mc_prob').textContent = probPositive.toFixed(1) + '%';
+
+            document.getElementById('monteCarloResults').style.display = 'block';
+        }
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function exportToExcel() {
+            const { inputs, baseCase, conservative, aggressive } = calculationData;
+            const wb = XLSX.utils.book_new();
+
+            // Helper to create formatted cell
+            const cell = (v, z) => ({ v, t: typeof v === 'number' ? 'n' : 's', ...(z ? { z } : {}) });
+            const currencyFmt = CURRENCIES[currentCurrency].format;
+
+            // Tab 1: Executive Summary
+            const summary = [
+                [`AI ROI ANALYSIS - EXECUTIVE SUMMARY (${CURRENCIES[currentCurrency].name})`],
+                [],
+                ['KEY METRICS', ''],
+                ['Net Present Value', cell(baseCase.npv, currencyFmt)],
+                ['Internal Rate of Return', baseCase.irr !== null ? cell(baseCase.irr/100, '0.0%') : 'N/A'],
+                ['Modified IRR', baseCase.mirr !== null ? cell(baseCase.mirr/100, '0.0%') : 'N/A'],
+                ['Payback Period', `${baseCase.paybackMonth} months`],
+                [`${currentHorizon}-Month ROI`, cell(baseCase.roiH/100, '0%')],
+                [],
+                ['HURDLE TEST', baseCase.irr > inputs.discountRate*100 ? 'PASS ✓' : 'FAIL ✗'],
+                ['IRR vs Hurdle', `${(baseCase.irr || 0).toFixed(1)}% vs ${(inputs.discountRate*100).toFixed(0)}%`],
+                [],
+                ['PROJECT OVERVIEW', ''],
+                ['Affected Employees', inputs.affectedEmployees],
+                ['Average Salary', cell(inputs.avgSalary, currencyFmt)],
+                ['Efficiency Gain', cell(inputs.efficiencyGain/100, '0%')],
+                ['Realization Rate', cell(inputs.realizationRate/100, '0%')],
+                [],
+                ['INVESTMENT REQUIRED', ''],
+                ['Initial Investment', cell(inputs.initialInvestment, currencyFmt)],
+                ['Training & Change', cell(inputs.trainingCost, currencyFmt)],
+                ['Monthly Operating', cell(baseCase.totalMonthlyCost, currencyFmt)]
+            ];
+            const wsSummary = XLSX.utils.aoa_to_sheet(summary);
+            XLSX.utils.book_append_sheet(wb, wsSummary, 'Executive Summary');
+
+            // Tab 2: Detailed Inputs
+            const inputsTab = [
+                ['DETAILED INPUTS'],
+                [],
+                ['PROJECT BASICS', ''],
+                ['Company Size', inputs.affectedEmployees],
+                ['Affected Employees', inputs.affectedEmployees],
+                ['Average Annual Salary', cell(inputs.avgSalary, currencyFmt)],
+                [],
+                ['PERFORMANCE PARAMETERS', ''],
+                ['Efficiency Gain', cell(inputs.efficiencyGain/100, '0%')],
+                ['Realization Rate', cell(inputs.realizationRate/100, '0%')],
+                ['Ramp-up Time', `${inputs.rampTime} months`],
+                ['Implementation Type', inputs.implementationType],
+                [],
+                ['COST ESTIMATES', ''],
+                ['Initial Investment', cell(inputs.initialInvestment, currencyFmt)],
+                ['Training Cost', cell(inputs.trainingCost, currencyFmt)],
+                ['Fixed Monthly Cost', cell(inputs.fixedMonthlyCost, currencyFmt)],
+                [],
+                ['FINANCE PARAMETERS', ''],
+                ['Discount Rate', cell(inputs.discountRate/100, '0.0%')],
+                [],
+                ['USAGE-BASED COSTS', ''],
+                ['Monthly Volume', inputs.monthlyVolume],
+                ['Avg Input Tokens', inputs.avgInputTokens],
+                ['Avg Output Tokens', inputs.avgOutputTokens],
+                ['Cache Hit Rate', cell(inputs.cacheHitRate/100, '0%')],
+                ['Rerun Rate', cell(inputs.rerunRate/100, '0%')]
+            ];
+            const wsInputs = XLSX.utils.aoa_to_sheet(inputsTab);
+            XLSX.utils.book_append_sheet(wb, wsInputs, 'Detailed Inputs');
+
+            // Tab 3: Financial Results
+            const results = [
+                ['FINANCIAL RESULTS'],
+                [],
+                ['METRIC', 'CONSERVATIVE', 'BASE CASE', 'AGGRESSIVE'],
+                ['NPV', cell(conservative.npv, currencyFmt), cell(baseCase.npv, currencyFmt), cell(aggressive.npv, currencyFmt)],
+                ['IRR', conservative.irr !== null ? cell(conservative.irr/100, '0.0%') : 'N/A', baseCase.irr !== null ? cell(baseCase.irr/100, '0.0%') : 'N/A', aggressive.irr !== null ? cell(aggressive.irr/100, '0.0%') : 'N/A'],
+                ['MIRR', conservative.mirr !== null ? cell(conservative.mirr/100, '0.0%') : 'N/A', baseCase.mirr !== null ? cell(baseCase.mirr/100, '0.0%') : 'N/A', aggressive.mirr !== null ? cell(aggressive.mirr/100, '0.0%') : 'N/A'],
+                ['Payback (months)', conservative.paybackMonth, baseCase.paybackMonth, aggressive.paybackMonth],
+                [`${currentHorizon}-Month ROI`, cell(conservative.roiH/100, '0%'), cell(baseCase.roiH/100, '0%'), cell(aggressive.roiH/100, '0%')]
+            ];
+            const wsResults = XLSX.utils.aoa_to_sheet(results);
+            XLSX.utils.book_append_sheet(wb, wsResults, 'Financial Results');
+
+            // Tab 4: Sensitivity Analysis
+            const tornado = displayTornadoData(inputs, baseCase.npv);
+            const sensitivity = [
+                ['SENSITIVITY ANALYSIS - NPV Impact (±20%)'],
+                [],
+                ['DRIVER', 'LOW IMPACT', 'HIGH IMPACT', 'RANGE'],
+                ...tornado.map(t => [t.name, cell(t.impactLow, currencyFmt), cell(t.impactHigh, currencyFmt), cell(t.range, currencyFmt)])
+            ];
+            const wsSensitivity = XLSX.utils.aoa_to_sheet(sensitivity);
+            XLSX.utils.book_append_sheet(wb, wsSensitivity, 'Sensitivity Analysis');
+
+            // Tab 5: Monthly Cashflows
+            const cashflows = [
+                ['MONTHLY CASHFLOWS (36 months)'],
+                [],
+                ['MONTH', 'ADOPTION %', 'BENEFITS', 'COSTS', 'NET CF', 'CUMULATIVE CF']
+            ];
+            let cumulative = baseCase.cashflows[0];
+            baseCase.cashflows.forEach((cf, i) => {
+                if (i > 0) cumulative += cf;
+                const adoption = i === 0 ? 0 : (1 / (1 + Math.exp(-({ saas: 0.9, hybrid: 0.6, custom: 0.4 }[inputs.implementationType] || 0.6) * (i - inputs.rampTime/2))));
+                cashflows.push([
+                    i,
+                    cell(adoption, '0%'),
+                    i === 0 ? cell(0, currencyFmt) : cell(baseCase.totalMonthlyBenefit * adoption, currencyFmt),
+                    i === 0 ? cell(Math.abs(baseCase.cashflows[0]), currencyFmt) : cell(baseCase.totalMonthlyCost, currencyFmt),
+                    cell(cf, currencyFmt),
+                    cell(cumulative, currencyFmt)
+                ]);
+            });
+            const wsCashflows = XLSX.utils.aoa_to_sheet(cashflows);
+            XLSX.utils.book_append_sheet(wb, wsCashflows, 'Monthly Cashflows');
+
+            // Tab 6: Cost Breakdown
+            const breakdown = [
+                ['YEAR 1 COST & BENEFIT BREAKDOWN'],
+                [],
+                ['COSTS', 'AMOUNT'],
+                ['Initial Investment', cell(baseCase.totalInitialCost, currencyFmt)],
+                ['Fixed Operating (12mo)', cell((baseCase.totalMonthlyCost - baseCase.llmCost - baseCase.humanReviewCost) * 12, currencyFmt)],
+                ['LLM Usage (12mo)', cell(baseCase.llmCost * 12, currencyFmt)],
+                ['Human Review (12mo)', cell(baseCase.humanReviewCost * 12, currencyFmt)],
+                ['Total Costs', cell(baseCase.totalInitialCost + baseCase.totalMonthlyCost * 12, currencyFmt)],
+                [],
+                ['BENEFITS', 'AMOUNT'],
+                ['Labor Savings (12mo)', cell(baseCase.peakLaborSavings * 12, currencyFmt)],
+                ['Quality Gains (12mo)', cell(baseCase.qualitySavings * 12, currencyFmt)],
+                ['Revenue Lift (12mo)', cell(baseCase.revenueLift * 12, currencyFmt)],
+                ['Total Benefits', cell(baseCase.totalMonthlyBenefit * 12, currencyFmt)]
+            ];
+            const wsBreakdown = XLSX.utils.aoa_to_sheet(breakdown);
+            XLSX.utils.book_append_sheet(wb, wsBreakdown, 'Cost Breakdown');
+
+            // Tab 7: Methodology
+            const methodology = [
+                ['METHODOLOGY & FORMULAS'],
+                [],
+                ['KEY FINANCIAL METRICS'],
+                ['NPV', 'Σ(CFₜ / (1 + r)ᵗ) where CFₜ = cashflow at time t, r = discount rate'],
+                ['IRR', 'Rate r where NPV = 0, calculated using Newton-Raphson + bisection fallback'],
+                ['MIRR', '(FV of positive CFs / PV of negative CFs)^(1/n) - 1'],
+                ['3-Year ROI', '(Gross Benefits - Total Costs) / Total Costs × 100%'],
+                [],
+                ['ADOPTION & BENEFITS MODEL'],
+                ['S-Curve', 'A(t) = 1 / (1 + e^(-k(t - m))) where k = steepness, m = midpoint'],
+                ['Labor Savings', 'Employees × Hours × Efficiency × Hourly Rate × Realization × Adoption(t)'],
+                ['Burden Rate', '1.3× salary (30% overhead)'],
+                [],
+                ['LLM COST MODEL'],
+                ['Token Cost', 'Volume × [(Input/1K) × Input$ + (Output/1K) × Output$]'],
+                ['Cache Adjusted', '× (1 - Cache Hit Rate)'],
+                ['Rerun Adjusted', '× (1 + Rerun Rate)'],
+                [],
+                ['KEY ASSUMPTIONS'],
+                ['', 'All cashflows monthly over 36 months'],
+                ['', 'Realization 60-70% typical (organizational friction)'],
+                ['', 'Scenarios vary benefits ±15%, costs constant'],
+                ['', 'Model version 1.0 - Jan 2025']
+            ];
+            const wsMethodology = XLSX.utils.aoa_to_sheet(methodology);
+            XLSX.utils.book_append_sheet(wb, wsMethodology, 'Methodology');
+
+            // Generate and download
+            XLSX.writeFile(wb, 'AI-ROI-Analysis.xlsx');
+        }
+
+        function displayTornadoData(inputs, baseNPV) {
+            const drivers = [
+                { name: 'Efficiency Gain', mutate: (inp, f) => ({ ...inp, efficiencyGain: inp.efficiencyGain * f }) },
+                { name: 'Realization Rate', mutate: (inp, f) => ({ ...inp, realizationRate: inp.realizationRate * f }) },
+                { name: 'Avg Salary', mutate: (inp, f) => ({ ...inp, avgSalary: inp.avgSalary * f }) },
+                { name: 'LLM Unit Prices', mutate: (inp, f) => ({ ...inp, inputPrice: inp.inputPrice * f, outputPrice: inp.outputPrice * f }) },
+                { name: 'Monthly Volume', mutate: (inp, f) => ({ ...inp, monthlyVolume: Math.round(inp.monthlyVolume * f) }) },
+                { name: 'Initial Investment', mutate: (inp, f) => ({ ...inp, initialInvestment: inp.initialInvestment * f }) },
+                { name: 'Discount Rate', mutate: (inp, f) => ({ ...inp, discountRate: inp.discountRate * f }) }
+            ];
+
+            return drivers.map(driver => {
+                const inputsLow = driver.mutate({ ...inputs }, 0.8);
+                const inputsHigh = driver.mutate({ ...inputs }, 1.2);
+                const npvLow = calculateScenario(inputsLow, 1.0).npv;
+                const npvHigh = calculateScenario(inputsHigh, 1.0).npv;
+                return {
+                    name: driver.name,
+                    impactLow: npvLow - baseNPV,
+                    impactHigh: npvHigh - baseNPV,
+                    range: Math.abs(npvHigh - npvLow)
+                };
+            }).sort((a, b) => b.range - a.range);
+        }
+
+        function exportToPowerPoint() {
+            if (typeof PptxGenJS === 'undefined') {
+                alert('PowerPoint library not loaded. Please refresh the page and try again.');
+                return;
+            }
+            if (!calculationData || !calculationData.baseCase) {
+                alert('Please run the calculation first before exporting to PowerPoint.');
+                return;
+            }
+
+            const { inputs, baseCase } = calculationData;
+            const pptx = new PptxGenJS();
+
+            const currSymbol = CURRENCIES[currentCurrency].symbol;
+            const fmtCurrency = n => currSymbol + Math.round(n).toLocaleString();
+            const fmtPercent = p => (p == null ? 'N/A' : p.toFixed(1) + '%');
+
+            const y1Costs = baseCase.totalInitialCost + 12 * baseCase.totalMonthlyCost;
+            const y1Benefits = 12 * baseCase.totalMonthlyBenefit;
+
+            // Title Slide
+            let slide = pptx.addSlide();
+            slide.background = { color: '2c3e50' };
+            slide.addText(`AI ROI Analysis (${currentHorizon} months, ${CURRENCIES[currentCurrency].name})`, { x: 0.5, y: 1.4, w: 9, h: 0.9, fontSize: 38, bold: true, color: 'FFFFFF', align: 'center' });
+            slide.addText('Executive Summary', { x: 0.5, y: 2.6, w: 9, h: 0.5, fontSize: 26, color: 'd4a574', align: 'center' });
+            slide.addText(new Date().toLocaleDateString(), { x: 0.5, y: 3.6, w: 9, h: 0.4, fontSize: 16, color: 'FFFFFF', align: 'center' });
+
+            // Key Metrics Slide
+            slide = pptx.addSlide();
+            slide.addText('Key Financial Metrics', { x: 0.5, y: 0.3, w: 9, h: 0.6, fontSize: 28, bold: true, color: '2c3e50' });
+            const metrics = [
+                ['NPV', fmtCurrency(baseCase.npv)],
+                ['IRR', fmtPercent(baseCase.irr)],
+                ['MIRR', fmtPercent(baseCase.mirr)],
+                ['Payback', baseCase.paybackMonth ? `${baseCase.paybackMonth} months` : 'No payback'],
+                [`${currentHorizon}-Month ROI`, fmtPercent(baseCase.roiH)]
+            ];
+            slide.addTable([['Metric', 'Value'], ...metrics], {
+                x: 0.5, y: 1.2, w: 9, colW: [3.5, 5.5],
+                fontSize: 14, fill: { color: 'f3f4f6' }, color: '1f2937',
+                border: { type: 'solid', pt: 1, color: 'e5e7eb' }
+            });
+
+            // Year-1 Breakdown Slide
+            slide = pptx.addSlide();
+            slide.addText('Year-1 Cost & Benefit Breakdown', { x: 0.5, y: 0.3, w: 9, h: 0.6, fontSize: 28, bold: true, color: '2c3e50' });
+            const breakdown = [
+                ['Component', 'Amount'],
+                ['Initial Investment', fmtCurrency(baseCase.totalInitialCost)],
+                ['Fixed OpEx (12 mo)', fmtCurrency((baseCase.totalMonthlyCost - baseCase.llmCost - baseCase.humanReviewCost) * 12)],
+                ['LLM Usage (12 mo)', fmtCurrency(baseCase.llmCost * 12)],
+                ['Human Review (12 mo)', fmtCurrency(baseCase.humanReviewCost * 12)],
+                ['—', '—'],
+                ['Labor Savings (12 mo)', fmtCurrency(baseCase.peakLaborSavings * 12)],
+                ['Quality Gains (12 mo)', fmtCurrency(baseCase.qualitySavings * 12)],
+                ['Revenue Lift (12 mo)', fmtCurrency(baseCase.revenueLift * 12)],
+                ['—', '—'],
+                ['Total Year-1 Costs', fmtCurrency(y1Costs)],
+                ['Total Year-1 Benefits', fmtCurrency(y1Benefits)]
+            ];
+            slide.addTable(breakdown, {
+                x: 0.5, y: 1.2, w: 9, colW: [5, 4],
+                fontSize: 12, fill: { color: 'ffffff' },
+                border: { type: 'solid', pt: 1, color: 'e5e7eb' }
+            });
+
+            pptx.writeFile({ fileName: `AI-ROI-Analysis-${new Date().toISOString().slice(0, 10)}.pptx` });
+        }
+    </script>
+
+    <script>
+        // Wizard Navigation System
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        function updateStepIndicator() {
+            // Update circles and lines
+            for (let i = 1; i <= totalSteps; i++) {
+                const circle = document.getElementById(`stepCircle${i}`);
+                const line = document.getElementById(`stepLine${i}`);
+                const label = circle.nextElementSibling;
+
+                if (i < currentStep) {
+                    // Completed
+                    circle.classList.remove('active');
+                    circle.classList.add('completed');
+                    circle.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                    if (line) line.classList.add('completed');
+                    label.classList.remove('active');
+                } else if (i === currentStep) {
+                    // Active
+                    circle.classList.add('active');
+                    circle.classList.remove('completed');
+                    circle.textContent = i;
+                    label.classList.add('active');
+                } else {
+                    // Future
+                    circle.classList.remove('active', 'completed');
+                    circle.textContent = i;
+                    if (line) line.classList.remove('completed');
+                    label.classList.remove('active');
+                }
+            }
+
+            // Update step visibility
+            document.querySelectorAll('.step-content').forEach((step, index) => {
+                step.classList.toggle('active', index + 1 === currentStep);
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                // Basic validation before proceeding
+                if (currentStep === 1) {
+                    const industry = document.getElementById('industrySelect').value;
+                    if (!industry) {
+                        alert('Please select an industry before proceeding');
+                        return;
+                    }
+                }
+
+                currentStep++;
+                updateStepIndicator();
+
+                // If moving to results step, calculate
+                if (currentStep === 5) {
+                    calculateROI();
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepIndicator();
+            }
+        }
+
+        function goToStep(step) {
+            if (step >= 1 && step <= totalSteps) {
+                currentStep = step;
+                updateStepIndicator();
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStepIndicator();
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                const activeElement = document.activeElement;
+                if (activeElement.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    nextStep();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

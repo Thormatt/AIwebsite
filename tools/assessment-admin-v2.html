@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Control Center - Thor AI Advisory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            color: #1a202c;
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            box-shadow: 4px 0 12px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #d4af37;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(212, 175, 55, 0.15);
+            color: #d4af37;
+        }
+
+        .nav-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 3rem;
+            overflow-y: auto;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #5a7c6a 0%, #4a6c5a 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(90, 124, 106, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(90, 124, 106, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.blue { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); }
+        .stat-icon.green { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); }
+        .stat-icon.yellow { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+        .stat-icon.purple { background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%); }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .stat-change.positive {
+            color: #059669;
+        }
+
+        .stat-change.neutral {
+            color: #64748b;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Organizations Section */
+        .org-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .org-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .org-card:hover {
+            border-color: #5a7c6a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .org-name {
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+        }
+
+        .org-stats {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        /* Activity Feed */
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            color: #1a202c;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #5a7c6a;
+            box-shadow: 0 0 0 3px rgba(90, 124, 106, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        /* Filter Pills */
+        .filter-pills {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-pill:hover {
+            border-color: #5a7c6a;
+            background: #f8faf9;
+        }
+
+        .filter-pill.active {
+            background: #5a7c6a;
+            color: white;
+            border-color: #5a7c6a;
+        }
+
+        /* Assessment Cards */
+        .assessment-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .assessment-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-color: #cbd5e1;
+        }
+
+        .assessment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .assessment-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .badge.individual {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge.consensus {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge.pulse {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.premium {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: white;
+        }
+
+        .badge.status {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .assessment-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+        }
+
+        .assessment-meta {
+            display: flex;
+            gap: 1rem;
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .assessment-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .assessment-progress {
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #5a7c6a 0%, #4a6c5a 100%);
+            border-radius: 999px;
+            transition: width 0.3s;
+        }
+
+        .assessment-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .assessment-actions .btn {
+            flex: 1;
+            padding: 0.625rem 1rem;
+            font-size: 0.8125rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: #f1f5f9;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #5a7c6a;
+            box-shadow: 0 0 0 3px rgba(90, 124, 106, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1001;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Login Page */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .login-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Chart Container */
+        .chart-container {
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #94a3b8;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <div class="login-box">
+            <div class="login-logo">⚡ Thor AI</div>
+            <div class="login-subtitle">Assessment Control Center</div>
+
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" class="form-input" required placeholder="your@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" class="form-input" required placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard-page" class="dashboard" style="display: none;">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">⚡ Thor AI</div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <div class="nav-item active" onclick="showView('overview', this)">
+                    <span class="nav-icon">📊</span>
+                    <span>Overview</span>
+                </div>
+                <div class="nav-item" onclick="showView('organizations', this)">
+                    <span class="nav-icon">🏢</span>
+                    <span>Organizations</span>
+                </div>
+                <div class="nav-item" onclick="showView('assessments', this)">
+                    <span class="nav-icon">📋</span>
+                    <span>Assessments</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Assessment Types</div>
+                <div class="nav-item" onclick="filterByType('individual', this)">
+                    <span class="nav-icon">👤</span>
+                    <span>Individual</span>
+                </div>
+                <div class="nav-item" onclick="filterByType('consensus', this)">
+                    <span class="nav-icon">👥</span>
+                    <span>Consensus</span>
+                </div>
+                <div class="nav-item" onclick="filterByType('pulse', this)">
+                    <span class="nav-icon">💫</span>
+                    <span>Pulse</span>
+                </div>
+            </div>
+
+            <div class="nav-section" style="margin-top: auto;">
+                <div class="nav-item" onclick="handleLogout()">
+                    <span class="nav-icon">🚪</span>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div>
+                    <h1 class="page-title">Dashboard Overview</h1>
+                    <p class="page-subtitle">Monitor and manage all your AI assessments</p>
+                </div>
+                <div class="user-menu">
+                    <button class="btn btn-primary" onclick="openCreateModal()">
+                        + New Assessment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="stat-orgs">0</div>
+                            <div class="stat-label">Organizations</div>
+                        </div>
+                        <div class="stat-icon blue">🏢</div>
+                    </div>
+                    <div class="stat-change neutral" id="stat-orgs-change">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="stat-total">0</div>
+                            <div class="stat-label">Total Assessments</div>
+                        </div>
+                        <div class="stat-icon green">📋</div>
+                    </div>
+                    <div class="stat-change positive" id="stat-total-change">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="stat-active">0</div>
+                            <div class="stat-label">Active Sessions</div>
+                        </div>
+                        <div class="stat-icon yellow">⚡</div>
+                    </div>
+                    <div class="stat-change positive" id="stat-active-change">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="stat-responses">0</div>
+                            <div class="stat-label">Total Responses</div>
+                        </div>
+                        <div class="stat-icon purple">💬</div>
+                    </div>
+                    <div class="stat-change positive" id="stat-responses-change">—</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Chart Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Assessment Activity</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recent Activity</div>
+                    </div>
+                    <div id="activity-feed">
+                        <div class="empty-state">
+                            <div class="empty-icon">📊</div>
+                            <div>No recent activity</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Organizations Section -->
+            <div class="card" id="organizations-section" style="display: none;">
+                <div class="card-header">
+                    <div class="card-title">Organizations</div>
+                </div>
+                <div class="org-grid" id="org-list"></div>
+            </div>
+
+            <!-- Assessments Section -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">All Assessments</div>
+                </div>
+
+                <!-- Search -->
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search assessments..." id="search-input" oninput="filterAssessments()">
+                </div>
+
+                <!-- Filters -->
+                <div class="filter-pills">
+                    <div class="filter-pill active" onclick="filterSessions('all', this)">All</div>
+                    <div class="filter-pill" onclick="filterSessions('individual', this)">Individual</div>
+                    <div class="filter-pill" onclick="filterSessions('consensus', this)">Consensus</div>
+                    <div class="filter-pill" onclick="filterSessions('pulse', this)">Pulse</div>
+                    <div class="filter-pill" onclick="filterSessions('premium', this)">Premium Only</div>
+                </div>
+
+                <!-- Assessment List -->
+                <div id="assessments-list">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Assessment Modal -->
+    <div id="create-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Create New Assessment</div>
+                <button class="close-btn" onclick="closeCreateModal()">×</button>
+            </div>
+
+            <form id="create-form" onsubmit="createAssessment(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="org-name">Organization Name</label>
+                        <input type="text" id="org-name" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="assessment-type">Assessment Type</label>
+                        <select id="assessment-type" class="form-select" required onchange="updateFormFields()">
+                            <option value="">Select type...</option>
+                            <option value="individual">Individual AI Maturity</option>
+                            <option value="consensus">C-Suite Consensus</option>
+                            <option value="pulse">Organization Pulse</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="assessment-title">Assessment Title</label>
+                    <input type="text" id="assessment-title" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="assessment-description">Description (optional)</label>
+                    <textarea id="assessment-description" class="form-textarea"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="expires-days">Expires in (days)</label>
+                        <input type="number" id="expires-days" class="form-input" min="1" placeholder="Optional">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="is-premium">Premium Assessment</label>
+                        <select id="is-premium" class="form-select">
+                            <option value="false">No (Free)</option>
+                            <option value="true">Yes (Premium)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; margin-top: 2rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeCreateModal()" style="flex: 1;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        Create Assessment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://hzverggjspltpopivtgc.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6dmVyZ2dqc3BsdHBvcGl2dGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzUxMDQsImV4cCI6MjA3NTI1MTEwNH0.n8S0BHP33VAP8KMEkHIBHcDdTapBOfnqwB8D1qf9pv4';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let currentUser = null;
+        let currentFilter = 'all';
+        let allSessions = [];
+        let activityChart = null;
+
+        // Authentication
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                currentUser = session.user;
+                showDashboard();
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email, password
+                });
+
+                if (error) throw error;
+                currentUser = data.user;
+                showDashboard();
+            } catch (error) {
+                showToast('Login failed: ' + error.message, 'error');
+            }
+        }
+
+        async function handleLogout() {
+            await supabase.auth.signOut();
+            currentUser = null;
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('dashboard-page').style.display = 'none';
+        }
+
+        function showDashboard() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('dashboard-page').style.display = 'grid';
+            loadStats();
+            loadSessions();
+            initChart();
+        }
+
+        // Stats
+        async function loadStats() {
+            try {
+                const { count: orgCount } = await supabase
+                    .from('organizations')
+                    .select('*', { count: 'exact', head: true });
+
+                const { count: totalCount } = await supabase
+                    .from('assessment_sessions')
+                    .select('*', { count: 'exact', head: true });
+
+                const { count: activeCount } = await supabase
+                    .from('assessment_sessions')
+                    .select('*', { count: 'exact', head: true })
+                    .in('status', ['pending', 'in_progress']);
+
+                const { count: pulseCount } = await supabase
+                    .from('assessment_responses')
+                    .select('*', { count: 'exact', head: true });
+
+                const { count: consensusCount } = await supabase
+                    .from('consensus_responses')
+                    .select('*', { count: 'exact', head: true });
+
+                const { count: individualCount } = await supabase
+                    .from('individual_responses')
+                    .select('*', { count: 'exact', head: true });
+
+                document.getElementById('stat-orgs').textContent = orgCount || 0;
+                document.getElementById('stat-total').textContent = totalCount || 0;
+                document.getElementById('stat-active').textContent = activeCount || 0;
+                document.getElementById('stat-responses').textContent = (pulseCount || 0) + (consensusCount || 0) + (individualCount || 0);
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Chart
+        function initChart() {
+            const ctx = document.getElementById('activityChart');
+            activityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Responses',
+                        data: [12, 19, 8, 15, 22, 13, 18],
+                        borderColor: '#5a7c6a',
+                        backgroundColor: 'rgba(90, 124, 106, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // HTML Sanitization
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Sessions
+        async function loadSessions() {
+            try {
+                let query = supabase
+                    .from('assessment_sessions')
+                    .select('*, organizations(name)')
+                    .order('created_at', { ascending: false });
+
+                if (currentFilter !== 'all' && currentFilter !== 'premium') {
+                    query = query.eq('type', currentFilter);
+                } else if (currentFilter === 'premium') {
+                    query = query.eq('is_premium', true);
+                }
+
+                const { data, error } = await query;
+                if (error) throw error;
+
+                allSessions = data || [];
+                renderSessions(allSessions);
+            } catch (error) {
+                console.error('Error loading sessions:', error);
+            }
+        }
+
+        function renderSessions(sessions) {
+            const container = document.getElementById('assessments-list');
+
+            if (!sessions || sessions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <div class="empty-title">No assessments found</div>
+                        <div>Create your first assessment to get started</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = sessions.map(session => {
+                let surveyUrl;
+                const baseUrl = window.location.origin + window.location.pathname.replace('assessment-admin-v2.html', '');
+
+                if (session.type === 'pulse') {
+                    surveyUrl = `${baseUrl}pulse-survey.html?code=${session.access_code}`;
+                } else if (session.type === 'consensus') {
+                    surveyUrl = `${baseUrl}consensus-assessment.html?session=${session.access_code}`;
+                } else if (session.type === 'individual') {
+                    surveyUrl = `${baseUrl}ai-assessment.html?session=${session.access_code}`;
+                }
+
+                const createdDate = new Date(session.created_at).toLocaleDateString();
+
+                return `
+                    <div class="assessment-card">
+                        <div class="assessment-header">
+                            <div style="flex: 1;">
+                                <div class="assessment-badges">
+                                    <span class="badge ${escapeHtml(session.type)}">${escapeHtml(session.type)}</span>
+                                    <span class="badge status">${escapeHtml(session.status)}</span>
+                                    ${session.is_premium ? '<span class="badge premium">⭐ Premium</span>' : ''}
+                                </div>
+                                <div class="assessment-title">${escapeHtml(session.title)}</div>
+                                <div class="assessment-meta">
+                                    <span class="assessment-meta-item">🏢 ${escapeHtml(session.organizations?.name || 'Unknown')}</span>
+                                    <span class="assessment-meta-item">📅 ${createdDate}</span>
+                                </div>
+                                ${session.description ? `<p style="color: #64748b; font-size: 0.875rem; margin-top: 0.5rem;">${escapeHtml(session.description)}</p>` : ''}
+                            </div>
+                        </div>
+
+                        <div class="assessment-progress">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 0.25rem;">
+                                <span id="response-label-${session.id}">Loading...</span>
+                                <span id="response-percent-${session.id}">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-${session.id}" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="assessment-actions">
+                            <button class="btn btn-secondary" onclick="copyLink('${surveyUrl}')">
+                                📋 Copy Link
+                            </button>
+                            <button class="btn btn-secondary" onclick="window.open('${surveyUrl}', '_blank')">
+                                🔗 Open
+                            </button>
+                            <button class="btn btn-primary" onclick="viewResults('${session.id}', '${session.type}')">
+                                📊 View Results
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Load response counts in batches
+            loadResponseCounts(sessions);
+        }
+
+        async function loadResponseCounts(sessions) {
+            if (!sessions || sessions.length === 0) return;
+
+            // Batch load pulse responses
+            const pulseSessions = sessions.filter(s => s.type === 'pulse');
+            if (pulseSessions.length > 0) {
+                try {
+                    const { data: participants, error } = await supabase
+                        .from('participants')
+                        .select('session_id')
+                        .in('session_id', pulseSessions.map(s => s.id));
+
+                    if (error) {
+                        console.error('Error loading pulse response counts:', error);
+                    } else {
+                        const counts = {};
+                        participants?.forEach(p => {
+                            counts[p.session_id] = (counts[p.session_id] || 0) + 1;
+                        });
+
+                        pulseSessions.forEach(session => {
+                            updateResponseDisplay(session.id, counts[session.id] || 0, 50, 'employees');
+                        });
+                    }
+                } catch (error) {
+                    console.error('Exception loading pulse counts:', error);
+                }
+            }
+
+            // Batch load consensus responses
+            const consensusSessions = sessions.filter(s => s.type === 'consensus');
+            if (consensusSessions.length > 0) {
+                try {
+                    const { data: responses, error } = await supabase
+                        .from('consensus_responses')
+                        .select('session_id')
+                        .in('session_id', consensusSessions.map(s => s.id));
+
+                    if (error) {
+                        console.error('Error loading consensus response counts:', error);
+                    } else {
+                        const counts = {};
+                        responses?.forEach(r => {
+                            counts[r.session_id] = (counts[r.session_id] || 0) + 1;
+                        });
+
+                        consensusSessions.forEach(session => {
+                            updateResponseDisplay(session.id, counts[session.id] || 0, 5, 'executives');
+                        });
+                    }
+                } catch (error) {
+                    console.error('Exception loading consensus counts:', error);
+                }
+            }
+
+            // Batch load individual responses
+            const individualSessions = sessions.filter(s => s.type === 'individual');
+            if (individualSessions.length > 0) {
+                try {
+                    const { data: responses, error } = await supabase
+                        .from('individual_responses')
+                        .select('session_id')
+                        .in('session_id', individualSessions.map(s => s.id));
+
+                    if (error) {
+                        console.error('Error loading individual response counts:', error);
+                    } else {
+                        const counts = {};
+                        responses?.forEach(r => {
+                            counts[r.session_id] = (counts[r.session_id] || 0) + 1;
+                        });
+
+                        individualSessions.forEach(session => {
+                            updateResponseDisplay(session.id, counts[session.id] || 0, 1, 'responses');
+                        });
+                    }
+                } catch (error) {
+                    console.error('Exception loading individual counts:', error);
+                }
+            }
+        }
+
+        function updateResponseDisplay(sessionId, count, expected, label) {
+            const labelEl = document.getElementById(`response-label-${sessionId}`);
+            const percentEl = document.getElementById(`response-percent-${sessionId}`);
+            const progressEl = document.getElementById(`progress-${sessionId}`);
+
+            if (labelEl) {
+                labelEl.textContent = `${count} / ${expected} ${label}`;
+            }
+            if (percentEl) {
+                const percent = Math.min(100, Math.round((count / expected) * 100));
+                percentEl.textContent = `${percent}%`;
+            }
+            if (progressEl) {
+                const percent = Math.min(100, (count / expected) * 100);
+                progressEl.style.width = `${percent}%`;
+            }
+        }
+
+        function filterSessions(filter, clickedElement) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-pill').forEach(pill => pill.classList.remove('active'));
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            }
+            loadSessions();
+        }
+
+        function filterAssessments() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const filtered = allSessions.filter(s =>
+                s.title.toLowerCase().includes(search) ||
+                s.organizations?.name?.toLowerCase().includes(search) ||
+                s.type.toLowerCase().includes(search)
+            );
+            renderSessions(filtered);
+        }
+
+        // Modal
+        function openCreateModal() {
+            document.getElementById('create-modal').classList.add('active');
+        }
+
+        function closeCreateModal() {
+            document.getElementById('create-modal').classList.remove('active');
+            document.getElementById('create-form').reset();
+        }
+
+        function updateFormFields() {
+            const type = document.getElementById('assessment-type').value;
+            const titleField = document.getElementById('assessment-title');
+
+            if (type === 'individual') {
+                titleField.placeholder = 'e.g., CEO AI Maturity Assessment';
+            } else if (type === 'consensus') {
+                titleField.placeholder = 'e.g., Executive Team Alignment';
+            } else if (type === 'pulse') {
+                titleField.placeholder = 'e.g., Q1 2025 AI Pulse Survey';
+            }
+        }
+
+        async function createAssessment(event) {
+            event.preventDefault();
+
+            const orgName = document.getElementById('org-name').value;
+            const type = document.getElementById('assessment-type').value;
+            const title = document.getElementById('assessment-title').value;
+            const description = document.getElementById('assessment-description').value;
+            const expiresDays = document.getElementById('expires-days').value;
+            const isPremium = document.getElementById('is-premium').value === 'true';
+
+            let expiresAt = null;
+            if (expiresDays) {
+                expiresAt = new Date();
+                expiresAt.setDate(expiresAt.getDate() + parseInt(expiresDays));
+            }
+
+            try {
+                // Create or find organization
+                let orgId;
+                const { data: existingOrg, error: findError } = await supabase
+                    .from('organizations')
+                    .select('id')
+                    .eq('name', orgName)
+                    .maybeSingle();
+
+                if (findError) {
+                    console.error('Error finding organization:', findError);
+                    throw new Error('Failed to search for organization');
+                }
+
+                if (existingOrg) {
+                    orgId = existingOrg.id;
+                } else {
+                    const { data: newOrg, error: orgError } = await supabase
+                        .from('organizations')
+                        .insert({ name: orgName })
+                        .select()
+                        .single();
+
+                    if (orgError) {
+                        console.error('Error creating organization:', orgError);
+                        throw new Error('Failed to create organization');
+                    }
+                    if (!newOrg) throw new Error('Organization creation returned no data');
+                    orgId = newOrg.id;
+                }
+
+                const accessCode = `${type}_${Math.random().toString(36).substr(2, 9)}${Math.random().toString(36).substr(2, 9)}`;
+
+                const { error: sessionError } = await supabase
+                    .from('assessment_sessions')
+                    .insert({
+                        organization_id: orgId,
+                        type: type,
+                        status: 'in_progress',
+                        title: title,
+                        description: description || null,
+                        access_code: accessCode,
+                        is_premium: isPremium,
+                        created_by: currentUser.id,
+                        expires_at: expiresAt ? expiresAt.toISOString() : null
+                    });
+
+                if (sessionError) {
+                    console.error('Error creating assessment session:', sessionError);
+                    throw new Error('Failed to create assessment');
+                }
+
+                closeCreateModal();
+                loadStats();
+                loadSessions();
+                showToast('Assessment created successfully!', 'success');
+            } catch (error) {
+                console.error('Error in createAssessment:', error);
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Utilities
+        function copyLink(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('Link copied to clipboard!', 'success');
+            });
+        }
+
+        function viewResults(sessionId, type) {
+            const baseUrl = window.location.origin + window.location.pathname.replace('assessment-admin-v2.html', '');
+            if (type === 'pulse') {
+                window.open(`${baseUrl}pulse-results.html?session=${sessionId}`, '_blank');
+            } else if (type === 'consensus') {
+                window.open(`${baseUrl}consensus-results.html?session=${sessionId}`, '_blank');
+            } else if (type === 'individual') {
+                showToast('Individual results viewer coming soon!', 'success');
+            } else {
+                showToast('Results viewer for ' + type + ' coming soon!', 'success');
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : '✕'}</span>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showView(view, clickedElement) {
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            }
+
+            // Show/hide sections
+            if (view === 'organizations') {
+                document.getElementById('organizations-section').style.display = 'block';
+            } else {
+                document.getElementById('organizations-section').style.display = 'none';
+            }
+        }
+
+        function filterByType(type, clickedElement) {
+            currentFilter = type;
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            }
+            loadSessions();
+        }
+
+        // Initialize
+        checkAuth();
+    </script>
+</body>
+</html>

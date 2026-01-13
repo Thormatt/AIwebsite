@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Readiness Pulse Survey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .survey-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .survey-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .survey-header h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .survey-header p {
+            color: #6b7280;
+            font-size: 1.125rem;
+        }
+
+        .info-box {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .question-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-number {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #5a7c6a 0%, #4a6c5a 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .question-text {
+            flex: 1;
+        }
+
+        .question-text h3 {
+            font-size: 1.125rem;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .question-text .dimension {
+            font-size: 0.875rem;
+            color: #5a7c6a;
+            font-weight: 500;
+        }
+
+        .likert-scale {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .likert-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .likert-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .likert-option label {
+            display: block;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .likert-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #5a7c6a 0%, #4a6c5a 100%);
+            color: white;
+            border-color: #5a7c6a;
+        }
+
+        .likert-option:hover label {
+            border-color: #5a7c6a;
+        }
+
+        .yes-no-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .yes-no-buttons button {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .yes-no-buttons button.selected {
+            background: linear-gradient(135deg, #5a7c6a 0%, #4a6c5a 100%);
+            color: white;
+            border-color: #5a7c6a;
+        }
+
+        .yes-no-buttons button:hover {
+            border-color: #5a7c6a;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a574 0%, #b8935f 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #5a7c6a 0%, #4a6c5a 100%);
+            transition: width 0.3s;
+        }
+
+        .completion-message {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .completion-message svg {
+            color: #10b981;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .likert-scale {
+                flex-direction: column;
+            }
+
+            .survey-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="survey-container">
+        <div class="survey-header">
+            <h1>AI Readiness Pulse Survey</h1>
+            <p>Help us understand your experience with AI at our organization</p>
+        </div>
+
+        <!-- Step 1: Participant Info -->
+        <div id="info-step" class="info-box">
+            <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Before we begin...</h2>
+            <p style="color: #6b7280; margin-bottom: 2rem;">
+                This survey is anonymous. We'll only ask for basic information to understand patterns across departments and roles.
+                Your responses will be aggregated with others—no individual answers will be shared.
+            </p>
+
+            <div class="form-group">
+                <label for="department">Department *</label>
+                <select id="department" required>
+                    <option value="">Select your department</option>
+                    <option value="Engineering">Engineering / Technology</option>
+                    <option value="Product">Product Management</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Operations">Operations</option>
+                    <option value="Finance">Finance</option>
+                    <option value="HR">Human Resources</option>
+                    <option value="Legal">Legal / Compliance</option>
+                    <option value="Customer Success">Customer Success</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="level">Level *</label>
+                <select id="level" required>
+                    <option value="">Select your level</option>
+                    <option value="ic">Individual Contributor</option>
+                    <option value="manager">Manager</option>
+                    <option value="director">Director</option>
+                    <option value="executive">Executive / VP+</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="tenure">How long have you been with the company? (Optional)</label>
+                <select id="tenure">
+                    <option value="">Prefer not to say</option>
+                    <option value="<1year">Less than 1 year</option>
+                    <option value="1-3years">1-3 years</option>
+                    <option value="3+years">More than 3 years</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" onclick="startSurvey()">Start Survey</button>
+        </div>
+
+        <!-- Step 2: Questions -->
+        <div id="questions-step" style="display: none;">
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div id="questions-container"></div>
+
+            <button class="btn btn-primary" onclick="submitSurvey()" id="submit-btn" disabled>
+                Submit Survey
+            </button>
+        </div>
+
+        <!-- Step 3: Completion -->
+        <div id="completion-step" style="display: none;">
+            <div class="completion-message">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9 12l2 2 4-4"></path>
+                </svg>
+                <h2 style="color: #2c3e50; margin-bottom: 1rem;">Thank You!</h2>
+                <p style="color: #6b7280; max-width: 500px; margin: 0 auto;">
+                    Your feedback has been submitted. Your insights will help us better understand how AI is being
+                    adopted across the organization and where we can improve.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const SUPABASE_URL = 'https://hzverggjspltpopivtgc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6dmVyZ2dqc3BsdHBvcGl2dGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzUxMDQsImV4cCI6MjA3NTI1MTEwNH0.n8S0BHP33VAP8KMEkHIBHcDdTapBOfnqwB8D1qf9pv4';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let sessionId = null;
+        let participantId = null;
+        let responses = {};
+
+        // Survey questions (12 questions across 5 dimensions)
+        const questions = [
+            // Data Readiness
+            { id: 1, key: 'pulse_data_access', dimension: 'Data', text: 'I have access to the data I need to do my job effectively', type: 'likert' },
+            { id: 2, key: 'pulse_data_organized', dimension: 'Data', text: 'Our data is organized and easy to find', type: 'likert' },
+
+            // Governance
+            { id: 3, key: 'pulse_governance_guidelines', dimension: 'Governance', text: 'I have clear guidelines on how to use AI tools with company data', type: 'likert' },
+            { id: 4, key: 'pulse_governance_confidence', dimension: 'Governance', text: 'I feel confident I am following the right policies when using AI', type: 'likert' },
+
+            // Technical
+            { id: 5, key: 'pulse_tech_tools', dimension: 'Technical', text: 'I have access to the AI tools I need', type: 'yes_no' },
+            { id: 6, key: 'pulse_tech_support', dimension: 'Technical', text: 'Our IT systems support AI adoption', type: 'likert' },
+
+            // Business Alignment
+            { id: 7, key: 'pulse_business_strategy', dimension: 'Business', text: 'Leadership has communicated a clear AI strategy', type: 'likert' },
+            { id: 8, key: 'pulse_business_impact', dimension: 'Business', text: 'I understand how AI will impact my role', type: 'likert' },
+            { id: 9, key: 'pulse_business_goals', dimension: 'Business', text: 'I see how AI initiatives connect to business goals', type: 'likert' },
+
+            // Culture
+            { id: 10, key: 'pulse_culture_prepared', dimension: 'Culture', text: 'I feel prepared for AI-driven changes', type: 'likert' },
+            { id: 11, key: 'pulse_culture_openness', dimension: 'Culture', text: 'My team is open to experimenting with AI', type: 'likert' },
+            { id: 12, key: 'pulse_culture_safety', dimension: 'Culture', text: 'I can speak up if I have concerns about AI use', type: 'likert' }
+        ];
+
+        // Get session from URL
+        function getAccessCode() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('code');
+        }
+
+        // Validate session on load
+        async function validateSession() {
+            const accessCode = getAccessCode();
+
+            if (!accessCode) {
+                showError('Invalid Link', 'This survey requires a valid access code. Please use the link provided by your administrator.');
+                return false;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('assessment_sessions')
+                    .select('*')
+                    .eq('access_code', accessCode)
+                    .eq('type', 'pulse')
+                    .single();
+
+                if (error || !data) {
+                    showError('Invalid Session', 'This survey link is not valid.');
+                    return false;
+                }
+
+                if (data.status !== 'in_progress') {
+                    showError('Survey Closed', 'This survey is no longer accepting responses.');
+                    return false;
+                }
+
+                if (data.expires_at && new Date(data.expires_at) < new Date()) {
+                    showError('Survey Expired', 'This survey has expired.');
+                    return false;
+                }
+
+                sessionId = data.id;
+                return true;
+            } catch (err) {
+                console.error('Session validation error:', err);
+                showError('Error', 'Unable to validate session.');
+                return false;
+            }
+        }
+
+        function showError(title, message) {
+            document.querySelector('.survey-container').innerHTML = `
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 3rem; text-align: center;">
+                    <h2 style="color: #2c3e50; margin-bottom: 1rem;">${title}</h2>
+                    <p style="color: #6b7280;">${message}</p>
+                </div>
+            `;
+        }
+
+        async function startSurvey() {
+            const department = document.getElementById('department').value;
+            const level = document.getElementById('level').value;
+            const tenure = document.getElementById('tenure').value;
+
+            if (!department || !level) {
+                alert('Please select your department and level');
+                return;
+            }
+
+            // Create participant record
+            try {
+                const { data, error } = await supabase
+                    .from('participants')
+                    .insert({
+                        session_id: sessionId,
+                        department: department,
+                        level: level,
+                        tenure: tenure || null,
+                        started_at: new Date().toISOString()
+                    })
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                participantId = data.id;
+
+                // Show questions
+                document.getElementById('info-step').style.display = 'none';
+                document.getElementById('questions-step').style.display = 'block';
+
+                renderQuestions();
+            } catch (err) {
+                console.error('Error creating participant:', err);
+                alert('Error starting survey. Please try again.');
+            }
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+
+            questions.forEach(q => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+
+                let answersHTML = '';
+                if (q.type === 'likert') {
+                    answersHTML = `
+                        <div class="likert-scale">
+                            ${[1, 2, 3, 4, 5].map(val => `
+                                <div class="likert-option">
+                                    <input type="radio" id="q${q.id}_${val}" name="q${q.id}" value="${val}" onchange="updateResponse('${q.key}', '${q.dimension}', ${val})">
+                                    <label for="q${q.id}_${val}">
+                                        ${val === 1 ? 'Strongly<br>Disagree' :
+                                          val === 2 ? 'Disagree' :
+                                          val === 3 ? 'Neutral' :
+                                          val === 4 ? 'Agree' :
+                                          'Strongly<br>Agree'}
+                                    </label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                } else if (q.type === 'yes_no') {
+                    answersHTML = `
+                        <div class="yes-no-buttons">
+                            <button onclick="updateYesNo('${q.key}', '${q.dimension}', 'yes', this)">Yes</button>
+                            <button onclick="updateYesNo('${q.key}', '${q.dimension}', 'no', this)">No</button>
+                            <button onclick="updateYesNo('${q.key}', '${q.dimension}', 'dont_know', this)">Don't Know</button>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-number">${q.id}</div>
+                        <div class="question-text">
+                            <h3>${q.text}</h3>
+                            <span class="dimension">${q.dimension}</span>
+                        </div>
+                    </div>
+                    ${answersHTML}
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function updateResponse(key, dimension, value) {
+            responses[key] = { dimension, value: value.toString() };
+            updateProgress();
+            checkCompletion();
+        }
+
+        function updateYesNo(key, dimension, value, button) {
+            // Remove selected class from siblings
+            const siblings = button.parentElement.querySelectorAll('button');
+            siblings.forEach(s => s.classList.remove('selected'));
+
+            // Add selected to clicked button
+            button.classList.add('selected');
+
+            responses[key] = { dimension, value };
+            updateProgress();
+            checkCompletion();
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(responses).length;
+            const total = questions.length;
+            const percent = (answered / total) * 100;
+            document.getElementById('progress-fill').style.width = percent + '%';
+        }
+
+        function checkCompletion() {
+            const allAnswered = Object.keys(responses).length === questions.length;
+            document.getElementById('submit-btn').disabled = !allAnswered;
+        }
+
+        async function submitSurvey() {
+            if (Object.keys(responses).length !== questions.length) {
+                alert('Please answer all questions');
+                return;
+            }
+
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').textContent = 'Submitting...';
+
+            try {
+                // Save all responses
+                const responseRecords = Object.entries(responses).map(([key, data]) => ({
+                    participant_id: participantId,
+                    question_key: key,
+                    dimension: data.dimension,
+                    response_value: data.value
+                }));
+
+                const { error: responseError } = await supabase
+                    .from('assessment_responses')
+                    .insert(responseRecords);
+
+                if (responseError) throw responseError;
+
+                // Update participant completion
+                const { error: updateError } = await supabase
+                    .from('participants')
+                    .update({ completed_at: new Date().toISOString() })
+                    .eq('id', participantId);
+
+                if (updateError) throw updateError;
+
+                // Show completion
+                document.getElementById('questions-step').style.display = 'none';
+                document.getElementById('completion-step').style.display = 'block';
+
+            } catch (err) {
+                console.error('Error submitting survey:', err);
+                alert('Error submitting survey. Please try again.');
+                document.getElementById('submit-btn').disabled = false;
+                document.getElementById('submit-btn').textContent = 'Submit Survey';
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', async () => {
+            const isValid = await validateSession();
+            if (!isValid) {
+                // Error message already shown by validateSession
+                return;
+            }
+        });
+    </script>
+</body>
+</html>

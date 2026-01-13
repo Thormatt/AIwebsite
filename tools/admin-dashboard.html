@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Advisory Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Login Screen */
+        .login-card {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem;
+            max-width: 450px;
+            margin: 4rem auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .login-card h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .login-card p {
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #d4a574;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #c19463;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c00;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #c00;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info span {
+            color: #7f8c8d;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #7f8c8d;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .stat-card .label {
+            color: #95a5a6;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .quick-actions h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .action-btn {
+            display: block;
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .action-btn.individual {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .action-btn.consensus {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .action-btn.pulse {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .action-btn .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Organizations Table */
+        .organizations-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .organizations-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .organizations-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .organizations-table th {
+            background: #f8f9fa;
+            padding: 1rem;
+            text-align: left;
+            color: #2c3e50;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .organizations-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .organizations-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.complete {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.partial {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.none {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .assessment-icons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .assessment-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .assessment-icon.individual {
+            background: #f5576c;
+        }
+
+        .assessment-icon.consensus {
+            background: #00f2fe;
+        }
+
+        .assessment-icon.pulse {
+            background: #38f9d7;
+        }
+
+        .assessment-icon.inactive {
+            background: #e0e0e0;
+            color: #95a5a6;
+        }
+
+        .action-links {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-links a {
+            color: #d4a574;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .action-links a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <h1>Admin Dashboard</h1>
+            <p>AI Advisory Platform Management</p>
+
+            <div id="errorMessage" style="display: none;" class="error-message"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboardScreen" class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>AI Advisory Admin Dashboard</h1>
+                <div class="user-info">
+                    <span id="userEmail"></span>
+                    <button id="logoutBtn" class="btn btn-secondary btn-small">Logout</button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Organizations</h3>
+                    <div class="value" id="totalOrgs">0</div>
+                    <div class="label">Active clients</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Individual Assessments</h3>
+                    <div class="value" id="totalIndividual">0</div>
+                    <div class="label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Consensus Assessments</h3>
+                    <div class="value" id="totalConsensus">0</div>
+                    <div class="label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Pulse Surveys</h3>
+                    <div class="value" id="totalPulse">0</div>
+                    <div class="label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Full Diagnostics</h3>
+                    <div class="value" id="totalComplete">0</div>
+                    <div class="label">All 3 assessments</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="actions-grid">
+                    <a href="individual-assessment-admin.html" class="action-btn individual">
+                        <div class="icon">👤</div>
+                        <div>Individual Assessments</div>
+                    </a>
+                    <a href="consensus-admin.html" class="action-btn consensus">
+                        <div class="icon">👥</div>
+                        <div>Consensus Assessments</div>
+                    </a>
+                    <a href="pulse-admin.html" class="action-btn pulse">
+                        <div class="icon">📊</div>
+                        <div>Pulse Surveys</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Organizations Table -->
+            <div class="organizations-section">
+                <h2>Organizations</h2>
+
+                <div class="table-controls">
+                    <input type="text" id="searchBox" class="search-box" placeholder="Search organizations...">
+                </div>
+
+                <div id="tableContainer">
+                    <div class="loading">Loading organizations...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://hzverggjspltpopivtgc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6dmVyZ2dqc3BsdHBvcGl2dGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc5OTU4MTgsImV4cCI6MjA0MzU3MTgxOH0.shSEF4eGy9c0v58l91BcRCRHG3u4PuZp_AEWLP_K3HI';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+        let organizations = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check if already logged in
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                currentUser = session.user;
+                showDashboard();
+            }
+
+            // Login form handler
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await login();
+            });
+
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                await supabase.auth.signOut();
+                currentUser = null;
+                showLogin();
+            });
+
+            // Search box
+            document.getElementById('searchBox').addEventListener('input', (e) => {
+                filterOrganizations(e.target.value);
+            });
+        });
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+
+            errorDiv.style.display = 'none';
+
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            currentUser = data.user;
+            showDashboard();
+        }
+
+        function showLogin() {
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('dashboardScreen').classList.remove('active');
+        }
+
+        async function showDashboard() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboardScreen').classList.add('active');
+            document.getElementById('userEmail').textContent = currentUser.email;
+
+            await loadDashboardData();
+        }
+
+        async function loadDashboardData() {
+            try {
+                // Load all organizations
+                const { data: orgs, error: orgsError } = await supabase
+                    .from('organizations')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (orgsError) throw orgsError;
+
+                // Load all assessment sessions
+                const { data: sessions, error: sessionsError } = await supabase
+                    .from('assessment_sessions')
+                    .select('*');
+
+                if (sessionsError) throw sessionsError;
+
+                // Aggregate data
+                organizations = orgs.map(org => {
+                    const orgSessions = sessions.filter(s => s.organization_id === org.id);
+
+                    const individualSession = orgSessions.find(s => s.type === 'individual' && s.status === 'completed');
+                    const consensusSession = orgSessions.find(s => s.type === 'consensus' && s.status === 'completed');
+                    const pulseSession = orgSessions.find(s => s.type === 'pulse' && s.status === 'completed');
+
+                    const completedCount = [individualSession, consensusSession, pulseSession].filter(Boolean).length;
+
+                    return {
+                        ...org,
+                        individualSession,
+                        consensusSession,
+                        pulseSession,
+                        completedCount
+                    };
+                });
+
+                updateStats();
+                renderOrganizationsTable();
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                document.getElementById('tableContainer').innerHTML = `
+                    <div class="error-message">Error loading data: ${error.message}</div>
+                `;
+            }
+        }
+
+        function updateStats() {
+            const totalOrgs = organizations.length;
+            const totalIndividual = organizations.filter(o => o.individualSession).length;
+            const totalConsensus = organizations.filter(o => o.consensusSession).length;
+            const totalPulse = organizations.filter(o => o.pulseSession).length;
+            const totalComplete = organizations.filter(o => o.completedCount === 3).length;
+
+            document.getElementById('totalOrgs').textContent = totalOrgs;
+            document.getElementById('totalIndividual').textContent = totalIndividual;
+            document.getElementById('totalConsensus').textContent = totalConsensus;
+            document.getElementById('totalPulse').textContent = totalPulse;
+            document.getElementById('totalComplete').textContent = totalComplete;
+        }
+
+        function renderOrganizationsTable(filteredOrgs = null) {
+            const orgsToRender = filteredOrgs || organizations;
+            const tableContainer = document.getElementById('tableContainer');
+
+            if (orgsToRender.length === 0) {
+                tableContainer.innerHTML = `
+                    <div class="empty-state">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                        </svg>
+                        <p>No organizations found</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const rows = orgsToRender.map(org => {
+                const statusClass = org.completedCount === 3 ? 'complete' : org.completedCount > 0 ? 'partial' : 'none';
+                const statusText = org.completedCount === 3 ? 'Complete' : org.completedCount > 0 ? `${org.completedCount}/3` : 'None';
+
+                return `
+                    <tr>
+                        <td><strong>${org.name}</strong></td>
+                        <td>${org.industry || 'N/A'}</td>
+                        <td>${org.employee_count || 'N/A'}</td>
+                        <td>
+                            <div class="assessment-icons">
+                                <div class="assessment-icon individual ${org.individualSession ? '' : 'inactive'}" title="Individual Assessment">
+                                    I
+                                </div>
+                                <div class="assessment-icon consensus ${org.consensusSession ? '' : 'inactive'}" title="Consensus Assessment">
+                                    C
+                                </div>
+                                <div class="assessment-icon pulse ${org.pulseSession ? '' : 'inactive'}" title="Pulse Survey">
+                                    P
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </td>
+                        <td>
+                            <div class="action-links">
+                                ${org.completedCount === 3 ? `<a href="synthesis-results.html?org=${org.id}" target="_blank">View Synthesis</a>` : ''}
+                                ${org.individualSession ? `<a href="individual-assessment-admin.html" target="_blank">Individual</a>` : ''}
+                                ${org.consensusSession ? `<a href="consensus-admin.html" target="_blank">Consensus</a>` : ''}
+                                ${org.pulseSession ? `<a href="pulse-results.html?session=${org.pulseSession.id}" target="_blank">Pulse</a>` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            tableContainer.innerHTML = `
+                <table class="organizations-table">
+                    <thead>
+                        <tr>
+                            <th>Organization</th>
+                            <th>Industry</th>
+                            <th>Employees</th>
+                            <th>Assessments</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function filterOrganizations(searchTerm) {
+            const term = searchTerm.toLowerCase();
+            const filtered = organizations.filter(org =>
+                org.name.toLowerCase().includes(term) ||
+                (org.industry && org.industry.toLowerCase().includes(term))
+            );
+            renderOrganizationsTable(filtered);
+        }
+    </script>
+</body>
+</html>

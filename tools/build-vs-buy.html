@@ -380,7 +380,7 @@
 </head>
 <body>
     <div class="analyzer-container">
-        <a href="../index.html" class="back-link">← Back to Main Site</a>
+        <a href="../tools.html" class="back-link">← Back to Tools</a>
 
         <div class="analyzer-header">
             <h1>Build vs Buy Analyzer</h1>
@@ -449,6 +449,14 @@
                         </div>
                         <input type="range" min="1" max="5" value="3" class="slider" id="sensitivity" oninput="updateLabel('sensitivity')">
                     </div>
+
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Available Development Time</span>
+                            <span id="timeline-label">6-12 months</span>
+                        </div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="timeline" oninput="updateLabel('timeline')">
+                    </div>
                 </div>
 
                 <div class="criterion">
@@ -465,13 +473,7 @@
                         </select>
                     </div>
 
-                    <div class="slider-container">
-                        <div class="slider-label">
-                            <span>Available Development Time</span>
-                            <span id="timeline-label">6-12 months</span>
-                        </div>
-                        <input type="range" min="1" max="5" value="3" class="slider" id="timeline" oninput="updateLabel('timeline')">
-                    </div>
+                    <!-- Timeline input temporarily removed - being redesigned for proper integration -->
 
                     <div class="slider-container">
                         <div class="slider-label">
@@ -496,6 +498,9 @@
                         <div class="meter-fill" id="meter-fill"></div>
                     </div>
                 </div>
+                <div id="top-drivers" style="margin: 1.5rem 0; padding: 1rem; background: #f8faf9; border-radius: 6px; font-size: 0.9375rem; color: #555;">
+                    <!-- Top drivers will be inserted here -->
+                </div>
                 <p id="recommendation-summary"></p>
             </div>
 
@@ -507,6 +512,28 @@
             <div class="insights-box">
                 <h3>Key Insights</h3>
                 <ul id="insights-list"></ul>
+            </div>
+
+            <div style="margin-top: 3rem; padding: 2rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #d4a574;">
+                <h3 style="margin-bottom: 1rem; color: #2c3e50;">How We Calculate Recommendations</h3>
+                <p style="color: #6b7280; line-height: 1.8; margin-bottom: 1rem;">
+                    This analyzer evaluates <strong>seven critical factors</strong> that influence build vs buy decisions in real AI implementations:
+                </p>
+                <ul style="color: #6b7280; line-height: 2; margin-left: 1.5rem;">
+                    <li><strong>Use Case Maturity</strong> – Commodity solutions favor Buy; unique needs favor Build</li>
+                    <li><strong>Technical Complexity vs Expertise</strong> – Gap between requirement and capability</li>
+                    <li><strong>Strategic Differentiation</strong> – Core IP and competitive advantage weigh toward Build</li>
+                    <li><strong>Time to Market Pressure</strong> – Urgency typically favors proven solutions (Buy)</li>
+                    <li><strong>Data Sensitivity</strong> – Compliance requirements and data residency constraints</li>
+                    <li><strong>Budget Constraints</strong> – Total cost of ownership over 3 years</li>
+                    <li><strong>Risk Tolerance</strong> – Organizational appetite for technical and execution risk</li>
+                </ul>
+                <p style="color: #6b7280; line-height: 1.8; margin-top: 1rem; font-size: 0.9rem;">
+                    <em>Note: This recommendation is based on general heuristics. Every organization has unique constraints. Use this as a starting point for deeper analysis, not a final decision.</em>
+                </p>
+                <p style="color: #059669; line-height: 1.6; margin-top: 1.5rem; font-size: 0.875rem; display: flex; align-items: center; gap: 0.5rem;">
+                    🔒 <strong>Privacy:</strong> All calculations run in your browser. We don't store or transmit your inputs.
+                </p>
             </div>
         </div>
     </div>
@@ -537,8 +564,8 @@
             const differentiation = parseInt(document.getElementById('differentiation').value);
             const urgency = parseInt(document.getElementById('urgency').value);
             const sensitivity = parseInt(document.getElementById('sensitivity').value);
-            const budget = document.getElementById('budget').value;
             const timeline = parseInt(document.getElementById('timeline').value);
+            const budget = document.getElementById('budget').value;
             const risk = parseInt(document.getElementById('risk').value);
 
             // Calculate scores for build vs buy
@@ -592,6 +619,7 @@
                 buildScore += 15;
                 factors.push({ name: 'Development Timeline', build: 70, buy: 30 });
             } else {
+                buyScore += 10;  // FIX: Now actually affects the score
                 factors.push({ name: 'Speed Requirements', build: 40, buy: 60 });
             }
 
@@ -604,7 +632,25 @@
                 factors.push({ name: 'Data Requirements', build: 40, buy: 60 });
             }
 
+            // Available development time: short timeline favors BUY, long timeline favors BUILD
+            const timelineShifts = {
+                1: { build: 0,  buy: 20 },  // < 3 months
+                2: { build: 5,  buy: 15 },  // 3-6 months
+                3: { build: 0,  buy: 0 },   // 6-12 months (neutral)
+                4: { build: 15, buy: 0 },   // 1-2 years
+                5: { build: 20, buy: 0 }    // 2+ years
+            };
+            const timeShift = timelineShifts[timeline] || { build: 0, buy: 0 };
+            buildScore += timeShift.build;
+            buyScore += timeShift.buy;
+            factors.push({
+                name: 'Available Dev Time',
+                build: 50 + timeShift.build,
+                buy: 50 + timeShift.buy
+            });
+
             // Budget considerations
+            const BUDGET_WEIGHT = 0.25; // Weight for budget factor in overall scoring
             const budgetScores = {
                 'minimal': { build: 10, buy: 90 },
                 'small': { build: 25, buy: 75 },
@@ -613,8 +659,8 @@
                 'enterprise': { build: 80, buy: 20 }
             };
 
-            buildScore += budgetScores[budget].build / 4;
-            buyScore += budgetScores[budget].buy / 4;
+            buildScore += budgetScores[budget].build * BUDGET_WEIGHT;
+            buyScore += budgetScores[budget].buy * BUDGET_WEIGHT;
             factors.push({
                 name: 'Budget Alignment',
                 build: budgetScores[budget].build,
@@ -670,6 +716,23 @@
                     recommendation === 'BUILD' ? '#10b981' :
                     recommendation === 'BUY' ? '#3b82f6' : '#f59e0b';
             }, 100);
+
+            // Calculate top drivers (factors with biggest delta from 50/50)
+            const factorDeltas = factors.map(f => ({
+                name: f.name,
+                delta: Math.abs(f.build - f.buy),
+                direction: f.build > f.buy ? 'BUILD' : 'BUY',
+                score: Math.max(f.build, f.buy)
+            })).sort((a, b) => b.delta - a.delta);
+
+            // Display top 2-3 drivers (always show them, even if deltas are small)
+            const topDriversDiv = document.getElementById('top-drivers');
+            const topN = factorDeltas.slice(0, 3);
+            const driverText = topN.map(f =>
+                `<strong>${f.name}</strong> (${f.direction === 'BUILD' ? '+' : ''}${f.direction === recommendation ? f.delta.toFixed(0) : -f.delta.toFixed(0)} ${f.direction})`
+            ).join(', ');
+            topDriversDiv.innerHTML = `<strong>Top drivers:</strong> ${driverText}`;
+            topDriversDiv.style.display = 'block';
 
             // Display factors
             const factorsList = document.getElementById('factors-list');

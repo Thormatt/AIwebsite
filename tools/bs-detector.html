@@ -310,11 +310,14 @@
 </head>
 <body>
     <div class="detector-container">
-        <a href="../index.html" class="back-link">← Back to Main Site</a>
+        <a href="../tools.html" class="back-link">← Back to Tools</a>
 
         <div class="detector-header">
             <h1>Vendor BS Detector</h1>
             <p>Paste any vendor's marketing pitch below and watch us decode the fluff, expose the buzzwords, and give you the reality check you need.</p>
+            <p style="color: #059669; font-size: 0.875rem; margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                🔒 <strong>Privacy:</strong> All analysis runs in your browser. We don't store or transmit vendor pitches.
+            </p>
         </div>
 
         <div class="input-section">
@@ -402,18 +405,57 @@
             const foundBuzzwords = [];
             let buzzwordCount = 0;
 
+            // Helper to escape regex special characters
+            const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
             buzzwords.forEach(buzzword => {
-                if (lowerPitch.includes(buzzword)) {
+                // Escape special chars and handle hyphen variants (e.g., "best-in-class" vs "best in class")
+                const pattern = escapeRegex(buzzword).replace(/-/g, '[- ]?');
+                const regex = new RegExp(`\\b${pattern}\\b`, 'gi');
+                const matches = lowerPitch.match(regex);
+                if (matches && matches.length > 0) {
                     foundBuzzwords.push(buzzword);
-                    // Count occurrences
-                    const regex = new RegExp(buzzword, 'gi');
-                    const matches = lowerPitch.match(regex);
-                    buzzwordCount += matches ? matches.length : 0;
+                    buzzwordCount += matches.length;
                 }
             });
 
-            // Calculate BS percentage
-            const bsPercentage = Math.min(Math.round((buzzwordCount / words.length) * 100), 100);
+            // Evidence signals (positive indicators of substance)
+            const evidenceTerms = [
+                'benchmark', 'case study', 'soc 2', 'soc2', 'hipaa', 'gdpr', 'iso 27001',
+                'latency', 'sla', 'uptime', 'rag', 'fine-tuning', 'fine tuning',
+                'evaluation', 'metrics', 'accuracy', 'precision', 'recall', 'on-premise', 'on-prem'
+            ];
+            let evidenceCount = 0;
+            const foundEvidence = [];
+            evidenceTerms.forEach(term => {
+                const pattern = escapeRegex(term).replace(/-/g, '[- ]?');
+                const regex = new RegExp(`\\b${pattern}\\b`, 'gi');
+                if (regex.test(lowerPitch)) {
+                    evidenceCount++;
+                    foundEvidence.push(term);
+                }
+            });
+
+            // Over-promise signals (red flags)
+            const overPromiseTerms = [
+                'guaranteed', '100%', 'no hallucinations', 'hands-off', 'fully autonomous',
+                'zero error', 'perfect', 'never fails', 'completely automat'
+            ];
+            let overPromiseCount = 0;
+            const foundOverPromises = [];
+            overPromiseTerms.forEach(term => {
+                const pattern = escapeRegex(term).replace(/-/g, '[- ]?');
+                const regex = new RegExp(`\\b${pattern}\\b`, 'gi');
+                if (regex.test(lowerPitch)) {
+                    overPromiseCount++;
+                    foundOverPromises.push(term);
+                }
+            });
+
+            // Calculate BS percentage (adjusted by evidence and over-promises)
+            let rawBsPercentage = Math.round((buzzwordCount / words.length) * 100);
+            const bsAdjustment = (evidenceCount * -3) + (overPromiseCount * 5); // Evidence reduces, over-promises increase
+            const bsPercentage = Math.min(Math.max(rawBsPercentage + bsAdjustment, 0), 100);
 
             // Determine BS level
             let bsLevel, bsClass, fillColor;
@@ -461,7 +503,7 @@
             document.getElementById('translation').textContent = translation;
 
             // Generate reality check
-            const realityPoints = generateRealityCheck(bsPercentage, foundBuzzwords);
+            const realityPoints = generateRealityCheck(bsPercentage, foundBuzzwords, foundEvidence, foundOverPromises);
             document.getElementById('reality-list').innerHTML = realityPoints.map(point =>
                 `<li>${point}</li>`
             ).join('');
@@ -477,39 +519,100 @@
                 'disruptive': 'hoping to get market share',
                 'innovative': 'has some new features',
                 'cutting-edge': 'relatively recent technology',
+                'next-generation': 'newer version',
                 'synergistic': 'works together (like everything should)',
                 'paradigm shift': 'different approach',
+                'paradigm': 'approach or model',
+                'ecosystem': 'collection of tools',
+                'holistic': 'comprehensive',
                 'leverage': 'use',
                 'utilize': 'use',
+                'optimize': 'improve',
+                'streamline': 'simplify',
+                'transform': 'change',
                 'ai-powered': 'uses some form of machine learning',
+                'ml-driven': 'uses machine learning',
                 'blockchain': 'probably unnecessary distributed database',
+                'quantum': 'buzzword (likely not actually quantum)',
+                'cloud-native': 'runs in the cloud',
                 'seamless': 'works most of the time',
                 'scalable': 'can handle more users (with more servers)',
                 'robust': 'usually doesn\'t crash',
                 'enterprise-grade': 'expensive',
                 'best-in-class': 'as good as competitors',
+                'world-class': 'competitive',
                 'actionable insights': 'reports with recommendations',
+                'data-driven': 'uses data for decisions',
+                'real-time': 'fast updates',
+                'omnichannel': 'works on multiple platforms',
                 'digital transformation': 'moving to newer technology',
+                'digital ecosystem': 'online tools and platforms',
+                'digital journey': 'technology adoption process',
                 'frictionless': 'fewer steps than before',
+                'turnkey': 'ready to use',
+                'end-to-end': 'covers the whole process',
+                'future-proof': 'should last a while',
                 'game-changing': 'incremental improvement'
             };
 
             if (buzzwords.length === 0) {
                 return "This pitch is relatively straightforward and focuses on actual capabilities rather than marketing hype.";
-            } else if (buzzwords.length < 5) {
-                return "They're trying to sell you their product with moderate marketing language. The core offering might be decent, but verify the specific claims.";
-            } else if (buzzwords.length < 10) {
-                return "This is heavy on marketing speak. They're probably offering something similar to existing solutions but want to sound special. Focus on specific features and pricing.";
-            } else {
-                return "This is marketing word salad. They're likely offering a standard solution dressed up in fancy language. Ask for specific use cases, actual customer references, and detailed pricing.";
             }
+
+            // Generate line-by-line translations for detected buzzwords
+            const translationLines = [];
+            const uniqueBuzzwords = [...new Set(buzzwords)]; // Remove duplicates
+
+            uniqueBuzzwords.forEach(bw => {
+                if (translations[bw]) {
+                    translationLines.push(`"${bw}" → ${translations[bw]}`);
+                }
+            });
+
+            if (translationLines.length === 0) {
+                if (buzzwords.length < 5) {
+                    return "They're trying to sell you their product with moderate marketing language. The core offering might be decent, but verify the specific claims.";
+                } else {
+                    return "This is heavy on marketing speak. Focus on specific features and pricing.";
+                }
+            }
+
+            let result = translationLines.join('\n');
+
+            // Add summary assessment
+            if (buzzwords.length >= 10) {
+                result += '\n\n⚠️ This is marketing word salad. Ask for specific use cases, actual customer references, and detailed pricing.';
+            } else if (buzzwords.length >= 5) {
+                result += '\n\n⚠️ Heavy marketing language. Focus on specific features and concrete metrics.';
+            }
+
+            return result;
         }
 
-        function generateRealityCheck(bsPercentage, buzzwords) {
+        function generateRealityCheck(bsPercentage, buzzwords, evidence = [], overPromises = []) {
             const points = [];
 
+            // Evidence signals (always show)
+            if (evidence.length > 0) {
+                points.push("✓ <strong>Evidence found:</strong> " + evidence.slice(0, 5).join(', '));
+            } else {
+                points.push("⚠️ <strong>No evidence found.</strong> Ask for: benchmarks, case studies, eval metrics, or compliance docs (SOC2, HIPAA)");
+            }
+
+            // Over-promise signals (always show if present)
+            if (overPromises.length > 0) {
+                points.push("🚩 <strong>Over-promises detected:</strong> " + overPromises.join(', ') + " — Request proof or SLAs");
+            }
+
             if (bsPercentage > 30) {
-                points.push("Red flag: Excessive buzzword usage often masks lack of substance");
+                points.push("⚠️ Red flag: Excessive buzzword usage often masks lack of substance");
+            }
+
+            // Ask-for-proof prompts when evidence is absent
+            if (evidence.length === 0 && bsPercentage > 25) {
+                points.push("📋 <strong>Request:</strong> Show confusion matrices, accuracy/precision/recall on held-out test data");
+                points.push("📋 <strong>Request:</strong> Provide a blinded evaluation set or share third-party audit results");
+                points.push("📋 <strong>Request:</strong> Share P50/P90/P95 latency metrics under realistic load");
             }
 
             if (buzzwords.includes('ai-powered') || buzzwords.includes('ml-driven')) {
@@ -534,6 +637,14 @@
 
             if (buzzwords.includes('scalable') || buzzwords.includes('robust')) {
                 points.push("Request actual uptime statistics and performance under load metrics");
+            }
+
+            // Compliance nudge when regulations mentioned
+            const complianceTerms = ['hipaa', 'gdpr', 'soc 2', 'soc2', 'iso 27001'];
+            const mentionsCompliance = evidence.some(e => complianceTerms.includes(e.toLowerCase())) ||
+                                      buzzwords.some(b => complianceTerms.includes(b.toLowerCase()));
+            if (mentionsCompliance) {
+                points.push("🔒 <strong>Compliance check:</strong> Verify BAAs (Business Associate Agreements), DPA terms, and data residency guarantees");
             }
 
             // Always add these

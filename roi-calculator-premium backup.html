@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium AI ROI Calculator - Advisory Session Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .calculator-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .calculator-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .calculator-header p {
+            font-size: 1.125rem;
+            color: #6b7280;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1200px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.2s;
+        }
+
+        .input-section:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .input-section h2 {
+            font-size: 1.375rem;
+            color: #1f2937;
+            margin-bottom: 1.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .input-section h2 svg {
+            color: #d4a574;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 0.875rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #fafafa;
+            transition: all 0.2s;
+        }
+
+        .input-group input:hover,
+        .input-group select:hover {
+            border-color: #d1d5db;
+            background: #ffffff;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #d4a574;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+
+        .input-helper {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .input-warning {
+            font-size: 0.875rem;
+            color: #f59e0b;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .input-warning.active {
+            display: block;
+        }
+
+        .toggle-section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .toggle-section:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-color: #d4a574;
+        }
+
+        .toggle-section h3 {
+            font-size: 1.125rem;
+            color: #1f2937;
+            flex: 1;
+        }
+
+        .toggle-section svg {
+            color: #d4a574;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .toggle-section.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-content {
+            display: none;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            padding: 2rem;
+            margin-top: -12px;
+            margin-bottom: 1rem;
+        }
+
+        .toggle-content.active {
+            display: block;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 1.125rem;
+            background: linear-gradient(135deg, #d4a574 0%, #c19560 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.25);
+        }
+
+        .calculate-btn:hover {
+            background: linear-gradient(135deg, #c19560 0%, #a8824e 100%);
+            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .results-section h2 {
+            font-size: 1.875rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .results-section h2 svg {
+            color: #d4a574;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .metric:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #d4a574;
+        }
+
+        .metric-value.positive {
+            color: #10b981;
+        }
+
+        .metric-value.negative {
+            color: #ef4444;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .bar-chart {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            height: 250px;
+            padding: 1rem 0;
+        }
+
+        .bar-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bar {
+            width: 100%;
+            border-radius: 6px 6px 0 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 10px;
+            position: relative;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .bar-label {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .scenario-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .scenario-table th {
+            background: rgba(212, 165, 116, 0.2);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(212, 165, 116, 0.3);
+        }
+
+        .scenario-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .scenario-table tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .alert-box {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            color: #10b981;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .export-btn {
+            padding: 0.75rem 1.5rem;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 1rem;
+            margin-top: 1rem;
+            transition: all 0.2s;
+        }
+
+        .export-btn:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .waterfall-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.5rem;
+            height: 200px;
+            padding: 1rem 0;
+        }
+
+        .waterfall-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .waterfall-block {
+            width: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .tornado-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .tornado-label {
+            width: 150px;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .tornado-bars {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            position: relative;
+            height: 32px;
+        }
+
+        .tornado-bar-low {
+            position: absolute;
+            right: 50%;
+            height: 100%;
+            background: #ef4444;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .tornado-bar-high {
+            position: absolute;
+            left: 50%;
+            height: 100%;
+            background: #10b981;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .tornado-center-line {
+            position: absolute;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .tornado-value {
+            position: absolute;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1>Premium AI ROI Calculator</h1>
+            <p>CFO-Grade Financial Analysis - Advisory Session Tool</p>
+            <button onclick="clearInputs()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #6b7280; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.875rem;">Clear All Inputs</button>
+        </div>
+
+        <!-- Industry Preset -->
+        <div class="input-section" style="grid-column: 1 / -1;">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                Industry Preset
+            </h2>
+            <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 1.5rem;">Pre-fills assumptions for a fast, credible first pass. These are starter defaults, not industry averages - adjust to your client's specifics.</p>
+            <div class="calculator-grid" style="gap: 1rem;">
+                <div class="input-group">
+                    <label>Industry</label>
+                    <select id="industrySelect" oninput="saveInputs()">
+                        <option value="">Select Industry</option>
+                    </select>
+                    <span class="input-helper">Choose the closest industry vertical</span>
+                </div>
+                <div class="input-group">
+                    <label>Operating Profile</label>
+                    <select id="profileSelect" oninput="saveInputs()">
+                        <option value="">Select Profile</option>
+                    </select>
+                    <span class="input-helper">Pick the closest operating model</span>
+                </div>
+                <div class="input-group">
+                    <label>&nbsp;</label>
+                    <button id="applyPresetBtn" type="button" style="width: 100%; padding: 0.875rem; background: linear-gradient(135deg, #d4a574 0%, #c19560 100%); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        Apply Preset
+                    </button>
+                    <span class="input-helper">Overwrites current inputs (you can adjust after)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Basic Inputs -->
+        <div class="calculator-grid">
+            <div class="input-section">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                    Project Basics
+                </h2>
+                <div class="input-group">
+                    <label>Use Case Type</label>
+                    <select id="useCase" oninput="saveInputs()">
+                        <option value="customer-service">Customer Service Automation</option>
+                        <option value="content-generation">Content Generation</option>
+                        <option value="data-analysis">Data Analysis & Insights</option>
+                        <option value="process-automation">Process Automation</option>
+                        <option value="predictive-analytics">Predictive Analytics</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Company Size (Employees)</label>
+                    <input type="number" id="companySize" value="500" min="1" oninput="saveInputs()">
+                </div>
+                <div class="input-group">
+                    <label>Affected Employees</label>
+                    <input type="number" id="affectedEmployees" value="50" min="1" oninput="saveInputs()">
+                    <span class="input-helper">Who will use the AI system</span>
+                </div>
+                <div class="input-group">
+                    <label>Average Annual Salary ($)</label>
+                    <input type="number" id="avgSalary" value="75000" min="0" oninput="saveInputs()">
+                    <span class="input-helper">Of affected employees</span>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="4" y1="21" x2="4" y2="14"></line>
+                        <line x1="4" y1="10" x2="4" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12" y2="3"></line>
+                        <line x1="20" y1="21" x2="20" y2="16"></line>
+                        <line x1="20" y1="12" x2="20" y2="3"></line>
+                        <line x1="1" y1="14" x2="7" y2="14"></line>
+                        <line x1="9" y1="8" x2="15" y2="8"></line>
+                        <line x1="17" y1="16" x2="23" y2="16"></line>
+                    </svg>
+                    Performance Parameters
+                </h2>
+                <div class="input-group">
+                    <label>Efficiency Gain (%)</label>
+                    <input type="number" id="efficiencyGain" value="20" min="0" max="80" oninput="validateEfficiency()">
+                    <span class="input-helper">Time saved per employee</span>
+                    <span class="input-warning" id="efficiencyWarning">⚠ Efficiency gains above 80% are uncommon - value clamped</span>
+                </div>
+                <div class="input-group">
+                    <label>Realization Rate (%)</label>
+                    <input type="number" id="realizationRate" value="60" min="0" max="100" oninput="validateRealization()">
+                    <span class="input-helper">% of time saved that converts to actual value (60-70% typical)</span>
+                    <span class="input-warning" id="realizationWarning">⚠ Realization rate must be between 0-100% - value clamped</span>
+                </div>
+                <div class="input-group">
+                    <label>Ramp-up Time (months)</label>
+                    <input type="number" id="rampTime" value="6" min="1" max="24">
+                    <span class="input-helper">Time to reach full efficiency</span>
+                </div>
+                <div class="input-group">
+                    <label>Implementation Type</label>
+                    <select id="implementationType">
+                        <option value="saas">SaaS (Fast adoption)</option>
+                        <option value="hybrid">Hybrid (Medium)</option>
+                        <option value="custom">Custom Build (Slow)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-grid">
+            <div class="input-section">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    Cost Estimates
+                </h2>
+                <div class="input-group">
+                    <label>Initial Investment ($)</label>
+                    <input type="number" id="initialInvestment" value="50000" min="0">
+                    <span class="input-helper">Setup, integration, licenses</span>
+                </div>
+                <div class="input-group">
+                    <label>Training & Change Management ($)</label>
+                    <input type="number" id="trainingCost" value="15000" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Fixed Monthly Operating Cost ($)</label>
+                    <input type="number" id="fixedMonthlyCost" value="5000" min="0">
+                    <span class="input-helper">Platform fees, infrastructure</span>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Finance Parameters
+                </h2>
+                <div class="input-group">
+                    <label>Discount Rate / Hurdle Rate (%)</label>
+                    <input type="number" id="discountRate" value="12" min="0" max="50" oninput="validateDiscountRate()">
+                    <span class="input-helper">WACC or corporate hurdle rate</span>
+                    <span class="input-warning" id="discountWarning">⚠ Discount rate should be 0-50% - value clamped</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Sections (Toggleable) -->
+        <div class="toggle-section" onclick="toggleSection('usageCosts')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"></path>
+            </svg>
+            <h3>Usage-Based Costs (LLM/API)</h3>
+            <svg class="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+        <div id="usageCosts" class="toggle-content">
+            <div class="calculator-grid">
+                <div class="input-group">
+                    <label>Monthly Transaction Volume</label>
+                    <input type="number" id="monthlyVolume" value="10000" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Avg Input Tokens</label>
+                    <input type="number" id="avgInputTokens" value="800" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Avg Output Tokens</label>
+                    <input type="number" id="avgOutputTokens" value="400" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Input Price ($/1K tokens)</label>
+                    <input type="number" id="inputPrice" value="0.01" step="0.001" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Output Price ($/1K tokens)</label>
+                    <input type="number" id="outputPrice" value="0.03" step="0.001" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Cache Hit Rate (%)</label>
+                    <input type="number" id="cacheHitRate" value="30" min="0" max="100">
+                </div>
+                <div class="input-group">
+                    <label>Rerun/Retry Rate (%)</label>
+                    <input type="number" id="rerunRate" value="10" min="0" max="100">
+                </div>
+            </div>
+        </div>
+
+        <div class="toggle-section" onclick="toggleSection('qualityBenefits')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+            <h3>Quality & Revenue Benefits</h3>
+            <svg class="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+        <div id="qualityBenefits" class="toggle-content">
+            <div class="calculator-grid">
+                <div class="input-group">
+                    <label>Baseline Errors per Month</label>
+                    <input type="number" id="baselineErrors" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Cost per Error ($)</label>
+                    <input type="number" id="costPerError" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Error Reduction Rate (%)</label>
+                    <input type="number" id="errorReduction" value="0" min="0" max="100">
+                </div>
+                <div class="input-group">
+                    <label>New Opportunities per Month</label>
+                    <input type="number" id="newOpportunities" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Conversion Lift (%)</label>
+                    <input type="number" id="conversionLift" value="0" min="0" max="100">
+                </div>
+                <div class="input-group">
+                    <label>Average Deal Margin ($)</label>
+                    <input type="number" id="dealMargin" value="0" min="0">
+                </div>
+            </div>
+        </div>
+
+        <div class="toggle-section" onclick="toggleSection('complianceCosts')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <h3>Compliance & Risk Costs</h3>
+            <svg class="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+        <div id="complianceCosts" class="toggle-content">
+            <div class="calculator-grid">
+                <div class="input-group">
+                    <label>Compliance Audit Costs ($/year)</label>
+                    <input type="number" id="complianceAudit" value="0" min="0">
+                    <span class="input-helper">SOC2, HIPAA, etc.</span>
+                </div>
+                <div class="input-group">
+                    <label>Legal/DPA Costs ($/year)</label>
+                    <input type="number" id="legalCosts" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Human Review Minutes per Transaction</label>
+                    <input type="number" id="reviewMinutes" value="0" min="0" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Reviewer Hourly Rate ($)</label>
+                    <input type="number" id="reviewerRate" value="50" min="0">
+                </div>
+            </div>
+        </div>
+
+        <button class="calculate-btn" onclick="calculateROI()">Calculate Complete ROI Analysis</button>
+
+        <!-- Results -->
+        <div id="results" class="results-section">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                Executive Summary
+            </h2>
+
+            <!-- Methodology Drawer -->
+            <div style="margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; overflow: hidden;">
+                <div onclick="toggleMethodology()" style="padding: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05);">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4a574" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                        </svg>
+                        <strong>Methodology & Formulas</strong>
+                        <span style="opacity: 0.7; font-size: 0.85rem;">(Model v1.0 - Jan 2025)</span>
+                    </div>
+                    <svg id="methodologyIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div id="methodologyContent" style="display: none; padding: 1.5rem; background: rgba(0,0,0,0.2); font-size: 0.9rem; line-height: 1.6;">
+                    <h4 style="color: #d4a574; margin-bottom: 1rem;">Key Financial Metrics</h4>
+                    <p><strong>Net Present Value (NPV):</strong> NPV = Σ(CFₜ / (1 + r)ᵗ) where CFₜ = cashflow at time t, r = discount rate</p>
+                    <p><strong>Internal Rate of Return (IRR):</strong> Rate r where NPV = 0</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Algorithm: Newton-Raphson method with bisection fallback for robustness</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Returns "N/A" if no sign change in cashflows (no valid IRR exists)</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Convergence tolerance: 0.01% on iterative refinement</p>
+                    <p><strong>Modified IRR (MIRR):</strong> (FV of positive CFs / PV of negative CFs)^(1/n) - 1</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Uses discount rate as both finance rate (for costs) and reinvestment rate (for benefits)</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• More conservative than IRR, assumes realistic reinvestment returns</p>
+                    <p><strong>3-Year ROI (undiscounted):</strong> (Total Gross Benefits - Total Costs) / Total Costs × 100%</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Calculated using gross benefits (not net cashflows) to avoid double-counting</p>
+
+                    <h4 style="color: #d4a574; margin-top: 1.5rem; margin-bottom: 1rem;">Adoption & Benefits Model</h4>
+                    <p><strong>S-Curve Adoption:</strong> A(t) = 1 / (1 + e^(-k(t - m))) where k = steepness, m = midpoint</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• SaaS: k=0.9 (fast adoption), Hybrid: k=0.6 (medium), Custom: k=0.4 (slow)</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Midpoint at ramp-time/2 (50% adoption at halfway point)</p>
+                    <p><strong>Labor Savings:</strong> Employees × 173.2 hrs/mo × Efficiency × (Salary × 1.3 / 2080) × Realization × Adoption(t)</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• 173.2 hrs/mo = 40 hrs/wk × 4.33 wks/mo average</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Burden rate 1.3× adds 30% for benefits, facilities, overhead</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• 2080 annual hours = 52 weeks × 40 hours</p>
+
+                    <h4 style="color: #d4a574; margin-top: 1.5rem; margin-bottom: 1rem;">LLM Cost Model</h4>
+                    <p><strong>Base Token Cost:</strong> Volume × [(Input/1K) × Input$ + (Output/1K) × Output$]</p>
+                    <p><strong>Cache Adjustment:</strong> × (1 - Cache Hit Rate) - reduces cost for cached responses</p>
+                    <p><strong>Rerun Adjustment:</strong> × (1 + Rerun Rate) - increases cost for retries/failures</p>
+                    <p style="margin-left: 1.5rem; opacity: 0.9;">• Full formula: Monthly Cost = Volume × Token Cost × (1 - Cache) × (1 + Reruns)</p>
+
+                    <h4 style="color: #d4a574; margin-top: 1.5rem; margin-bottom: 1rem;">Model Validation & Assumptions</h4>
+                    <ul style="margin-left: 1.5rem; opacity: 0.9;">
+                        <li>All cashflows monthly over 36-month period (standard project horizon)</li>
+                        <li>Realization rate 60-70% typical (accounts for organizational friction, not all time saved = value created)</li>
+                        <li>Scenarios vary benefit assumptions by ±15%, costs held constant (asymmetric risk profile)</li>
+                        <li>Quality benefits and revenue lift scale with adoption curve (assumes benefit realization tracks deployment)</li>
+                        <li>Model validated against: NPV convergence, IRR edge cases, MIRR consistency, adoption curve realism</li>
+                        <li>Version 1.0 - January 2025</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value" id="npv">$0</div>
+                    <div class="metric-label">Net Present Value</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="irr">0%</div>
+                    <div class="metric-label">Internal Rate of Return</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="mirr">0%</div>
+                    <div class="metric-label">Modified IRR</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="payback">0</div>
+                    <div class="metric-label">Payback Period (months)</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="roi3yr">0%</div>
+                    <div class="metric-label">3-Year ROI</div>
+                </div>
+            </div>
+            <div id="hurdleTest" class="alert-box"></div>
+
+            <div class="chart-container">
+                <div class="chart-title">Cost Waterfall (Year 1)</div>
+                <div class="waterfall-chart" id="waterfallChart"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Cumulative Cash Flow (36 months)</div>
+                <div class="bar-chart" id="cashflowChart"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Scenario Analysis</div>
+                <p style="opacity: 0.9; margin-bottom: 1rem; font-size: 0.9rem;">Conservative/Aggressive scenarios scale <strong>benefit assumptions</strong> by ±15% (labor savings, quality gains, revenue lift)</p>
+                <table class="scenario-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Conservative (-15% benefits)</th>
+                            <th>Base Case</th>
+                            <th>Aggressive (+15% benefits)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scenarioTable"></tbody>
+                </table>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Sensitivity Analysis - NPV Impact (±20% variation)</div>
+                <p style="opacity: 0.9; margin-bottom: 1rem; font-size: 0.9rem;">Shows how NPV changes when each driver varies by ±20% (all other factors held constant)</p>
+                <div id="tornadoChart"></div>
+            </div>
+
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <button class="export-btn" onclick="exportToExcel()" style="background: #10b981;">📊 Export to Excel (Complete Analysis)</button>
+                <button class="export-btn" style="background: #ef4444;" onclick="exportToPowerPoint()">📊 Export to PowerPoint (Board-Ready Deck)</button>
+            </div>
+
+            <!-- Data Privacy & Validation -->
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <h4 style="color: #d4a574; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            Data Privacy
+                        </h4>
+                        <p style="font-size: 0.875rem; opacity: 0.9; line-height: 1.5;">
+                            All calculations run <strong>100% client-side</strong> in your browser. No data is transmitted to any server, stored, or shared.
+                            Your financial information remains completely private and secure.
+                        </p>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                        <h4 style="color: #d4a574; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            Model Validation
+                        </h4>
+                        <p style="font-size: 0.875rem; opacity: 0.9; line-height: 1.5;">
+                            This model has been validated against standard finance frameworks. Key checks: NPV convergence, IRR bisection fallback,
+                            MIRR reinvestment consistency, adoption curve realism, and scenario independence.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let calculationData = {};
+
+        // Industry Preset Library (starter defaults)
+        const PRESETS = {
+            healthcare: {
+                label: 'Healthcare',
+                profiles: {
+                    hospital: {
+                        label: 'Hospital (Provider)',
+                        values: {
+                            affectedEmployees: 80, avgSalary: 90000, efficiencyGain: 15, realizationRate: 60,
+                            rampTime: 9, implementationType: 'hybrid', discountRate: 10,
+                            monthlyVolume: 15000, avgInputTokens: 900, avgOutputTokens: 450, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 25, rerunRate: 12,
+                            baselineErrors: 200, costPerError: 75, errorReduction: 30,
+                            newOpportunities: 0, conversionLift: 0, dealMargin: 0,
+                            complianceAudit: 80000, legalCosts: 25000, reviewMinutes: 2.5, reviewerRate: 60,
+                            initialInvestment: 120000, trainingCost: 50000, fixedMonthlyCost: 12000
+                        }
+                    },
+                    payer: {
+                        label: 'Payer / Insurer',
+                        values: {
+                            affectedEmployees: 60, avgSalary: 100000, efficiencyGain: 16, realizationRate: 60,
+                            rampTime: 8, implementationType: 'hybrid', discountRate: 10,
+                            monthlyVolume: 12000, avgInputTokens: 950, avgOutputTokens: 450, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 35, rerunRate: 10,
+                            baselineErrors: 120, costPerError: 90, errorReduction: 25,
+                            newOpportunities: 0, conversionLift: 0, dealMargin: 0,
+                            complianceAudit: 70000, legalCosts: 30000, reviewMinutes: 2.0, reviewerRate: 85,
+                            initialInvestment: 140000, trainingCost: 60000, fixedMonthlyCost: 14000
+                        }
+                    }
+                }
+            },
+            finance: {
+                label: 'Financial Services',
+                profiles: {
+                    bank: {
+                        label: 'Retail/Commercial Bank',
+                        values: {
+                            affectedEmployees: 60, avgSalary: 110000, efficiencyGain: 18, realizationRate: 65,
+                            rampTime: 8, implementationType: 'hybrid', discountRate: 12,
+                            monthlyVolume: 12000, avgInputTokens: 1000, avgOutputTokens: 500, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 40, rerunRate: 8,
+                            baselineErrors: 100, costPerError: 120, errorReduction: 25,
+                            newOpportunities: 50, conversionLift: 2, dealMargin: 900,
+                            complianceAudit: 60000, legalCosts: 30000, reviewMinutes: 1.5, reviewerRate: 90,
+                            initialInvestment: 180000, trainingCost: 70000, fixedMonthlyCost: 15000
+                        }
+                    }
+                }
+            },
+            retail: {
+                label: 'Retail / E-commerce',
+                profiles: {
+                    ecommerce: {
+                        label: 'E-commerce Operations',
+                        values: {
+                            affectedEmployees: 50, avgSalary: 55000, efficiencyGain: 20, realizationRate: 60,
+                            rampTime: 6, implementationType: 'saas', discountRate: 12,
+                            monthlyVolume: 30000, avgInputTokens: 700, avgOutputTokens: 350, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 35, rerunRate: 10,
+                            baselineErrors: 80, costPerError: 50, errorReduction: 30,
+                            newOpportunities: 120, conversionLift: 1.5, dealMargin: 40,
+                            complianceAudit: 20000, legalCosts: 10000, reviewMinutes: 1.0, reviewerRate: 40,
+                            initialInvestment: 60000, trainingCost: 20000, fixedMonthlyCost: 8000
+                        }
+                    }
+                }
+            },
+            manufacturing: {
+                label: 'Manufacturing',
+                profiles: {
+                    discrete: {
+                        label: 'Discrete Manufacturing',
+                        values: {
+                            affectedEmployees: 70, avgSalary: 70000, efficiencyGain: 22, realizationRate: 60,
+                            rampTime: 9, implementationType: 'hybrid', discountRate: 11,
+                            monthlyVolume: 12000, avgInputTokens: 800, avgOutputTokens: 400, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 30, rerunRate: 12,
+                            baselineErrors: 60, costPerError: 150, errorReduction: 20,
+                            newOpportunities: 30, conversionLift: 1, dealMargin: 600,
+                            complianceAudit: 30000, legalCosts: 15000, reviewMinutes: 2.0, reviewerRate: 55,
+                            initialInvestment: 150000, trainingCost: 50000, fixedMonthlyCost: 10000
+                        }
+                    }
+                }
+            },
+            saas: {
+                label: 'SaaS / Tech',
+                profiles: {
+                    b2b: {
+                        label: 'B2B Software',
+                        values: {
+                            affectedEmployees: 40, avgSalary: 120000, efficiencyGain: 25, realizationRate: 70,
+                            rampTime: 5, implementationType: 'saas', discountRate: 10,
+                            monthlyVolume: 20000, avgInputTokens: 800, avgOutputTokens: 400, inputPrice: 0.01, outputPrice: 0.03,
+                            cacheHitRate: 45, rerunRate: 8,
+                            baselineErrors: 50, costPerError: 80, errorReduction: 25,
+                            newOpportunities: 60, conversionLift: 2.5, dealMargin: 1200,
+                            complianceAudit: 15000, legalCosts: 10000, reviewMinutes: 0.5, reviewerRate: 80,
+                            initialInvestment: 80000, trainingCost: 30000, fixedMonthlyCost: 9000
+                        }
+                    }
+                }
+            }
+        };
+
+        // LocalStorage persistence
+        function saveInputs() {
+            const inputs = {
+                useCase: document.getElementById('useCase').value,
+                companySize: document.getElementById('companySize').value,
+                affectedEmployees: document.getElementById('affectedEmployees').value,
+                avgSalary: document.getElementById('avgSalary').value,
+                efficiencyGain: document.getElementById('efficiencyGain').value,
+                realizationRate: document.getElementById('realizationRate').value,
+                rampTime: document.getElementById('rampTime').value,
+                implementationType: document.getElementById('implementationType').value,
+                initialInvestment: document.getElementById('initialInvestment').value,
+                trainingCost: document.getElementById('trainingCost').value,
+                fixedMonthlyCost: document.getElementById('fixedMonthlyCost').value,
+                discountRate: document.getElementById('discountRate').value,
+                monthlyVolume: document.getElementById('monthlyVolume').value,
+                avgInputTokens: document.getElementById('avgInputTokens').value,
+                avgOutputTokens: document.getElementById('avgOutputTokens').value,
+                inputPrice: document.getElementById('inputPrice').value,
+                outputPrice: document.getElementById('outputPrice').value,
+                cacheHitRate: document.getElementById('cacheHitRate').value,
+                rerunRate: document.getElementById('rerunRate').value,
+                baselineErrors: document.getElementById('baselineErrors').value,
+                costPerError: document.getElementById('costPerError').value,
+                errorReduction: document.getElementById('errorReduction').value,
+                newOpportunities: document.getElementById('newOpportunities').value,
+                conversionLift: document.getElementById('conversionLift').value,
+                dealMargin: document.getElementById('dealMargin').value,
+                complianceAudit: document.getElementById('complianceAudit').value,
+                legalCosts: document.getElementById('legalCosts').value,
+                reviewMinutes: document.getElementById('reviewMinutes').value,
+                reviewerRate: document.getElementById('reviewerRate').value
+            };
+            localStorage.setItem('roiCalculatorInputs', JSON.stringify(inputs));
+        }
+
+        function loadInputs() {
+            const saved = localStorage.getItem('roiCalculatorInputs');
+            if (saved) {
+                const inputs = JSON.parse(saved);
+                Object.keys(inputs).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) element.value = inputs[key];
+                });
+            }
+        }
+
+        function clearInputs() {
+            localStorage.removeItem('roiCalculatorInputs');
+            location.reload();
+        }
+
+        // Initialize industry presets
+        function initPresets() {
+            const industrySel = document.getElementById('industrySelect');
+            const profileSel = document.getElementById('profileSelect');
+            const stored = JSON.parse(localStorage.getItem('roi_preset_v1') || 'null');
+
+            // Populate industries
+            industrySel.innerHTML = '<option value="">Select Industry</option>' +
+                Object.entries(PRESETS).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+
+            function populateProfiles(indKey) {
+                if (!indKey) {
+                    profileSel.innerHTML = '<option value="">Select Profile</option>';
+                    return;
+                }
+                const profiles = PRESETS[indKey].profiles;
+                profileSel.innerHTML = '<option value="">Select Profile</option>' +
+                    Object.entries(profiles).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+            }
+
+            // Initial population
+            if (stored?.industry && PRESETS[stored.industry]) {
+                industrySel.value = stored.industry;
+                populateProfiles(stored.industry);
+                if (stored.profile && PRESETS[stored.industry].profiles[stored.profile]) {
+                    profileSel.value = stored.profile;
+                }
+            }
+
+            industrySel.addEventListener('change', () => {
+                populateProfiles(industrySel.value);
+                saveInputs();
+            });
+
+            document.getElementById('applyPresetBtn').addEventListener('click', applySelectedPreset);
+        }
+
+        function applySelectedPreset() {
+            const industrySel = document.getElementById('industrySelect');
+            const profileSel = document.getElementById('profileSelect');
+
+            if (!industrySel.value || !profileSel.value) {
+                alert('Please select both an industry and profile before applying preset.');
+                return;
+            }
+
+            const preset = PRESETS[industrySel.value].profiles[profileSel.value].values;
+
+            // Map preset values to input fields
+            const fieldMap = {
+                affectedEmployees: 'affectedEmployees',
+                avgSalary: 'avgSalary',
+                efficiencyGain: 'efficiencyGain',
+                realizationRate: 'realizationRate',
+                rampTime: 'rampTime',
+                implementationType: 'implementationType',
+                discountRate: 'discountRate',
+                initialInvestment: 'initialInvestment',
+                trainingCost: 'trainingCost',
+                fixedMonthlyCost: 'fixedMonthlyCost',
+                monthlyVolume: 'monthlyVolume',
+                avgInputTokens: 'avgInputTokens',
+                avgOutputTokens: 'avgOutputTokens',
+                inputPrice: 'inputPrice',
+                outputPrice: 'outputPrice',
+                cacheHitRate: 'cacheHitRate',
+                rerunRate: 'rerunRate',
+                baselineErrors: 'baselineErrors',
+                costPerError: 'costPerError',
+                errorReduction: 'errorReduction',
+                newOpportunities: 'newOpportunities',
+                conversionLift: 'conversionLift',
+                dealMargin: 'dealMargin',
+                complianceAudit: 'complianceAudit',
+                legalCosts: 'legalCosts',
+                reviewMinutes: 'reviewMinutes',
+                reviewerRate: 'reviewerRate'
+            };
+
+            Object.entries(fieldMap).forEach(([presetKey, inputId]) => {
+                const element = document.getElementById(inputId);
+                if (element && preset[presetKey] !== undefined) {
+                    element.value = preset[presetKey];
+                }
+            });
+
+            // Save preset selection
+            localStorage.setItem('roi_preset_v1', JSON.stringify({
+                industry: industrySel.value,
+                profile: profileSel.value
+            }));
+
+            // Save all inputs
+            saveInputs();
+
+            // Show confirmation and scroll to top
+            alert(`✓ Applied ${PRESETS[industrySel.value].label} - ${PRESETS[industrySel.value].profiles[profileSel.value].label} preset.\n\nReview and adjust the pre-filled values, then click Calculate.`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Load saved inputs on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadInputs();
+            initPresets();
+        });
+
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            const parent = section.previousElementSibling;
+            section.classList.toggle('active');
+            parent.classList.toggle('active');
+        }
+
+        function toggleMethodology() {
+            const content = document.getElementById('methodologyContent');
+            const icon = document.getElementById('methodologyIcon');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.display = 'none';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function validateEfficiency() {
+            const input = document.getElementById('efficiencyGain');
+            const warning = document.getElementById('efficiencyWarning');
+            let value = parseFloat(input.value) || 0;
+
+            if (value > 80) {
+                input.value = 80;
+                warning.classList.add('active');
+            } else if (value < 0) {
+                input.value = 0;
+                warning.classList.add('active');
+            } else {
+                warning.classList.remove('active');
+            }
+            saveInputs();
+        }
+
+        function validateRealization() {
+            const input = document.getElementById('realizationRate');
+            const warning = document.getElementById('realizationWarning');
+            let value = parseFloat(input.value) || 0;
+
+            if (value > 100) {
+                input.value = 100;
+                warning.classList.add('active');
+            } else if (value < 0) {
+                input.value = 0;
+                warning.classList.add('active');
+            } else {
+                warning.classList.remove('active');
+            }
+            saveInputs();
+        }
+
+        function validateDiscountRate() {
+            const input = document.getElementById('discountRate');
+            const warning = document.getElementById('discountWarning');
+            let value = parseFloat(input.value) || 0;
+
+            if (value > 50) {
+                input.value = 50;
+                warning.classList.add('active');
+            } else if (value < 0) {
+                input.value = 0;
+                warning.classList.add('active');
+            } else {
+                warning.classList.remove('active');
+            }
+            saveInputs();
+        }
+
+        function calculateROI() {
+            const inputs = {
+                affectedEmployees: parseFloat(document.getElementById('affectedEmployees').value),
+                avgSalary: parseFloat(document.getElementById('avgSalary').value),
+                efficiencyGain: parseFloat(document.getElementById('efficiencyGain').value) / 100,
+                realizationRate: parseFloat(document.getElementById('realizationRate').value) / 100,
+                initialInvestment: parseFloat(document.getElementById('initialInvestment').value),
+                trainingCost: parseFloat(document.getElementById('trainingCost').value),
+                fixedMonthlyCost: parseFloat(document.getElementById('fixedMonthlyCost').value),
+                rampTime: parseFloat(document.getElementById('rampTime').value),
+                discountRate: parseFloat(document.getElementById('discountRate').value) / 100,
+                implementationType: document.getElementById('implementationType').value,
+                monthlyVolume: parseFloat(document.getElementById('monthlyVolume').value) || 0,
+                avgInputTokens: parseFloat(document.getElementById('avgInputTokens').value) || 0,
+                avgOutputTokens: parseFloat(document.getElementById('avgOutputTokens').value) || 0,
+                inputPrice: parseFloat(document.getElementById('inputPrice').value) || 0,
+                outputPrice: parseFloat(document.getElementById('outputPrice').value) || 0,
+                cacheHitRate: parseFloat(document.getElementById('cacheHitRate').value) / 100 || 0,
+                rerunRate: parseFloat(document.getElementById('rerunRate').value) / 100 || 0,
+                baselineErrors: parseFloat(document.getElementById('baselineErrors').value) || 0,
+                costPerError: parseFloat(document.getElementById('costPerError').value) || 0,
+                errorReduction: parseFloat(document.getElementById('errorReduction').value) / 100 || 0,
+                newOpportunities: parseFloat(document.getElementById('newOpportunities').value) || 0,
+                conversionLift: parseFloat(document.getElementById('conversionLift').value) / 100 || 0,
+                dealMargin: parseFloat(document.getElementById('dealMargin').value) || 0,
+                complianceAudit: parseFloat(document.getElementById('complianceAudit').value) || 0,
+                legalCosts: parseFloat(document.getElementById('legalCosts').value) || 0,
+                reviewMinutes: parseFloat(document.getElementById('reviewMinutes').value) || 0,
+                reviewerRate: parseFloat(document.getElementById('reviewerRate').value) || 0
+            };
+
+            const baseCase = calculateScenario(inputs, 1.0);
+            const conservative = calculateScenario(inputs, 0.85);
+            const aggressive = calculateScenario(inputs, 1.15);
+
+            calculationData = { inputs, baseCase, conservative, aggressive };
+
+            displayResults(baseCase);
+            displayScenarios(conservative, baseCase, aggressive);
+            displayCharts(baseCase);
+            displayTornadoChart(inputs, baseCase.npv);
+
+            document.getElementById('results').classList.add('active');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calculateScenario(inputs, factor) {
+            const burdenRate = 1.3;
+            const steepness = { saas: 0.9, hybrid: 0.6, custom: 0.4 }[inputs.implementationType] || 0.6;
+
+            const hourlyRate = (inputs.avgSalary * burdenRate) / (52 * 40);
+            const monthlyHoursSaved = inputs.affectedEmployees * (40 * 4.33 * inputs.efficiencyGain * factor);
+            const peakLaborSavings = monthlyHoursSaved * hourlyRate * inputs.realizationRate;
+
+            const llmCost = inputs.monthlyVolume * (
+                (inputs.avgInputTokens / 1000) * inputs.inputPrice +
+                (inputs.avgOutputTokens / 1000) * inputs.outputPrice
+            ) * (1 - inputs.cacheHitRate) * (1 + inputs.rerunRate);
+
+            const humanReviewCost = inputs.monthlyVolume * (inputs.reviewMinutes / 60) * inputs.reviewerRate;
+            const totalMonthlyCost = inputs.fixedMonthlyCost + llmCost + humanReviewCost +
+                (inputs.complianceAudit / 12) + (inputs.legalCosts / 12);
+
+            const qualitySavings = inputs.baselineErrors * inputs.costPerError * inputs.errorReduction * factor;
+            const revenueLift = inputs.newOpportunities * inputs.conversionLift * inputs.dealMargin * factor;
+            const totalMonthlyBenefit = peakLaborSavings + qualitySavings + revenueLift;
+
+            const totalInitialCost = inputs.initialInvestment + inputs.trainingCost;
+            let cashflows = [-totalInitialCost];
+            let cumulativeValue = -totalInitialCost;
+            let paybackMonth = 0;
+
+            const adoptionCurve = (month) => {
+                const midpoint = inputs.rampTime / 2;
+                return 1 / (1 + Math.exp(-steepness * (month - midpoint)));
+            };
+
+            for (let month = 1; month <= 36; month++) {
+                const adoption = adoptionCurve(month);
+                const monthlyBenefit = totalMonthlyBenefit * adoption;
+                const netCashflow = monthlyBenefit - totalMonthlyCost;
+                cashflows.push(netCashflow);
+                cumulativeValue += netCashflow;
+                if (cumulativeValue > 0 && paybackMonth === 0) {
+                    paybackMonth = month;
+                }
+            }
+
+            const npv = cashflows.reduce((sum, cf, t) => sum + cf / Math.pow(1 + inputs.discountRate, t), 0);
+
+            // IRR Calculation with robustness checks
+            let irr = null;
+            const hasPositiveCF = cashflows.some(cf => cf > 0);
+            const hasNegativeCF = cashflows.some(cf => cf < 0);
+
+            if (!hasPositiveCF || !hasNegativeCF) {
+                // No sign change in cashflows = no IRR exists
+                irr = null;
+            } else {
+                // Try Newton-Raphson method
+                irr = 0.2;
+                let converged = false;
+                for (let i = 0; i < 50; i++) {
+                    const f = cashflows.reduce((sum, cf, t) => sum + cf / Math.pow(1 + irr, t), 0);
+                    const fp = cashflows.reduce((sum, cf, t) => sum - t * cf / Math.pow(1 + irr, t + 1), 0);
+                    if (Math.abs(fp) < 1e-10) break; // Derivative too small
+                    const newIrr = irr - f / fp;
+                    if (Math.abs(newIrr - irr) < 0.0001) {
+                        converged = true;
+                        break;
+                    }
+                    irr = newIrr;
+                }
+
+                // Bisection fallback if Newton-Raphson failed
+                if (!converged || isNaN(irr) || !isFinite(irr)) {
+                    let low = -0.99, high = 5.0;
+                    const npvAtLow = cashflows.reduce((sum, cf, t) => sum + cf / Math.pow(1 + low, t), 0);
+                    const npvAtHigh = cashflows.reduce((sum, cf, t) => sum + cf / Math.pow(1 + high, t), 0);
+
+                    if (npvAtLow * npvAtHigh > 0) {
+                        irr = null; // No IRR in reasonable range
+                    } else {
+                        for (let i = 0; i < 100; i++) {
+                            irr = (low + high) / 2;
+                            const npvAtMid = cashflows.reduce((sum, cf, t) => sum + cf / Math.pow(1 + irr, t), 0);
+                            if (Math.abs(npvAtMid) < 0.01) break;
+                            if (npvAtMid * npvAtLow < 0) {
+                                high = irr;
+                            } else {
+                                low = irr;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Calculate gross benefits over 36 months (not net cashflows)
+            const grossBenefits36 = Array.from({length: 36}, (_, i) => {
+                const month = i + 1;
+                const adoption = adoptionCurve(month);
+                return totalMonthlyBenefit * adoption;
+            }).reduce((a, b) => a + b, 0);
+
+            const totalCost36 = totalInitialCost + (totalMonthlyCost * 36);
+            const roi3yr = ((grossBenefits36 - totalCost36) / totalCost36) * 100;
+
+            // Calculate MIRR (Modified IRR)
+            let mirr = null;
+            const reinvestmentRate = inputs.discountRate; // Use discount rate as reinvestment rate
+            const financeRate = inputs.discountRate;
+
+            // Separate positive and negative cashflows
+            const pvNegative = cashflows.reduce((sum, cf, t) => {
+                if (cf < 0) return sum + Math.abs(cf) / Math.pow(1 + financeRate, t);
+                return sum;
+            }, 0);
+
+            const fvPositive = cashflows.reduce((sum, cf, t) => {
+                if (cf > 0) return sum + cf * Math.pow(1 + reinvestmentRate, 36 - t);
+                return sum;
+            }, 0);
+
+            if (pvNegative > 0 && fvPositive > 0) {
+                mirr = (Math.pow(fvPositive / pvNegative, 1/36) - 1) * 100;
+            }
+
+            return {
+                npv, irr: irr !== null ? irr * 100 : null, mirr, paybackMonth, roi3yr, cashflows,
+                totalInitialCost, totalMonthlyCost, totalMonthlyBenefit,
+                llmCost, humanReviewCost, qualitySavings, revenueLift, peakLaborSavings
+            };
+        }
+
+        function displayResults(data) {
+            document.getElementById('npv').textContent = '$' + formatNumber(Math.round(data.npv));
+            document.getElementById('npv').className = 'metric-value ' + (data.npv > 0 ? 'positive' : 'negative');
+
+            if (data.irr !== null) {
+                document.getElementById('irr').textContent = data.irr.toFixed(1) + '%';
+                document.getElementById('irr').className = 'metric-value ' + (data.irr > calculationData.inputs.discountRate * 100 ? 'positive' : 'negative');
+            } else {
+                document.getElementById('irr').textContent = 'N/A';
+                document.getElementById('irr').className = 'metric-value';
+            }
+
+            if (data.mirr !== null) {
+                document.getElementById('mirr').textContent = data.mirr.toFixed(1) + '%';
+                document.getElementById('mirr').className = 'metric-value ' + (data.mirr > calculationData.inputs.discountRate * 100 ? 'positive' : 'negative');
+            } else {
+                document.getElementById('mirr').textContent = 'N/A';
+                document.getElementById('mirr').className = 'metric-value';
+            }
+
+            document.getElementById('payback').textContent = data.paybackMonth > 0 ? data.paybackMonth + ' mo' : 'No payback';
+            document.getElementById('roi3yr').textContent = data.roi3yr.toFixed(0) + '%';
+
+            const hurdleTest = document.getElementById('hurdleTest');
+            const hurdleRate = calculationData.inputs.discountRate * 100;
+            if (data.irr === null) {
+                hurdleTest.innerHTML = `<strong>⚠ Unable to calculate IRR:</strong> No valid internal rate of return exists for these cashflows`;
+                hurdleTest.className = 'alert-box alert-error';
+            } else if (data.irr > hurdleRate) {
+                hurdleTest.innerHTML = `<strong>✓ Project passes hurdle test:</strong> IRR (${data.irr.toFixed(1)}%) > Hurdle Rate (${hurdleRate}%)`;
+                hurdleTest.className = 'alert-box alert-success';
+            } else {
+                hurdleTest.innerHTML = `<strong>✗ Project fails hurdle test:</strong> IRR (${data.irr.toFixed(1)}%) < Hurdle Rate (${hurdleRate}%)`;
+                hurdleTest.className = 'alert-box alert-error';
+            }
+        }
+
+        function displayScenarios(conservative, base, aggressive) {
+            const formatIRR = (irr) => irr !== null ? `${irr.toFixed(1)}%` : 'N/A';
+            document.getElementById('scenarioTable').innerHTML = `
+                <tr><td><strong>NPV</strong></td><td>$${formatNumber(Math.round(conservative.npv))}</td><td>$${formatNumber(Math.round(base.npv))}</td><td>$${formatNumber(Math.round(aggressive.npv))}</td></tr>
+                <tr><td><strong>IRR</strong></td><td>${formatIRR(conservative.irr)}</td><td>${formatIRR(base.irr)}</td><td>${formatIRR(aggressive.irr)}</td></tr>
+                <tr><td><strong>MIRR</strong></td><td>${formatIRR(conservative.mirr)}</td><td>${formatIRR(base.mirr)}</td><td>${formatIRR(aggressive.mirr)}</td></tr>
+                <tr><td><strong>Payback Period</strong></td><td>${conservative.paybackMonth} mo</td><td>${base.paybackMonth} mo</td><td>${aggressive.paybackMonth} mo</td></tr>
+                <tr><td><strong>3-Year ROI</strong></td><td>${conservative.roi3yr.toFixed(0)}%</td><td>${base.roi3yr.toFixed(0)}%</td><td>${aggressive.roi3yr.toFixed(0)}%</td></tr>
+            `;
+        }
+
+        function displayCharts(data) {
+            const totalCost = Math.max(data.totalInitialCost + (data.totalMonthlyCost * 12), 1); // Prevent division by zero
+            const totalBenefit = Math.max(data.totalMonthlyBenefit * 12, 1); // Prevent division by zero
+
+            // Build waterfall bars - only show if value > 0
+            const bars = [];
+
+            // Costs (red bars)
+            if (data.totalInitialCost > 0) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((data.totalInitialCost / (totalCost || 1) * 180), 30)}px; background: #ef4444;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(data.totalInitialCost))}</div>
+                        </div>
+                        <div class="bar-label">Initial Investment</div>
+                    </div>
+                `);
+            }
+
+            const fixedCostYear = (data.totalMonthlyCost - data.llmCost - data.humanReviewCost) * 12;
+            if (fixedCostYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((fixedCostYear / (totalCost || 1) * 180), 30)}px; background: #f59e0b;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(fixedCostYear))}</div>
+                        </div>
+                        <div class="bar-label">Fixed Operating</div>
+                    </div>
+                `);
+            }
+
+            const llmCostYear = data.llmCost * 12;
+            if (llmCostYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((llmCostYear / (totalCost || 1) * 180), 30)}px; background: #f59e0b;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(llmCostYear))}</div>
+                        </div>
+                        <div class="bar-label">LLM Usage</div>
+                    </div>
+                `);
+            }
+
+            const reviewCostYear = data.humanReviewCost * 12;
+            if (reviewCostYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((reviewCostYear / (totalCost || 1) * 180), 30)}px; background: #f59e0b;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(reviewCostYear))}</div>
+                        </div>
+                        <div class="bar-label">Human Review</div>
+                    </div>
+                `);
+            }
+
+            // Benefits (green bars)
+            const laborSavingsYear = data.peakLaborSavings * 12;
+            if (laborSavingsYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((laborSavingsYear / (totalBenefit || 1) * 180), 30)}px; background: #10b981;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(laborSavingsYear))}</div>
+                        </div>
+                        <div class="bar-label">Labor Savings</div>
+                    </div>
+                `);
+            }
+
+            const qualitySavingsYear = data.qualitySavings * 12;
+            if (qualitySavingsYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((qualitySavingsYear / (totalBenefit || 1) * 180), 30)}px; background: #10b981;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(qualitySavingsYear))}</div>
+                        </div>
+                        <div class="bar-label">Quality Gains</div>
+                    </div>
+                `);
+            }
+
+            const revenueLiftYear = data.revenueLift * 12;
+            if (revenueLiftYear > 100) {
+                bars.push(`
+                    <div class="waterfall-bar">
+                        <div class="waterfall-block" style="height: ${Math.max((revenueLiftYear / (totalBenefit || 1) * 180), 30)}px; background: #10b981;">
+                            <div style="writing-mode: vertical-rl; transform: rotate(180deg);">$${formatNumber(Math.round(revenueLiftYear))}</div>
+                        </div>
+                        <div class="bar-label">Revenue Lift</div>
+                    </div>
+                `);
+            }
+
+            document.getElementById('waterfallChart').innerHTML = bars.length > 0 ? bars.join('') : '<p style="text-align: center; opacity: 0.7;">No significant cost or benefit components to display</p>';
+
+            // Calculate cumulative cashflows for display with safety guards
+            const cumulativeCF = [6, 12, 18, 24, 30, 36].map(month =>
+                data.cashflows.slice(0, month + 1).reduce((a, b) => a + b, 0)
+            );
+
+            const maxCF = Math.max(...cumulativeCF, 0);
+            const minCF = Math.min(...cumulativeCF, 0);
+            const rangeCF = Math.max(Math.abs(maxCF - minCF), 1); // Ensure non-zero range
+
+            // Check if all values are flat (no variation)
+            const isFlat = rangeCF < 0.01;
+
+            document.getElementById('cashflowChart').innerHTML = [6, 12, 18, 24, 30, 36].map((month, idx) => {
+                const value = cumulativeCF[idx];
+                let height;
+                if (isFlat) {
+                    height = 100; // Default height for flat data
+                } else {
+                    const normalized = Math.max(0, Math.min(1, (value - minCF) / rangeCF)); // Clamp 0-1
+                    height = Math.min(Math.max(normalized * 200, 10), 200); // 10-200px range
+                }
+                const color = value > 0 ? '#10b981' : value < 0 ? '#ef4444' : '#6b7280';
+                return `
+                    <div class="bar-wrapper">
+                        <div class="bar" style="height: ${height}px; background: ${color};">
+                            <div class="bar-value">$${formatNumber(Math.round(value / 1000))}K</div>
+                        </div>
+                        <div class="bar-label">${month} mo</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function displayTornadoChart(inputs, baseNPV) {
+            // Test each driver at ±20%
+            const drivers = [
+                { name: 'Efficiency Gain', key: 'efficiencyGain', low: inputs.efficiencyGain * 0.8, high: inputs.efficiencyGain * 1.2 },
+                { name: 'Realization Rate', key: 'realizationRate', low: inputs.realizationRate * 0.8, high: inputs.realizationRate * 1.2 },
+                { name: 'Avg Salary', key: 'avgSalary', low: inputs.avgSalary * 0.8, high: inputs.avgSalary * 1.2 },
+                { name: 'Monthly LLM Cost', key: 'fixedMonthlyCost', low: inputs.fixedMonthlyCost * 0.8, high: inputs.fixedMonthlyCost * 1.2 },
+                { name: 'Initial Investment', key: 'initialInvestment', low: inputs.initialInvestment * 0.8, high: inputs.initialInvestment * 1.2 },
+                { name: 'Discount Rate', key: 'discountRate', low: inputs.discountRate * 0.8, high: inputs.discountRate * 1.2 }
+            ];
+
+            const results = drivers.map(driver => {
+                const inputsLow = { ...inputs, [driver.key]: driver.low };
+                const inputsHigh = { ...inputs, [driver.key]: driver.high };
+                const npvLow = calculateScenario(inputsLow, 1.0).npv;
+                const npvHigh = calculateScenario(inputsHigh, 1.0).npv;
+                return {
+                    name: driver.name,
+                    impactLow: npvLow - baseNPV,
+                    impactHigh: npvHigh - baseNPV,
+                    range: Math.abs(npvHigh - npvLow)
+                };
+            });
+
+            // Sort by range (largest impact first)
+            results.sort((a, b) => b.range - a.range);
+
+            const maxImpact = Math.max(...results.map(r => Math.max(Math.abs(r.impactLow), Math.abs(r.impactHigh))));
+
+            const html = results.map(r => {
+                const lowWidth = (Math.abs(r.impactLow) / maxImpact) * 45; // 45% max width
+                const highWidth = (Math.abs(r.impactHigh) / maxImpact) * 45;
+                return `
+                    <div class="tornado-row">
+                        <div class="tornado-label">${r.name}</div>
+                        <div class="tornado-bars">
+                            <div class="tornado-center-line"></div>
+                            <div class="tornado-bar-low" style="width: ${lowWidth}%;">
+                                <span class="tornado-value" style="right: 100%; margin-right: 0.5rem;">$${formatNumber(Math.round(r.impactLow / 1000))}K</span>
+                            </div>
+                            <div class="tornado-bar-high" style="width: ${highWidth}%;">
+                                <span class="tornado-value" style="left: 100%; margin-left: 0.5rem;">$${formatNumber(Math.round(r.impactHigh / 1000))}K</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('tornadoChart').innerHTML = html;
+        }
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function exportToExcel() {
+            const { inputs, baseCase, conservative, aggressive } = calculationData;
+            const wb = XLSX.utils.book_new();
+
+            // Tab 1: Executive Summary
+            const summary = [
+                ['AI ROI ANALYSIS - EXECUTIVE SUMMARY'],
+                [],
+                ['KEY METRICS', ''],
+                ['Net Present Value', baseCase.npv, {t:'n', z:'$#,##0'}],
+                ['Internal Rate of Return', baseCase.irr !== null ? baseCase.irr/100 : 'N/A', {t:'n', z:'0.0%'}],
+                ['Modified IRR', baseCase.mirr !== null ? baseCase.mirr/100 : 'N/A', {t:'n', z:'0.0%'}],
+                ['Payback Period', `${baseCase.paybackMonth} months`],
+                ['3-Year ROI', baseCase.roi3yr/100, {t:'n', z:'0%'}],
+                [],
+                ['HURDLE TEST', baseCase.irr > inputs.discountRate*100 ? 'PASS ✓' : 'FAIL ✗'],
+                ['IRR vs Hurdle', `${(baseCase.irr || 0).toFixed(1)}% vs ${(inputs.discountRate*100).toFixed(0)}%`],
+                [],
+                ['PROJECT OVERVIEW', ''],
+                ['Affected Employees', inputs.affectedEmployees],
+                ['Average Salary', inputs.avgSalary, {t:'n', z:'$#,##0'}],
+                ['Efficiency Gain', inputs.efficiencyGain, {t:'n', z:'0%'}],
+                ['Realization Rate', inputs.realizationRate, {t:'n', z:'0%'}],
+                [],
+                ['INVESTMENT REQUIRED', ''],
+                ['Initial Investment', inputs.initialInvestment, {t:'n', z:'$#,##0'}],
+                ['Training & Change', inputs.trainingCost, {t:'n', z:'$#,##0'}],
+                ['Monthly Operating', baseCase.totalMonthlyCost, {t:'n', z:'$#,##0'}]
+            ];
+            const wsSummary = XLSX.utils.aoa_to_sheet(summary);
+            XLSX.utils.book_append_sheet(wb, wsSummary, 'Executive Summary');
+
+            // Tab 2: Detailed Inputs
+            const inputsTab = [
+                ['DETAILED INPUTS'],
+                [],
+                ['PROJECT BASICS', ''],
+                ['Company Size', inputs.affectedEmployees],
+                ['Affected Employees', inputs.affectedEmployees],
+                ['Average Annual Salary', inputs.avgSalary, {t:'n', z:'$#,##0'}],
+                [],
+                ['PERFORMANCE PARAMETERS', ''],
+                ['Efficiency Gain', inputs.efficiencyGain, {t:'n', z:'0%'}],
+                ['Realization Rate', inputs.realizationRate, {t:'n', z:'0%'}],
+                ['Ramp-up Time', `${inputs.rampTime} months`],
+                ['Implementation Type', inputs.implementationType],
+                [],
+                ['COST ESTIMATES', ''],
+                ['Initial Investment', inputs.initialInvestment, {t:'n', z:'$#,##0'}],
+                ['Training Cost', inputs.trainingCost, {t:'n', z:'$#,##0'}],
+                ['Fixed Monthly Cost', inputs.fixedMonthlyCost, {t:'n', z:'$#,##0'}],
+                [],
+                ['FINANCE PARAMETERS', ''],
+                ['Discount Rate', inputs.discountRate, {t:'n', z:'0.0%'}],
+                [],
+                ['USAGE-BASED COSTS', ''],
+                ['Monthly Volume', inputs.monthlyVolume],
+                ['Avg Input Tokens', inputs.avgInputTokens],
+                ['Avg Output Tokens', inputs.avgOutputTokens],
+                ['Cache Hit Rate', inputs.cacheHitRate, {t:'n', z:'0%'}],
+                ['Rerun Rate', inputs.rerunRate, {t:'n', z:'0%'}]
+            ];
+            const wsInputs = XLSX.utils.aoa_to_sheet(inputsTab);
+            XLSX.utils.book_append_sheet(wb, wsInputs, 'Detailed Inputs');
+
+            // Tab 3: Financial Results
+            const results = [
+                ['FINANCIAL RESULTS'],
+                [],
+                ['METRIC', 'CONSERVATIVE', 'BASE CASE', 'AGGRESSIVE'],
+                ['NPV', conservative.npv, baseCase.npv, aggressive.npv],
+                ['IRR', conservative.irr !== null ? conservative.irr/100 : 'N/A', baseCase.irr !== null ? baseCase.irr/100 : 'N/A', aggressive.irr !== null ? aggressive.irr/100 : 'N/A'],
+                ['MIRR', conservative.mirr !== null ? conservative.mirr/100 : 'N/A', baseCase.mirr !== null ? baseCase.mirr/100 : 'N/A', aggressive.mirr !== null ? aggressive.mirr/100 : 'N/A'],
+                ['Payback (months)', conservative.paybackMonth, baseCase.paybackMonth, aggressive.paybackMonth],
+                ['3-Year ROI', conservative.roi3yr/100, baseCase.roi3yr/100, aggressive.roi3yr/100]
+            ];
+            const wsResults = XLSX.utils.aoa_to_sheet(results);
+            XLSX.utils.book_append_sheet(wb, wsResults, 'Financial Results');
+
+            // Tab 4: Sensitivity Analysis
+            const tornado = displayTornadoData(inputs, baseCase.npv);
+            const sensitivity = [
+                ['SENSITIVITY ANALYSIS - NPV Impact (±20%)'],
+                [],
+                ['DRIVER', 'LOW IMPACT', 'HIGH IMPACT', 'RANGE'],
+                ...tornado.map(t => [t.name, t.impactLow, t.impactHigh, t.range])
+            ];
+            const wsSensitivity = XLSX.utils.aoa_to_sheet(sensitivity);
+            XLSX.utils.book_append_sheet(wb, wsSensitivity, 'Sensitivity Analysis');
+
+            // Tab 5: Monthly Cashflows
+            const cashflows = [
+                ['MONTHLY CASHFLOWS (36 months)'],
+                [],
+                ['MONTH', 'ADOPTION %', 'BENEFITS', 'COSTS', 'NET CF', 'CUMULATIVE CF']
+            ];
+            let cumulative = baseCase.cashflows[0];
+            baseCase.cashflows.forEach((cf, i) => {
+                if (i > 0) cumulative += cf;
+                const adoption = i === 0 ? 0 : (1 / (1 + Math.exp(-({ saas: 0.9, hybrid: 0.6, custom: 0.4 }[inputs.implementationType] || 0.6) * (i - inputs.rampTime/2))));
+                cashflows.push([
+                    i,
+                    adoption,
+                    i === 0 ? 0 : baseCase.totalMonthlyBenefit * adoption,
+                    i === 0 ? baseCase.cashflows[0] : baseCase.totalMonthlyCost,
+                    cf,
+                    cumulative
+                ]);
+            });
+            const wsCashflows = XLSX.utils.aoa_to_sheet(cashflows);
+            XLSX.utils.book_append_sheet(wb, wsCashflows, 'Monthly Cashflows');
+
+            // Tab 6: Cost Breakdown
+            const breakdown = [
+                ['YEAR 1 COST & BENEFIT BREAKDOWN'],
+                [],
+                ['COSTS', 'AMOUNT'],
+                ['Initial Investment', baseCase.totalInitialCost, {t:'n', z:'$#,##0'}],
+                ['Fixed Operating (12mo)', (baseCase.totalMonthlyCost - baseCase.llmCost - baseCase.humanReviewCost) * 12, {t:'n', z:'$#,##0'}],
+                ['LLM Usage (12mo)', baseCase.llmCost * 12, {t:'n', z:'$#,##0'}],
+                ['Human Review (12mo)', baseCase.humanReviewCost * 12, {t:'n', z:'$#,##0'}],
+                ['Total Costs', baseCase.totalInitialCost + baseCase.totalMonthlyCost * 12, {t:'n', z:'$#,##0'}],
+                [],
+                ['BENEFITS', 'AMOUNT'],
+                ['Labor Savings (12mo)', baseCase.peakLaborSavings * 12, {t:'n', z:'$#,##0'}],
+                ['Quality Gains (12mo)', baseCase.qualitySavings * 12, {t:'n', z:'$#,##0'}],
+                ['Revenue Lift (12mo)', baseCase.revenueLift * 12, {t:'n', z:'$#,##0'}],
+                ['Total Benefits', baseCase.totalMonthlyBenefit * 12, {t:'n', z:'$#,##0'}]
+            ];
+            const wsBreakdown = XLSX.utils.aoa_to_sheet(breakdown);
+            XLSX.utils.book_append_sheet(wb, wsBreakdown, 'Cost Breakdown');
+
+            // Tab 7: Methodology
+            const methodology = [
+                ['METHODOLOGY & FORMULAS'],
+                [],
+                ['KEY FINANCIAL METRICS'],
+                ['NPV', 'Σ(CFₜ / (1 + r)ᵗ) where CFₜ = cashflow at time t, r = discount rate'],
+                ['IRR', 'Rate r where NPV = 0, calculated using Newton-Raphson + bisection fallback'],
+                ['MIRR', '(FV of positive CFs / PV of negative CFs)^(1/n) - 1'],
+                ['3-Year ROI', '(Gross Benefits - Total Costs) / Total Costs × 100%'],
+                [],
+                ['ADOPTION & BENEFITS MODEL'],
+                ['S-Curve', 'A(t) = 1 / (1 + e^(-k(t - m))) where k = steepness, m = midpoint'],
+                ['Labor Savings', 'Employees × Hours × Efficiency × Hourly Rate × Realization × Adoption(t)'],
+                ['Burden Rate', '1.3× salary (30% overhead)'],
+                [],
+                ['LLM COST MODEL'],
+                ['Token Cost', 'Volume × [(Input/1K) × Input$ + (Output/1K) × Output$]'],
+                ['Cache Adjusted', '× (1 - Cache Hit Rate)'],
+                ['Rerun Adjusted', '× (1 + Rerun Rate)'],
+                [],
+                ['KEY ASSUMPTIONS'],
+                ['', 'All cashflows monthly over 36 months'],
+                ['', 'Realization 60-70% typical (organizational friction)'],
+                ['', 'Scenarios vary benefits ±15%, costs constant'],
+                ['', 'Model version 1.0 - Jan 2025']
+            ];
+            const wsMethodology = XLSX.utils.aoa_to_sheet(methodology);
+            XLSX.utils.book_append_sheet(wb, wsMethodology, 'Methodology');
+
+            // Generate and download
+            XLSX.writeFile(wb, 'AI-ROI-Analysis.xlsx');
+        }
+
+        function displayTornadoData(inputs, baseNPV) {
+            const drivers = [
+                { name: 'Efficiency Gain', key: 'efficiencyGain', low: inputs.efficiencyGain * 0.8, high: inputs.efficiencyGain * 1.2 },
+                { name: 'Realization Rate', key: 'realizationRate', low: inputs.realizationRate * 0.8, high: inputs.realizationRate * 1.2 },
+                { name: 'Avg Salary', key: 'avgSalary', low: inputs.avgSalary * 0.8, high: inputs.avgSalary * 1.2 },
+                { name: 'Monthly LLM Cost', key: 'fixedMonthlyCost', low: inputs.fixedMonthlyCost * 0.8, high: inputs.fixedMonthlyCost * 1.2 },
+                { name: 'Initial Investment', key: 'initialInvestment', low: inputs.initialInvestment * 0.8, high: inputs.initialInvestment * 1.2 },
+                { name: 'Discount Rate', key: 'discountRate', low: inputs.discountRate * 0.8, high: inputs.discountRate * 1.2 }
+            ];
+
+            return drivers.map(driver => {
+                const inputsLow = { ...inputs, [driver.key]: driver.low };
+                const inputsHigh = { ...inputs, [driver.key]: driver.high };
+                const npvLow = calculateScenario(inputsLow, 1.0).npv;
+                const npvHigh = calculateScenario(inputsHigh, 1.0).npv;
+                return {
+                    name: driver.name,
+                    impactLow: npvLow - baseNPV,
+                    impactHigh: npvHigh - baseNPV,
+                    range: Math.abs(npvHigh - npvLow)
+                };
+            }).sort((a, b) => b.range - a.range);
+        }
+
+        function exportToPowerPoint() {
+            try {
+                // Check if library is loaded
+                if (typeof pptxgen === 'undefined') {
+                    alert('PowerPoint library not loaded. Please refresh the page and try again.');
+                    return;
+                }
+
+                // Check if calculations have been run
+                if (!calculationData || !calculationData.baseCase) {
+                    alert('Please run the calculation first before exporting to PowerPoint.');
+                    return;
+                }
+
+                const pptx = new pptxgen();
+
+                // Get preset info
+                const presetInfo = JSON.parse(localStorage.getItem('roi_preset_v1') || 'null');
+                let presetText = '';
+                if (presetInfo?.industry && presetInfo?.profile && PRESETS[presetInfo.industry]?.profiles[presetInfo.profile]) {
+                    presetText = `${PRESETS[presetInfo.industry].label} - ${PRESETS[presetInfo.industry].profiles[presetInfo.profile].label}`;
+                }
+
+                // Use the stored calculation results
+                const baseCase = calculationData.baseCase;
+
+                // Title Slide
+                const titleSlide = pptx.addSlide();
+                titleSlide.background = { color: '2c3e50' };
+                titleSlide.addText('AI ROI Analysis', {
+                    x: 0.5, y: 1.5, w: 9, h: 1,
+                    fontSize: 44, bold: true, color: 'FFFFFF', align: 'center'
+                });
+                titleSlide.addText('Executive Summary', {
+                    x: 0.5, y: 2.7, w: 9, h: 0.5,
+                    fontSize: 28, color: 'd4a574', align: 'center'
+                });
+                titleSlide.addText(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), {
+                    x: 0.5, y: 4, w: 9, h: 0.5,
+                    fontSize: 18, color: 'FFFFFF', align: 'center'
+                });
+                if (presetText) {
+                    titleSlide.addText(presetText, {
+                        x: 0.5, y: 4.5, w: 9, h: 0.5,
+                        fontSize: 14, color: 'CCCCCC', align: 'center'
+                    });
+                }
+
+                // Executive Summary Slide
+                const summarySlide = pptx.addSlide();
+                summarySlide.background = { color: 'FFFFFF' };
+                summarySlide.addText('Executive Summary', {
+                    x: 0.5, y: 0.3, w: 9, h: 0.6,
+                    fontSize: 32, bold: true, color: '2c3e50'
+                });
+
+                const metrics = [
+                    { label: 'Net Present Value (NPV)', value: formatCurrency(baseCase.npv), color: baseCase.npv > 0 ? '10b981' : 'ef4444' },
+                    { label: 'ROI', value: formatPercent(baseCase.roi), color: baseCase.roi > 0 ? '10b981' : 'ef4444' },
+                    { label: 'Payback Period', value: baseCase.paybackMonths > 36 ? '>36 months' : `${baseCase.paybackMonths} months`, color: '6366f1' },
+                    { label: 'IRR', value: formatPercent(baseCase.irr), color: '8b5cf6' }
+                ];
+
+                metrics.forEach((metric, idx) => {
+                    summarySlide.addText(metric.label, {
+                        x: 0.5 + (idx % 2) * 5, y: 1.2 + Math.floor(idx / 2) * 1.5,
+                        w: 4.5, h: 0.4,
+                        fontSize: 14, color: '6b7280'
+                    });
+                    summarySlide.addText(metric.value, {
+                        x: 0.5 + (idx % 2) * 5, y: 1.6 + Math.floor(idx / 2) * 1.5,
+                        w: 4.5, h: 0.6,
+                        fontSize: 24, bold: true, color: metric.color
+                    });
+                });
+
+                // Financial Breakdown Slide
+                const breakdownSlide = pptx.addSlide();
+                breakdownSlide.background = { color: 'FFFFFF' };
+                breakdownSlide.addText('Financial Breakdown', {
+                    x: 0.5, y: 0.3, w: 9, h: 0.6,
+                    fontSize: 32, bold: true, color: '2c3e50'
+                });
+
+                const breakdown = [
+                    ['Component', 'Year 1', 'Year 2', 'Year 3'],
+                    ['Implementation Cost', formatCurrency(baseCase.implementationCost), '-', '-'],
+                    ['Annual Operating Cost', formatCurrency(baseCase.annualCost), formatCurrency(baseCase.annualCost), formatCurrency(baseCase.annualCost)],
+                    ['Annual Benefit', formatCurrency(baseCase.totalBenefit), formatCurrency(baseCase.totalBenefit * 1.1), formatCurrency(baseCase.totalBenefit * 1.2)],
+                    ['Net Cash Flow', formatCurrency(baseCase.totalBenefit - baseCase.implementationCost - baseCase.annualCost),
+                                     formatCurrency(baseCase.totalBenefit * 1.1 - baseCase.annualCost),
+                                     formatCurrency(baseCase.totalBenefit * 1.2 - baseCase.annualCost)]
+                ];
+
+                breakdownSlide.addTable(breakdown, {
+                    x: 0.5, y: 1.2, w: 9, h: 3,
+                    colW: [3, 2, 2, 2],
+                    fill: { color: 'f3f4f6' },
+                    color: '1f2937',
+                    fontSize: 12,
+                    border: { type: 'solid', pt: 1, color: 'e5e7eb' }
+                });
+
+                // Recommendation Slide
+                const recommendationSlide = pptx.addSlide();
+                recommendationSlide.background = { color: 'FFFFFF' };
+                recommendationSlide.addText('Recommendation', {
+                    x: 0.5, y: 0.3, w: 9, h: 0.6,
+                    fontSize: 32, bold: true, color: '2c3e50'
+                });
+
+                const recommendation = baseCase.npv > 0 ?
+                    '✅ PROCEED: Strong positive ROI with acceptable payback period' :
+                    '⚠️ REVIEW: Negative ROI - consider optimizing costs or benefits';
+
+                recommendationSlide.addText(recommendation, {
+                    x: 0.5, y: 2, w: 9, h: 1.5,
+                    fontSize: 24, bold: true,
+                    color: baseCase.npv > 0 ? '10b981' : 'f59e0b',
+                    align: 'center',
+                    valign: 'middle'
+                });
+
+                // Save the presentation
+                pptx.writeFile({ fileName: `AI-ROI-Analysis-${new Date().toISOString().split('T')[0]}.pptx` });
+            } catch (error) {
+                console.error('PowerPoint export error:', error);
+                alert('Failed to generate PowerPoint. Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

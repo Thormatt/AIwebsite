@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Alignment Diagnostic - Synthesis Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        .synthesis-container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .synthesis-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 12px;
+        }
+
+        .synthesis-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .synthesis-header .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+
+        .org-info {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            display: inline-block;
+        }
+
+        .alert-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .alert-box.critical {
+            background: #fee2e2;
+            border-left-color: #ef4444;
+        }
+
+        .alert-box.success {
+            background: #d1fae5;
+            border-left-color: #10b981;
+        }
+
+        .alert-box h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 1200px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .assessment-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .assessment-card.individual {
+            border-color: #3b82f6;
+        }
+
+        .assessment-card.consensus {
+            border-color: #8b5cf6;
+        }
+
+        .assessment-card.pulse {
+            border-color: #10b981;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-icon.individual { background: #dbeafe; color: #3b82f6; }
+        .card-icon.consensus { background: #ede9fe; color: #8b5cf6; }
+        .card-icon.pulse { background: #d1fae5; color: #10b981; }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .score-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+
+        .dimension-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .dimension-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .dimension-item:last-child {
+            border-bottom: none;
+        }
+
+        .dimension-name {
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        .dimension-score {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .misalignment-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .misalignment-section h2 {
+            font-size: 1.75rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .heatmap-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        .heatmap-table th,
+        .heatmap-table td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+        }
+
+        .heatmap-table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .heatmap-cell {
+            font-weight: 600;
+            border-radius: 4px;
+        }
+
+        .heatmap-cell.aligned {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .heatmap-cell.moderate {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .heatmap-cell.misaligned {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .gap-indicator {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .gap-indicator.high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .gap-indicator.medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .gap-indicator.low {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .insight-card {
+            background: #f9fafb;
+            border-left: 4px solid #d4a574;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .insight-card h4 {
+            color: #2c3e50;
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
+        }
+
+        .insight-card p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .chart-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .actions-section {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(44, 62, 80, 0.1) 100%);
+            border: 2px solid #d4a574;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .actions-section h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a574 0%, #c19560 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #2c3e50;
+            border: 2px solid #e5e7eb;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: #6b7280;
+        }
+
+        .error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            background: #f9fafb;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.missing {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="synthesis-container">
+        <div class="synthesis-header">
+            <h1>🎯 AI Alignment Diagnostic</h1>
+            <div class="subtitle">Executive Synthesis Report</div>
+            <div id="orgInfo" class="org-info"></div>
+        </div>
+
+        <div id="loadingState" class="loading">
+            <p>Loading assessment data...</p>
+        </div>
+
+        <div id="errorState" class="error" style="display: none;"></div>
+
+        <div id="mainContent" style="display: none;">
+            <!-- Executive Summary Alert -->
+            <div id="executiveSummary"></div>
+
+            <!-- Three-Way Comparison -->
+            <div class="comparison-grid" id="comparisonGrid"></div>
+
+            <!-- Misalignment Heatmap -->
+            <div class="misalignment-section">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Misalignment Analysis by Dimension
+                </h2>
+                <p style="color: #6b7280; margin-bottom: 1.5rem;">
+                    Shows where leadership perception diverges from employee reality.
+                    <strong>Red cells = high misalignment</strong> (10+ point gap), indicating costly blind spots.
+                </p>
+                <div id="heatmapContainer"></div>
+            </div>
+
+            <!-- Radar Chart Overlay -->
+            <div class="chart-section">
+                <h2>Visual Comparison Across All Dimensions</h2>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Key Insights -->
+            <div class="misalignment-section">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                    Key Insights & Blind Spots
+                </h2>
+                <div id="insightsGrid" class="insights-grid"></div>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions-section">
+                <h3>Ready to Address These Misalignments?</h3>
+                <p style="color: #4b5563; margin-bottom: 1.5rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                    This synthesis reveals where your organization's AI readiness perception differs from reality.
+                    The next step is a prioritized 90-day roadmap to close these gaps.
+                </p>
+                <a href="../index.html#contact" class="btn btn-primary">Schedule Strategy Session</a>
+                <button onclick="exportReport()" class="btn btn-secondary">Export Full Report (PDF)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const SUPABASE_URL = 'https://hzverggjspltpopivtgc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6dmVyZ2dqc3BsdHBvcGl2dGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzUxMDQsImV4cCI6MjA3NTI1MTEwNH0.n8S0BHP33VAP8KMEkHIBHcDdTapBOfnqwB8D1qf9pv4';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let organizationId = null;
+        let assessmentData = {
+            individual: null,
+            consensus: null,
+            pulse: null,
+            organization: null
+        };
+
+        // Dimension mapping (different assessments may use different names)
+        const DIMENSION_MAP = {
+            'Data': ['Data', 'Data Readiness'],
+            'Governance': ['Governance', 'Risk & Governance'],
+            'Technical': ['Technical', 'Technical Capability'],
+            'Business': ['Business', 'Business Alignment'],
+            'Culture': ['Culture', 'Organizational Culture']
+        };
+
+        // Get organization ID from URL
+        function getOrganizationId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('org') || params.get('organization_id');
+        }
+
+        // Load all assessment data for organization
+        async function loadAssessmentData() {
+            organizationId = getOrganizationId();
+
+            if (!organizationId) {
+                showError('No organization specified. Please provide an organization ID in the URL (?org=xxx)');
+                return;
+            }
+
+            try {
+                // Load organization info
+                const { data: org, error: orgError } = await supabase
+                    .from('organizations')
+                    .select('*')
+                    .eq('id', organizationId)
+                    .single();
+
+                if (orgError) throw orgError;
+                assessmentData.organization = org;
+
+                // Load individual assessment (most recent completed)
+                const { data: individualSession } = await supabase
+                    .from('assessment_sessions')
+                    .select('*')
+                    .eq('organization_id', organizationId)
+                    .eq('type', 'individual')
+                    .eq('status', 'completed')
+                    .order('completed_at', { ascending: false })
+                    .limit(1)
+                    .single();
+
+                if (individualSession) {
+                    assessmentData.individual = await loadIndividualResults(individualSession.id);
+                }
+
+                // Load consensus assessment
+                const { data: consensusSession } = await supabase
+                    .from('assessment_sessions')
+                    .select('*')
+                    .eq('organization_id', organizationId)
+                    .eq('type', 'consensus')
+                    .eq('status', 'completed')
+                    .order('completed_at', { ascending: false })
+                    .limit(1)
+                    .single();
+
+                if (consensusSession) {
+                    assessmentData.consensus = await loadConsensusResults(consensusSession.id);
+                }
+
+                // Load pulse survey
+                const { data: pulseSession } = await supabase
+                    .from('assessment_sessions')
+                    .select('*')
+                    .eq('organization_id', organizationId)
+                    .eq('type', 'pulse')
+                    .eq('status', 'completed')
+                    .order('completed_at', { ascending: false })
+                    .limit(1)
+                    .single();
+
+                if (pulseSession) {
+                    assessmentData.pulse = await loadPulseResults(pulseSession.id);
+                }
+
+                // Render the synthesis
+                renderSynthesis();
+
+            } catch (error) {
+                console.error('Error loading assessment data:', error);
+                showError('Error loading assessment data: ' + error.message);
+            }
+        }
+
+        async function loadIndividualResults(sessionId) {
+            const { data: participants } = await supabase
+                .from('participants')
+                .select('id')
+                .eq('session_id', sessionId)
+                .eq('completed_at', 'not.is.null')
+                .limit(1)
+                .single();
+
+            if (!participants) return null;
+
+            const { data: responses } = await supabase
+                .from('assessment_responses')
+                .select('*')
+                .eq('participant_id', participants.id);
+
+            return calculateDimensionScores(responses || []);
+        }
+
+        async function loadConsensusResults(sessionId) {
+            const { data: participants } = await supabase
+                .from('participants')
+                .select('id')
+                .eq('session_id', sessionId)
+                .not('completed_at', 'is', null);
+
+            if (!participants || participants.length === 0) return null;
+
+            const participantIds = participants.map(p => p.id);
+            const { data: responses } = await supabase
+                .from('assessment_responses')
+                .select('*')
+                .in('participant_id', participantIds);
+
+            return calculateDimensionScores(responses || []);
+        }
+
+        async function loadPulseResults(sessionId) {
+            const { data: participants } = await supabase
+                .from('participants')
+                .select('id')
+                .eq('session_id', sessionId)
+                .not('completed_at', 'is', null);
+
+            if (!participants || participants.length === 0) return null;
+
+            const participantIds = participants.map(p => p.id);
+            const { data: responses } = await supabase
+                .from('assessment_responses')
+                .select('*')
+                .in('participant_id', participantIds);
+
+            return calculateDimensionScores(responses || []);
+        }
+
+        function calculateDimensionScores(responses) {
+            const dimensionScores = {};
+            const dimensionCounts = {};
+
+            responses.forEach(response => {
+                const dimension = normalizeDimension(response.dimension);
+                if (!dimension) return;
+
+                const value = parseFloat(response.response_value);
+                if (isNaN(value)) return;
+
+                // Convert to 0-100 scale (assuming most are 1-5 likert)
+                const normalized = value <= 5 ? ((value - 1) / 4) * 100 : value;
+
+                if (!dimensionScores[dimension]) {
+                    dimensionScores[dimension] = 0;
+                    dimensionCounts[dimension] = 0;
+                }
+
+                dimensionScores[dimension] += normalized;
+                dimensionCounts[dimension]++;
+            });
+
+            // Calculate averages
+            const result = {};
+            Object.keys(dimensionScores).forEach(dim => {
+                result[dim] = Math.round(dimensionScores[dim] / dimensionCounts[dim]);
+            });
+
+            return result;
+        }
+
+        function normalizeDimension(dimension) {
+            if (!dimension) return null;
+
+            for (const [key, variations] of Object.entries(DIMENSION_MAP)) {
+                if (variations.some(v => dimension.includes(v))) {
+                    return key;
+                }
+            }
+
+            return dimension; // Return as-is if no mapping found
+        }
+
+        function renderSynthesis() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+
+            // Render organization info
+            document.getElementById('orgInfo').innerHTML = `
+                <strong>${assessmentData.organization.name}</strong>
+                ${assessmentData.organization.industry ? ` | ${assessmentData.organization.industry}` : ''}
+                ${assessmentData.organization.employee_count ? ` | ${assessmentData.organization.employee_count} employees` : ''}
+            `;
+
+            // Render executive summary
+            renderExecutiveSummary();
+
+            // Render comparison cards
+            renderComparisonGrid();
+
+            // Render heatmap
+            renderHeatmap();
+
+            // Render radar chart
+            renderRadarChart();
+
+            // Render insights
+            renderInsights();
+        }
+
+        function renderExecutiveSummary() {
+            const hasAll = assessmentData.individual && assessmentData.consensus && assessmentData.pulse;
+            const missing = [];
+            if (!assessmentData.individual) missing.push('Individual Assessment');
+            if (!assessmentData.consensus) missing.push('C-Suite Consensus');
+            if (!assessmentData.pulse) missing.push('Pulse Survey');
+
+            let html = '';
+
+            if (!hasAll) {
+                html = `
+                    <div class="alert-box">
+                        <h3>⚠️ Incomplete Diagnostic</h3>
+                        <p>Missing assessments: <strong>${missing.join(', ')}</strong></p>
+                        <p>For a complete AI Alignment Diagnostic, all three assessment types are required.</p>
+                    </div>
+                `;
+            } else {
+                // Calculate misalignment severity
+                const gaps = calculateMisalignments();
+                const criticalGaps = gaps.filter(g => g.gap >= 20).length;
+                const moderateGaps = gaps.filter(g => g.gap >= 10 && g.gap < 20).length;
+
+                if (criticalGaps > 0) {
+                    html = `
+                        <div class="alert-box critical">
+                            <h3>🚨 Critical Misalignments Detected</h3>
+                            <p><strong>${criticalGaps} dimension(s)</strong> show severe misalignment (20+ point gap) between leadership and employees.</p>
+                            <p>These blind spots are costing your organization millions in failed pilots, duplicated work, and compliance risk.</p>
+                        </div>
+                    `;
+                } else if (moderateGaps > 0) {
+                    html = `
+                        <div class="alert-box">
+                            <h3>⚠️ Moderate Misalignments Detected</h3>
+                            <p><strong>${moderateGaps} dimension(s)</strong> show notable misalignment (10-20 point gap).</p>
+                            <p>Addressing these perception gaps early will prevent costly missteps.</p>
+                        </div>
+                    `;
+                } else {
+                    html = `
+                        <div class="alert-box success">
+                            <h3>✅ Good Alignment</h3>
+                            <p>Leadership and employee perceptions are relatively aligned across all dimensions.</p>
+                            <p>Continue monitoring for emerging gaps as AI initiatives scale.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            document.getElementById('executiveSummary').innerHTML = html;
+        }
+
+        function renderComparisonGrid() {
+            const grid = document.getElementById('comparisonGrid');
+
+            grid.innerHTML = `
+                ${renderAssessmentCard('individual', 'Individual Assessment', '👤', assessmentData.individual, '1 person', 'baseline')}
+                ${renderAssessmentCard('consensus', 'C-Suite Consensus', '👥', assessmentData.consensus, 'executive team', 'aggregate')}
+                ${renderAssessmentCard('pulse', 'Employee Pulse', '🌐', assessmentData.pulse, 'organization-wide', 'aggregate')}
+            `;
+        }
+
+        function renderAssessmentCard(type, title, icon, data, scope, badge) {
+            if (!data) {
+                return `
+                    <div class="assessment-card ${type}">
+                        <div class="card-header">
+                            <div class="card-icon ${type}">${icon}</div>
+                            <div>
+                                <div class="card-title">${title}</div>
+                                <div class="card-subtitle">${scope}</div>
+                            </div>
+                        </div>
+                        <div class="empty-state">
+                            <p><strong>No data available</strong></p>
+                            <p style="font-size: 0.875rem; margin-top: 0.5rem;">Complete this assessment to see results</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const dimensions = Object.keys(data);
+            const overall = Math.round(Object.values(data).reduce((a, b) => a + b, 0) / dimensions.length);
+
+            const dimensionHTML = dimensions.map(dim => `
+                <li class="dimension-item">
+                    <span class="dimension-name">${dim}</span>
+                    <span class="dimension-score">${data[dim]}%</span>
+                </li>
+            `).join('');
+
+            return `
+                <div class="assessment-card ${type}">
+                    <div class="card-header">
+                        <div class="card-icon ${type}">${icon}</div>
+                        <div>
+                            <div class="card-title">${title}</div>
+                            <div class="card-subtitle">${scope}</div>
+                        </div>
+                    </div>
+                    <div class="score-display">
+                        <div class="score-value">${overall}%</div>
+                        <div class="score-label">Overall AI Readiness</div>
+                    </div>
+                    <ul class="dimension-list">
+                        ${dimensionHTML}
+                    </ul>
+                </div>
+            `;
+        }
+
+        function calculateMisalignments() {
+            const gaps = [];
+
+            if (!assessmentData.individual || !assessmentData.pulse) {
+                return gaps;
+            }
+
+            // Get all unique dimensions
+            const allDimensions = new Set([
+                ...Object.keys(assessmentData.individual || {}),
+                ...Object.keys(assessmentData.consensus || {}),
+                ...Object.keys(assessmentData.pulse || {})
+            ]);
+
+            allDimensions.forEach(dim => {
+                const individualScore = assessmentData.individual?.[dim] || 0;
+                const consensusScore = assessmentData.consensus?.[dim] || 0;
+                const pulseScore = assessmentData.pulse?.[dim] || 0;
+
+                // Calculate gap between leadership (average of individual + consensus) and pulse
+                const leadershipAvg = consensusScore ? (individualScore + consensusScore) / 2 : individualScore;
+                const gap = Math.abs(leadershipAvg - pulseScore);
+
+                gaps.push({
+                    dimension: dim,
+                    individual: individualScore,
+                    consensus: consensusScore,
+                    pulse: pulseScore,
+                    leadership: Math.round(leadershipAvg),
+                    gap: Math.round(gap)
+                });
+            });
+
+            return gaps.sort((a, b) => b.gap - a.gap);
+        }
+
+        function renderHeatmap() {
+            const gaps = calculateMisalignments();
+
+            if (gaps.length === 0) {
+                document.getElementById('heatmapContainer').innerHTML = '<div class="empty-state">No data to compare</div>';
+                return;
+            }
+
+            const rows = gaps.map(g => {
+                const gapClass = g.gap >= 20 ? 'misaligned' : g.gap >= 10 ? 'moderate' : 'aligned';
+                const gapBadge = g.gap >= 20 ? 'high' : g.gap >= 10 ? 'medium' : 'low';
+
+                return `
+                    <tr>
+                        <td style="text-align: left; font-weight: 600;">${g.dimension}</td>
+                        <td>${g.individual}%</td>
+                        <td>${g.consensus || 'N/A'}</td>
+                        <td>${g.pulse}%</td>
+                        <td class="heatmap-cell ${gapClass}">${g.gap}%</td>
+                        <td><span class="gap-indicator ${gapBadge}">${g.gap >= 20 ? 'CRITICAL' : g.gap >= 10 ? 'MODERATE' : 'ALIGNED'}</span></td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('heatmapContainer').innerHTML = `
+                <table class="heatmap-table">
+                    <thead>
+                        <tr>
+                            <th>Dimension</th>
+                            <th>Individual</th>
+                            <th>C-Suite Avg</th>
+                            <th>Employee Avg</th>
+                            <th>Gap</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-top: 1rem;">
+                    <strong>Gap Calculation:</strong> Absolute difference between leadership perception (average of individual + C-suite) and employee reality (pulse survey).
+                </p>
+            `;
+        }
+
+        function renderRadarChart() {
+            const gaps = calculateMisalignments();
+            if (gaps.length === 0) return;
+
+            const dimensions = gaps.map(g => g.dimension);
+            const individualData = gaps.map(g => g.individual);
+            const consensusData = gaps.map(g => g.consensus || g.individual);
+            const pulseData = gaps.map(g => g.pulse);
+
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: dimensions,
+                    datasets: [
+                        {
+                            label: 'Individual Assessment',
+                            data: individualData,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            pointBackgroundColor: '#3b82f6'
+                        },
+                        {
+                            label: 'C-Suite Consensus',
+                            data: consensusData,
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            pointBackgroundColor: '#8b5cf6'
+                        },
+                        {
+                            label: 'Employee Pulse',
+                            data: pulseData,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            pointBackgroundColor: '#10b981'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { stepSize: 20 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderInsights() {
+            const gaps = calculateMisalignments();
+            if (gaps.length === 0) return;
+
+            const criticalGaps = gaps.filter(g => g.gap >= 20);
+            const topGap = gaps[0];
+
+            let insights = [];
+
+            // Insight 1: Biggest gap
+            if (topGap) {
+                insights.push({
+                    title: `Biggest Blind Spot: ${topGap.dimension}`,
+                    text: `Leadership rates this at ${topGap.leadership}%, but employees rate it at ${topGap.pulse}%. This ${topGap.gap}-point gap suggests significant misalignment in ${topGap.dimension.toLowerCase()} perception.`
+                });
+            }
+
+            // Insight 2: Critical gaps count
+            if (criticalGaps.length > 0) {
+                insights.push({
+                    title: `${criticalGaps.length} Critical Misalignment(s)`,
+                    text: `Dimensions with 20+ point gaps: ${criticalGaps.map(g => g.dimension).join(', ')}. These require immediate attention to prevent costly failures.`
+                });
+            }
+
+            // Insight 3: Strongest alignment
+            const bestAligned = gaps[gaps.length - 1];
+            if (bestAligned.gap < 10) {
+                insights.push({
+                    title: `Best Alignment: ${bestAligned.dimension}`,
+                    text: `Only ${bestAligned.gap}% gap between leadership and employees. Use this as a model for improving other dimensions.`
+                });
+            }
+
+            // Insight 4: Overall trend
+            const avgGap = Math.round(gaps.reduce((sum, g) => sum + g.gap, 0) / gaps.length);
+            insights.push({
+                title: 'Overall Alignment Score',
+                text: `Average gap across all dimensions is ${avgGap}%. ${avgGap < 10 ? 'Good alignment overall.' : avgGap < 15 ? 'Moderate misalignment - addressable.' : 'Significant misalignment - high priority.'}`
+            });
+
+            document.getElementById('insightsGrid').innerHTML = insights.map(insight => `
+                <div class="insight-card">
+                    <h4>${insight.title}</h4>
+                    <p>${insight.text}</p>
+                </div>
+            `).join('');
+        }
+
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorState').innerHTML = `
+                <h3>Error</h3>
+                <p>${message}</p>
+            `;
+        }
+
+        function exportReport() {
+            alert('PDF export coming soon! For now, use your browser\'s Print to PDF function.');
+            window.print();
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', loadAssessmentData);
+    </script>
+</body>
+</html>

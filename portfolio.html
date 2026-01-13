@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thor Matthiasson - Portfolio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #fafafa;
+            --bg-card: #ffffff;
+            --accent-sage: #5a7c6a;
+            --accent-gold: #d4a574;
+            --gold: #daa520;
+            --text-primary: #2c3e50;
+            --text-secondary: #666;
+            --text-tertiary: #999;
+            --border-light: #e5e5e5;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body.locked #protected-content {
+            opacity: 0;
+            filter: blur(10px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        body.unlocked #protected-content {
+            opacity: 1;
+            filter: none;
+            pointer-events: auto;
+            user-select: auto;
+        }
+
+        #protected-content {
+            transition: opacity 0.4s ease, filter 0.4s ease;
+        }
+
+        .access-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1.5rem;
+            background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%);
+        }
+
+        body.unlocked .access-gate {
+            display: none;
+        }
+
+        .access-panel {
+            width: min(500px, 100%);
+            padding: 3rem;
+            border-radius: 16px;
+            background: white;
+            border: 1px solid rgba(90, 124, 106, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .access-panel h1 {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .access-panel p {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .access-panel label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .access-panel input[type="password"] {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #2c3e50;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .access-panel input[type="password"]:focus {
+            outline: none;
+            border-color: #5a7c6a;
+            box-shadow: 0 0 0 3px rgba(90, 124, 106, 0.1);
+        }
+
+        .access-panel button {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            background: #5a7c6a;
+            color: white;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .access-panel button:hover {
+            background: #4a6c5a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(90, 124, 106, 0.3);
+        }
+
+        .access-error {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            font-size: 0.875rem;
+        }
+
+        .noscript-warning {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            color: #92400e;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 600px) {
+            .access-panel {
+                padding: 2rem 1.5rem;
+            }
+
+            .access-panel h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Subtle background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8faf9 0%, #ffffff 50%, #f0f5f2 100%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            padding: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-sage);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 100px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(90, 124, 106, 0.08);
+            border: 1px solid rgba(90, 124, 106, 0.2);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 40px;
+            color: var(--accent-sage);
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-sage);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        h1 {
+            font-size: 7rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+
+        .hero-tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 60px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin: 80px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .stat-item:hover {
+            border-color: var(--accent-sage);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(90, 124, 106, 0.15);
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--accent-sage), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Projects Grid */
+        .projects {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .projects-grid {
+            display: grid;
+            gap: 30px;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .project-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-sage), var(--accent-gold));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent-sage);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(90, 124, 106, 0.15);
+        }
+
+        .project-card.featured {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(90, 124, 106, 0.03) 0%, rgba(212, 165, 116, 0.03) 100%);
+            border: 1px solid var(--accent-sage);
+        }
+
+        .project-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .project-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(90, 124, 106, 0.08), rgba(212, 165, 116, 0.08));
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .project-title-group h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .project-type {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(90, 124, 106, 0.1);
+            color: var(--accent-sage);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(90, 124, 106, 0.2);
+        }
+
+        .project-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .project-features {
+            list-style: none;
+            display: grid;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .project-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .project-features li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: rgba(90, 124, 106, 0.1);
+            color: var(--accent-sage);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .project-tech {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .tech-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .tech-stack {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: var(--accent-sage);
+            border: 1px solid var(--accent-sage);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .project-link:hover {
+            background: #4a6c5a;
+            transform: translateX(4px);
+        }
+
+        /* Project Screenshots */
+        .project-screenshot {
+            margin-top: 30px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            max-height: 400px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .project-screenshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .project-screenshot {
+            box-shadow: 0 8px 32px rgba(90, 124, 106, 0.2);
+            border-color: var(--accent-sage);
+        }
+
+        .project-card:hover .project-screenshot img {
+            transform: scale(1.02);
+        }
+
+        /* Smooth Carousel Animation Intro */
+        .typing-intro {
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .typing-text {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .carousel-word {
+            position: absolute;
+            background: linear-gradient(135deg, var(--accent-sage), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .carousel-word.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .carousel-word.exit {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        /* Mobile app screenshots (for phone/tablet apps) */
+        .project-screenshot.mobile {
+            max-width: 300px;
+            max-height: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .project-screenshot.mobile img {
+            border-radius: 20px;
+            object-fit: contain;
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 0 40px;
+            text-align: center;
+            border-top: 1px solid var(--border-light);
+            margin-top: 100px;
+            background: var(--bg-secondary);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-card.featured {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--accent-sage);
+            color: white;
+        }
+    </style>
+</head>
+<body class="locked">
+    <div class="access-gate" role="dialog" aria-modal="true" aria-labelledby="portfolio-access-title">
+        <div class="access-panel">
+            <h1 id="portfolio-access-title">Technical Portfolio</h1>
+            <p>This portfolio showcases the AI applications and systems I've built. Enter the access code to view projects and technical case studies.</p>
+            <form id="access-form" autocomplete="off">
+                <label for="access-code">Access Code</label>
+                <input type="password" id="access-code" name="access-code" inputmode="text" autocomplete="current-password" required placeholder="Enter access code">
+                <button type="submit">View Portfolio</button>
+                <p class="access-error" role="alert" hidden>Incorrect access code. Please try again.</p>
+            </form>
+            <noscript>
+                <div class="noscript-warning">JavaScript is required to verify access. Please enable JavaScript and refresh the page.</div>
+            </noscript>
+        </div>
+    </div>
+    <div id="protected-content">
+    <div class="container">
+        <nav>
+            <div class="logo">Thor Matthiasson</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <section class="hero">
+            <div class="badge">
+                <div class="badge-dot"></div>
+                I Build What I Advise
+            </div>
+            <h1>Thor Matthiasson</h1>
+            <p class="hero-tagline">Real AI applications solving real problems</p>
+        </section>
+
+        <section class="projects" id="projects">
+            <div class="typing-intro">
+                <div class="typing-text" id="typingText"></div>
+            </div>
+
+            <div class="projects-grid">
+                <!-- Raven Research -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">🦅</div>
+                        <div class="project-title-group">
+                            <h3>Raven Research</h3>
+                            <span class="project-type">AI Research Platform</span>
+                        </div>
+                    </div>
+                    <p class="project-description">Production-ready AI research automation platform that aggregates, analyzes, and synthesizes information from 100+ sources in real-time. Built with modern async Python architecture and advanced AI integration.</p>
+                    <ul class="project-features">
+                        <li>Analyzes 100-500+ sources in under 60 seconds</li>
+                        <li>Multi-pass AI analysis with Gemini 1.5 Pro (2M token context)</li>
+                        <li>Statistical validation & cross-source fact verification</li>
+                        <li>Real-time WebSocket streaming with live progress tracking</li>
+                        <li>95%+ fact verification rate with bias detection</li>
+                        <li>Docker containerized with 99.9% uptime</li>
+                    </ul>
+                    <div class="project-tech">
+                        <div class="tech-label">Tech Stack</div>
+                        <div class="tech-stack">Python 3.13 (async), FastAPI, Gemini AI, WebSocket, Redis, SQLite, Docker, NumPy/Pandas</div>
+                    </div>
+                    <div class="project-screenshot">
+                        <img src="images/raven-research.png" alt="Raven Research Platform Screenshot">
+                    </div>
+                </div>
+
+                <!-- Daolight -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">🌅</div>
+                        <div class="project-title-group">
+                            <h3>Daolight</h3>
+                            <span class="project-type">iOS Application</span>
+                        </div>
+                    </div>
+                    <p class="project-description">Daily wisdom from Eastern philosophy delivered with simplicity and grace. A mindful companion for your daily spiritual journey.</p>
+                    <ul class="project-features">
+                        <li>Daily quotes from Dao, Buddhism & Zen traditions</li>
+                        <li>Browse library by category, author, or tradition</li>
+                        <li>Save favorites & daily notifications</li>
+                        <li>Beautiful minimalist design</li>
+                    </ul>
+                    <div class="project-tech">
+                        <div class="tech-label">Tech Stack</div>
+                        <div class="tech-stack">iOS 15+, Swift 5.9, SwiftUI, MVVM Architecture</div>
+                    </div>
+                    <div class="project-screenshot mobile">
+                        <img src="images/daolight.png" alt="Daolight App Screenshot">
+                    </div>
+                </div>
+
+                <!-- Article Generator -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">📝</div>
+                        <div class="project-title-group">
+                            <h3>Article Generator</h3>
+                            <span class="project-type">Content Automation</span>
+                        </div>
+                    </div>
+                    <p class="project-description">AI-powered SEO-optimized travel article generator for Iceland tourism content with real-time trending topic integration.</p>
+
+                    <div style="margin: 1.5rem 0; padding: 1rem; background: linear-gradient(135deg, rgba(90, 124, 106, 0.05), rgba(212, 165, 116, 0.05)); border-radius: 8px; border: 1px solid var(--border-light);">
+                        <p style="font-size: 0.875rem; font-weight: 600; color: var(--accent-sage); margin-bottom: 0.5rem;">Business Impact</p>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0;">10x content production velocity • 40% improvement in organic search rankings • Maintained brand voice consistency at scale</p>
+                    </div>
+
+                    <ul class="project-features">
+                        <li>Real-time trending topics with Gemini API</li>
+                        <li>Grounded search for current information</li>
+                        <li>Multiple export formats (Markdown, HTML, Plain Text)</li>
+                        <li>Preview before publishing to Google Docs</li>
+                    </ul>
+                    <div class="project-tech">
+                        <div class="tech-label">Tech Stack</div>
+                        <div class="tech-stack">Google Apps Script, Gemini 2.5 Flash, Web App, REST API</div>
+                    </div>
+                    <div class="project-screenshot">
+                        <img src="images/article-generator.png" alt="Article Generator Screenshot">
+                    </div>
+                    <a href="https://script.google.com/a/macros/svartigaldur.is/s/AKfycby0RyhNQG17nJHxCaVSdrbn6JQmgqScfvGuZwl7wBygAnKUEZNhLLapvobM7HbOVJq8OQ/exec" target="_blank" class="project-link">
+                        Try Live Demo
+                        <span>→</span>
+                    </a>
+                </div>
+
+                <!-- SEO Coach -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">📊</div>
+                        <div class="project-title-group">
+                            <h3>SEO Coach</h3>
+                            <span class="project-type">Monitoring Platform</span>
+                        </div>
+                    </div>
+                    <p class="project-description">Automated SEO monitoring system with multi-timeframe analysis and AI-powered anomaly detection.</p>
+
+                    <div style="margin: 1.5rem 0; padding: 1rem; background: linear-gradient(135deg, rgba(90, 124, 106, 0.05), rgba(212, 165, 116, 0.05)); border-radius: 8px; border: 1px solid var(--border-light);">
+                        <p style="font-size: 0.875rem; font-weight: 600; color: var(--accent-sage); margin-bottom: 0.5rem;">Business Impact</p>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0;">Identified ranking issues 48 hours faster • Reduced manual monitoring time by 90% • Prevented 3 major SEO incidents</p>
+                    </div>
+
+                    <ul class="project-features">
+                        <li>Daily, Weekly, Monthly SEO monitoring</li>
+                        <li>Statistical anomaly detection (Z-score)</li>
+                        <li>AI-powered insights with Gemini</li>
+                        <li>Automated email alerts & reporting</li>
+                    </ul>
+                    <div class="project-tech">
+                        <div class="tech-label">Tech Stack</div>
+                        <div class="tech-stack">Google Apps Script, Gemini AI, Screaming Frog Integration</div>
+                    </div>
+                    <div class="project-screenshot">
+                        <img src="images/seo-1.png" alt="SEO Coach Dashboard Screenshot">
+                    </div>
+                    <a href="https://script.google.com/a/macros/svartigaldur.is/s/AKfycby74-fzJmZIdS5lZrnfIDP-MfurQV74W2rDKy5o_jtVzKxJ5ZI0PfbtD25aC-CAdtY/exec" target="_blank" class="project-link">
+                        View Dashboard
+                        <span>→</span>
+                    </a>
+                </div>
+
+                <!-- ESG Data Pipeline -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">⚡</div>
+                        <div class="project-title-group">
+                            <h3>ESG Data Pipeline</h3>
+                            <span class="project-type">Data Engineering Platform</span>
+                        </div>
+                    </div>
+                    <p class="project-description">Modular data engineering stack processing 35M+ energy readings into audit-ready ESG outputs for real-estate portfolios with CRREM/IFRS/SECR compliance.</p>
+                    <ul class="project-features">
+                        <li>Staged asset enrichment pipeline (alpha/bravo/charlie/delta)</li>
+                        <li>Weather-normalized electricity/gas modeling</li>
+                        <li>Automated data reconciliation across multiple meter sources</li>
+                        <li>Deterministic client exports & point-in-time snapshots</li>
+                    </ul>
+                    <div class="project-tech">
+                        <div class="tech-label">Tech Stack</div>
+                        <div class="tech-stack">PostgreSQL (materialized views), Python, Schema migrations, Telemetry/QA validation</div>
+                    </div>
+                    <div class="project-screenshot">
+                        <img src="images/esg.png" alt="Mobius Carbon ESG Dashboard">
+                    </div>
+                </div>
+
+                <!-- Local Chat Interface -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">🔒</div>
+                        <div class="project-title-group">
+                            <h3>Local Chat Interface</h3>
+                            <span class="project-type">Privacy-First AI Platform</span>
+                        </div>
+                    </div>
+                    <p class="project-description">Self-hosted AI interface with enterprise-grade capabilities and complete data privacy. 100% local processing with no cloud dependencies.</p>
+                    <ul class="project-features">
+                        <li>Local AI model management with Ollama integration</li>
+                        <li>Advanced RAG & vector storage for documents</li>
+                        <li>Role-Based Access Control (RBAC) & SCIM 2.0</li>
+                        <li>Docker/Kubernetes deployment with GPU support</li>
+                    </ul>
+                    <div class="project-tech">
+                        <div class="tech-label">Tech Stack</div>
+                        <div class="tech-stack">SvelteKit, TypeScript, Python (FastAPI), Docker, Ollama, TailwindCSS v4</div>
+                    </div>
+                    <div class="project-screenshot">
+                        <img src="images/local-chat.png" alt="Local Chat Interface Screenshot">
+                    </div>
+                </div>
+
+                <!-- Booking Analytics -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">📈</div>
+                        <div class="project-title-group">
+                            <h3>Booking Analytics</h3>
+                            <span class="project-type">Analytics Dashboard</span>
+                        </div>
+                    </div>
+                    <p class="project-description">Real-time booking performance dashboard with momentum scoring, YoY growth tracking, and forward-looking analytics for hospitality businesses.</p>
+                    <ul class="project-features">
+                        <li>Multi-timeframe growth analysis (30/90/180/365 days)</li>
+                        <li>Momentum score with business health indicators</li>
+                        <li>Forward booking trends & pace analysis</li>
+                        <li>PostgreSQL with materialized views for performance</li>
+                    </ul>
+                    <div class="project-tech">
+                        <div class="tech-label">Tech Stack</div>
+                        <div class="tech-stack">React, TypeScript, Vite, PostgreSQL, Vercel Serverless Functions</div>
+                    </div>
+                    <div class="project-screenshot">
+                        <img src="images/booking-analytics.png" alt="Booking Analytics Dashboard">
+                    </div>
+                </div>
+
+                <!-- Real Intelligence -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon">🧠</div>
+                        <div class="project-title-group">
+                            <h3>Real Intelligence</h3>
+                            <span class="project-type">Web Platform</span>
+                        </div>
+                    </div>
+                    <p class="project-description">Carbon Impact Simulator - Interactive tool for businesses to model their emissions reduction strategies and align with UK sustainability targets.</p>
+                    <ul class="project-features">
+                        <li>Real-time emissions calculation & projections (2023-2050)</li>
+                        <li>UK net-zero target alignment (2030/2035/2050)</li>
+                        <li>Industry-specific sustainability measures & cost modeling</li>
+                        <li>Carbon offsetting calculator & visual dashboards</li>
+                    </ul>
+                    <div class="project-tech">
+                        <div class="tech-label">Live Platform</div>
+                        <div class="tech-stack">realintelligence.app • Lead generation for mobiuscarbon.com</div>
+                    </div>
+                    <div class="project-screenshot">
+                        <img src="images/realintelligence.png" alt="Carbon Impact Simulator Screenshot">
+                    </div>
+                    <a href="https://realintelligence.app" target="_blank" class="project-link">
+                        Try Simulator
+                        <span>→</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2025 Thor Matthiasson · Building the future with AI and intelligent automation</p>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth carousel animation
+        const phrases = [
+            "AI Integration",
+            "Data Engineering",
+            "Process Automation",
+            "Research Platforms",
+            "Privacy-First Tools",
+            "ESG Compliance"
+        ];
+
+        let currentIndex = 0;
+        const typingText = document.getElementById('typingText');
+
+        function createWord(text) {
+            const span = document.createElement('span');
+            span.className = 'carousel-word';
+            span.textContent = text;
+            return span;
+        }
+
+        function rotateWords() {
+            // Remove old word
+            const oldWord = typingText.querySelector('.carousel-word.active');
+            if (oldWord) {
+                oldWord.classList.remove('active');
+                oldWord.classList.add('exit');
+                setTimeout(() => oldWord.remove(), 600);
+            }
+
+            // Add new word
+            const newWord = createWord(phrases[currentIndex]);
+            typingText.appendChild(newWord);
+
+            // Trigger animation
+            setTimeout(() => newWord.classList.add('active'), 50);
+
+            // Move to next phrase
+            currentIndex = (currentIndex + 1) % phrases.length;
+
+            // Continue rotation
+            setTimeout(rotateWords, 2500);
+        }
+
+        // Start animation
+        setTimeout(rotateWords, 300);
+    </script>
+<script>
+    (function () {
+        const PASSWORD_HASH = '65ca92c9db724a2477466d206f717bcea944b3ffc4e9e567f5c40a559ba1b22d'; // SHA-256 for "portfolio2024!"
+        const storageKey = 'portfolioUnlocked';
+        const accessGate = document.querySelector('.access-gate');
+        const form = document.getElementById('access-form');
+        const input = document.getElementById('access-code');
+        const error = document.querySelector('.access-error');
+        const submitButton = form?.querySelector('button');
+
+        function markUnlocked() {
+            document.body.classList.remove('locked');
+            document.body.classList.add('unlocked');
+            accessGate?.setAttribute('aria-hidden', 'true');
+            accessGate?.setAttribute('hidden', 'hidden');
+        }
+
+        async function digest(message) {
+            const data = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hashBuffer))
+                .map((b) => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        // Restore unlocked state if this browser tab already passed validation.
+        if (sessionStorage.getItem(storageKey) === 'true') {
+            markUnlocked();
+            return;
+        }
+
+        if (!window.crypto || !window.crypto.subtle) {
+            console.warn('Web Crypto API is unavailable; cannot validate portfolio access code securely.');
+            error?.removeAttribute('hidden');
+            if (error) {
+                error.textContent = 'Please use a modern browser (with JavaScript and secure context) to view this private page.';
+            }
+            input?.setAttribute('disabled', 'disabled');
+            submitButton?.setAttribute('disabled', 'disabled');
+            return;
+        }
+
+        requestAnimationFrame(() => input?.focus());
+
+        form?.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const candidate = (input?.value || '').trim();
+            if (!candidate) {
+                return;
+            }
+
+            try {
+                const hash = await digest(candidate);
+                if (hash === PASSWORD_HASH) {
+                    sessionStorage.setItem(storageKey, 'true');
+                    markUnlocked();
+                } else {
+                    error?.removeAttribute('hidden');
+                    input?.focus();
+                    input?.select();
+                }
+            } catch (err) {
+                console.error('Access validation failed', err);
+                error?.removeAttribute('hidden');
+            }
+        });
+
+        input?.addEventListener('input', () => {
+            if (!error?.hasAttribute('hidden')) {
+                error.setAttribute('hidden', 'hidden');
+            }
+        });
+    })();
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How We Work Together - Thor Matthiasson</title>
+    <meta name="description" content="Strategic AI engagements designed for executives. From 2-week discovery assessments to ongoing fractional advisory.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Keyframe animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes drawProgress {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Animation utilities */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Vertical Timeline */
+        .timeline {
+            position: relative;
+            margin-left: 20px;
+            padding-left: 40px;
+            border-left: 2px solid #e0e0e0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -50px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            background-color: var(--accent-sage);
+            border-radius: 50%;
+            border: 3px solid #f5f5f5;
+        }
+
+        .timeline-content h3 {
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-content p {
+            font-family: 'Inter', sans-serif;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* Question Accordion */
+        .question-item {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .question-item:hover {
+            border-color: var(--accent-sage);
+            box-shadow: 0 4px 12px rgba(90, 124, 106, 0.1);
+        }
+
+        .question-item summary {
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-item summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .question-item summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--accent-sage);
+            font-weight: 300;
+        }
+
+        .question-item[open] summary::after {
+            content: '−';
+        }
+
+        .question-item div {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        /* Stat highlight */
+        .stat-highlight {
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-sage);
+            margin: 3rem 0;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--accent-sage);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Principle cards */
+        .principle-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .principle-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(90, 124, 106, 0.1);
+            border-color: rgba(90, 124, 106, 0.3);
+        }
+
+        .principle-card h4 {
+            color: var(--accent-sage);
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
+        }
+
+        /* Deliverables cards with icons */
+        .deliverable-card {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+        }
+
+        .deliverable-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(90, 124, 106, 0.08);
+            border-color: rgba(90, 124, 106, 0.3);
+        }
+
+        .deliverable-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-sage) 0%, #6a8c7a 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .stats-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .process-visual {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .process-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .timeline-item {
+                margin-left: 0;
+                padding-left: 30px;
+            }
+
+            .timeline-dot {
+                left: -35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Thor Matthiasson</a>
+            <div class="nav-links">
+                <a href="index.html#thinking">Thinking</a>
+                <a href="services.html">Advisory</a>
+                <a href="framework.html">Framework</a>
+                <a href="portfolio.html">Portfolio</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero" style="min-height: 60vh;">
+        <div class="container">
+            <p style="color: #999; text-transform: uppercase; letter-spacing: 1px; font-size: 0.875rem; margin-bottom: 1rem;">Engagements</p>
+            <h1 class="hero-name" style="margin-bottom: 1.5rem;">How We Work Together</h1>
+            <p class="hero-description" style="max-width: 700px; margin: 0 auto;">
+                Every organization's AI journey is unique. We can engage in two primary ways,
+                depending on your immediate needs and where you are in your transformation.
+            </p>
+        </div>
+    </header>
+
+    <!-- Industry Context -->
+    <section style="padding: 4rem 2rem; background: white;">
+        <div class="container" style="max-width: 900px;">
+            <div class="stat-highlight fade-in-section">
+                <div class="stat-number">Only 1%</div>
+                <p style="font-size: 1.25rem; color: var(--text-primary); margin-bottom: 1rem; font-weight: 500;">
+                    of companies have reached AI maturity, despite widespread investment
+                </p>
+                <p style="color: #666; line-height: 1.7; margin: 0; font-family: 'Crimson Text', serif; font-style: italic;">
+                    Almost all companies invest in AI, but just 1% believe they are at maturity. Use continues to surge,
+                    but from a value capture standpoint, these are still early days—few are experiencing meaningful bottom-line impacts.
+                </p>
+                <p style="margin-top: 1rem; font-size: 0.875rem; color: #999;">— McKinsey State of AI Report, 2025</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Critical Questions -->
+    <section class="section-alt">
+        <div class="container" style="max-width: 900px;">
+            <div class="fade-in-section">
+                <h2 class="section-title" style="text-align: center;">Critical Questions for AI-Ready Leaders</h2>
+                <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem; max-width: 650px; margin-left: auto; margin-right: auto;">
+                    These are the questions that separate strategic AI transformation from expensive experimentation.
+                </p>
+
+                <div style="margin-bottom: 2rem;">
+                    <details class="question-item">
+                        <summary>How can AI create a competitive moat for my business?</summary>
+                        <div>
+                            <p style="font-family: 'Crimson Text', serif; font-style: italic; color: #555; margin: 0; line-height: 1.7;">
+                                This moves beyond cost-cutting to focus on durable, long-term advantage. We'll explore proprietary data plays,
+                                unique customer experiences, and operational models that competitors cannot easily replicate.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="question-item">
+                        <summary>What "quick wins" can we execute in 90 days?</summary>
+                        <div>
+                            <p style="font-family: 'Crimson Text', serif; font-style: italic; color: #555; margin: 0; line-height: 1.7;">
+                                Building momentum is key. This question targets immediate value creation to fund longer-term initiatives
+                                and build internal buy-in across the organization.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="question-item">
+                        <summary>Do we have the governance to scale responsibly?</summary>
+                        <div>
+                            <p style="font-family: 'Crimson Text', serif; font-style: italic; color: #555; margin: 0; line-height: 1.7;">
+                                Policy, risk, compliance, and model governance must be in place before pilots become production systems.
+                                We identify gaps early to avoid costly retrofitting later.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="question-item">
+                        <summary>Where is our data, and is it actually usable?</summary>
+                        <div>
+                            <p style="font-family: 'Crimson Text', serif; font-style: italic; color: #555; margin: 0; line-height: 1.7;">
+                                Data quality, lineage, and access are the #1 blockers. We map your data landscape and identify
+                                what's ready for AI and what needs remediation.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="question-item">
+                        <summary>How will we measure ROI and benefits realization?</summary>
+                        <div>
+                            <p style="font-family: 'Crimson Text', serif; font-style: italic; color: #555; margin: 0; line-height: 1.7;">
+                                Without clear metrics and ownership, AI projects become science experiments. We define success criteria upfront
+                                and build accountability into the roadmap.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="question-item">
+                        <summary>What's our path from pilot to production?</summary>
+                        <div>
+                            <p style="font-family: 'Crimson Text', serif; font-style: italic; color: #555; margin: 0; line-height: 1.7;">
+                                Most pilots die in committee. We establish clear acceptance criteria, go/no-go gates, and the operational
+                                readiness needed to move winners into production.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+
+                <p style="text-align: center; color: #666; font-family: 'Crimson Text', serif; font-style: italic;">
+                    The Discovery & Gap Assessment is designed to answer these questions with clarity and conviction.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Discovery Assessment -->
+    <section style="padding: 6rem 2rem; background: white;">
+        <div class="container" style="max-width: 900px;">
+            <div class="fade-in-section" style="text-align: center; margin-bottom: 4rem;">
+                <h2 class="section-title">Discovery & Gap Assessment</h2>
+                <p class="section-subtitle" style="max-width: 650px; margin: 0 auto;">
+                    A comprehensive 2-week engagement that gives you a clear, defensible plan—without a six-month consulting project.
+                </p>
+            </div>
+
+            <!-- Timeline -->
+            <div class="fade-in-section" style="margin-bottom: 4rem;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 2rem; color: var(--text-primary);">The Journey</h3>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Days 1-2: Discovery</h3>
+                            <p>Stakeholder interviews across leadership. We surface challenges, opportunities, and organizational readiness through structured conversations.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Days 3-5: Assessment & Workshop</h3>
+                            <p>Maturity scoring across 8 dimensions. Interactive workshop to identify use cases, estimate value/effort/risk, and build consensus.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Days 6-7: Prioritization</h3>
+                            <p>Weighted analysis to shortlist 3-5 high-impact initiatives. Pilot shaping with clear success metrics and guardrails.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Days 8-10: Readout & Mobilization</h3>
+                            <p>Executive presentation with findings, roadmap, and 30-60-90 day action plan. Board-ready narrative and decision package.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deliverables -->
+            <!-- Visual Stats Infographic - Simplified -->
+            <div class="fade-in-section" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 3rem 0; padding: 3rem; background: linear-gradient(135deg, #fff5ee 0%, #fdf9f4 100%); border-radius: 16px; border: 1px solid #e0b896;">
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; font-weight: 300; color: #d4a574; line-height: 1; margin-bottom: 0.5rem;">2</div>
+                    <div style="font-size: 0.875rem; color: #6a6a6a; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Weeks</div>
+                    <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Time-boxed engagement</div>
+                </div>
+                <div style="text-align: center; border-left: 1px solid #e0b896; border-right: 1px solid #e0b896;">
+                    <div style="font-size: 4rem; font-weight: 300; color: #5a7c6a; line-height: 1; margin-bottom: 0.5rem;">8</div>
+                    <div style="font-size: 0.875rem; color: #6a6a6a; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Dimensions</div>
+                    <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Comprehensive coverage</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; font-weight: 300; color: #2c3e50; line-height: 1; margin-bottom: 0.5rem;">6</div>
+                    <div style="font-size: 0.875rem; color: #6a6a6a; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Deliverables</div>
+                    <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Actionable outputs</div>
+                </div>
+            </div>
+
+            <!-- Journey Visualization - Animated -->
+            <div class="fade-in-section" style="margin: 3rem 0; padding: 3rem; background: linear-gradient(135deg, #ffffff 0%, #fdf9f4 100%); border-radius: 16px; border: 1px solid #e0b896;">
+                <h3 style="text-align: center; font-size: 1.5rem; font-weight: 400; margin-bottom: 2.5rem; color: #2c3e50;">Your AI Transformation Journey</h3>
+
+                <!-- Progress Bar Version -->
+                <div class="journey-progress" style="position: relative; padding: 2rem 0;">
+                    <!-- Background Line -->
+                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: #f0f0f0; z-index: 1;"></div>
+
+                    <!-- Animated Progress Line -->
+                    <div class="journey-line" style="position: absolute; top: 50%; left: 0; height: 2px; background: linear-gradient(90deg, #d4a574 0%, #5a7c6a 100%); z-index: 2; width: 0; transition: width 2s ease-out;"></div>
+
+                    <!-- Steps -->
+                    <div style="display: flex; justify-content: space-between; position: relative; z-index: 3;">
+                        <div class="journey-step" style="text-align: center; opacity: 0; animation: fadeInUp 0.6s ease-out 0.3s forwards;">
+                            <div style="width: 60px; height: 60px; background: #fff; border: 3px solid #d4a574; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem; color: #d4a574; box-shadow: 0 4px 12px rgba(212, 165, 116, 0.2);">1</div>
+                            <div style="font-weight: 600; color: #2c3e50;">Discover</div>
+                            <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Map current state</div>
+                        </div>
+
+                        <div class="journey-step" style="text-align: center; opacity: 0; animation: fadeInUp 0.6s ease-out 0.6s forwards;">
+                            <div style="width: 60px; height: 60px; background: #fff; border: 3px solid #5a7c6a; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem; color: #5a7c6a; box-shadow: 0 4px 12px rgba(90, 124, 106, 0.2);">2</div>
+                            <div style="font-weight: 600; color: #2c3e50;">Assess</div>
+                            <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Score maturity</div>
+                        </div>
+
+                        <div class="journey-step" style="text-align: center; opacity: 0; animation: fadeInUp 0.6s ease-out 0.9s forwards;">
+                            <div style="width: 60px; height: 60px; background: #fff; border: 3px solid #5a7c6a; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem; color: #5a7c6a; box-shadow: 0 4px 12px rgba(90, 124, 106, 0.2);">3</div>
+                            <div style="font-weight: 600; color: #2c3e50;">Prioritize</div>
+                            <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Focus efforts</div>
+                        </div>
+
+                        <div class="journey-step" style="text-align: center; opacity: 0; animation: fadeInUp 0.6s ease-out 1.2s forwards;">
+                            <div style="width: 60px; height: 60px; background: #fff; border: 3px solid #2c3e50; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem; color: #2c3e50; box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);">4</div>
+                            <div style="font-weight: 600; color: #2c3e50;">Deliver</div>
+                            <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Execute plan</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Animate journey line on scroll
+                setTimeout(() => {
+                    const journeyLine = document.querySelector('.journey-line');
+                    if (journeyLine) {
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    journeyLine.style.width = '100%';
+                                }
+                            });
+                        }, { threshold: 0.5 });
+                        observer.observe(journeyLine);
+                    }
+                }, 100);
+            </script>
+
+            <!-- What You Receive -->
+            <div class="fade-in-section" style="margin-bottom: 4rem;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 2rem; color: var(--text-primary);">What You Receive</h3>
+
+                <div style="display: grid; gap: 1rem;">
+                    <div class="deliverable-card">
+                        <div class="deliverable-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <path d="M9 3v18"/>
+                                <path d="M15 3v18"/>
+                                <path d="M3 9h18"/>
+                                <path d="M3 15h18"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="font-size: 1.0625rem; color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 500;">Maturity Baseline</p>
+                            <p style="font-size: 0.9375rem; color: #666; margin: 0; line-height: 1.6;">
+                                Scored assessment (0-5) across 8 dimensions with visual heatmap
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="deliverable-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="3"/>
+                                <line x1="12" y1="1" x2="12" y2="3"/>
+                                <line x1="12" y1="21" x2="12" y2="23"/>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="font-size: 1.0625rem; color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 500;">Opportunity Inventory</p>
+                            <p style="font-size: 0.9375rem; color: #666; margin: 0; line-height: 1.6;">
+                                Catalogued use cases with value, effort, and risk estimates
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="deliverable-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="font-size: 1.0625rem; color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 500;">Prioritized Roadmap</p>
+                            <p style="font-size: 0.9375rem; color: #666; margin: 0; line-height: 1.6;">
+                                3-5 high-impact initiatives with dependencies and quick wins mapped
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="deliverable-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 11l3 3L22 4"/>
+                                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="font-size: 1.0625rem; color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 500;">Pilot Charter</p>
+                            <p style="font-size: 0.9375rem; color: #666; margin: 0; line-height: 1.6;">
+                                Success metrics, acceptance criteria, guardrails, owners, and go/no-go gate
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="deliverable-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="font-size: 1.0625rem; color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 500;">Responsible AI Checklist</p>
+                            <p style="font-size: 0.9375rem; color: #666; margin: 0; line-height: 1.6;">
+                                Policy starter covering acceptable use, data handling, privacy, and safety
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                        <div class="deliverable-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 16 12 13 15 10 15 7 12 2 12"/>
+                                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="font-size: 1.0625rem; color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 500;">Executive Readout</p>
+                            <p style="font-size: 0.9375rem; color: #666; margin: 0; line-height: 1.6;">
+                                Board-ready narrative with findings, recommendations, and 30-60-90 day plan
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What I Need -->
+            <div class="fade-in-section" style="background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%); padding: 2.5rem; border-radius: 12px; margin-bottom: 3rem;">
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);">What I Need From You</h3>
+                <ul style="color: #666; line-height: 1.8; margin: 0; padding-left: 1.5rem;">
+                    <li>Executive sponsor who can make decisions</li>
+                    <li>5-7 stakeholder interviewees across functions</li>
+                    <li>Access to sample data or sandbox environment</li>
+                    <li>Decision-maker availability for pilot go/no-go</li>
+                </ul>
+            </div>
+
+            <!-- Investment -->
+            <div class="fade-in-section" style="text-align: center; padding: 3rem 2rem; background: white; border: 2px solid var(--accent-sage); border-radius: 12px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-primary);">Fixed Scope. Two Weeks. Decision-Ready Outputs.</h3>
+                <p style="color: #666; margin-bottom: 2rem; line-height: 1.7;">
+                    This engagement is based on the same time-boxed model used by leading cloud providers' AI readiness programs,
+                    adapted for direct executive advisory.
+                </p>
+                <a href="index.html#contact" class="btn btn-primary">Book a Scoping Call</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guiding Principles -->
+    <section class="section-alt">
+        <div class="container" style="max-width: 900px;">
+            <div class="fade-in-section">
+                <h2 class="section-title" style="text-align: center;">Guiding Principles</h2>
+                <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">
+                    The core beliefs that shape how I work with clients
+                </p>
+
+                <div style="display: grid; gap: 2rem;">
+                    <div class="principle-card">
+                        <h4>Strategy First, Technology Second</h4>
+                        <p style="color: #666; line-height: 1.7; margin: 0;">
+                            AI is a business transformation, not an IT project. We start with your strategic goals,
+                            not with a list of tools. Technology choices follow from strategy, never the reverse.
+                        </p>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>Focus on Asymmetric Upside</h4>
+                        <p style="color: #666; line-height: 1.7; margin: 0;">
+                            We identify opportunities where a small, focused AI investment can yield a disproportionately
+                            large business impact. The goal is strategic leverage, not just operational efficiency.
+                        </p>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>From 'Black Box' to Business Tool</h4>
+                        <p style="color: #666; line-height: 1.7; margin: 0;">
+                            My goal is to demystify AI for you and your leadership team, turning it into a predictable
+                            tool for growth. Clarity and conviction matter more than technical complexity.
+                        </p>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>Vendor-Neutral, Always</h4>
+                        <p style="color: #666; line-height: 1.7; margin: 0;">
+                            Unlike large consultancies, I have no implementation teams to sell you. My only incentive
+                            is helping you make the right decisions for your business.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fractional Advisor -->
+    <section style="padding: 6rem 2rem; background: white;">
+        <div class="container" style="max-width: 900px;">
+            <div class="fade-in-section" style="text-align: center; margin-bottom: 4rem;">
+                <h2 class="section-title">Fractional AI Advisor</h2>
+                <p class="section-subtitle" style="max-width: 650px; margin: 0 auto;">
+                    Ongoing strategic partnership for leaders who have a plan but need consistent,
+                    expert guidance to ensure execution and navigate unforeseen challenges.
+                </p>
+            </div>
+
+            <!-- Who It's For -->
+            <div class="fade-in-section" style="background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%); padding: 2.5rem; border-radius: 12px; margin-bottom: 3rem;">
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);">Who This Is For</h3>
+                <p style="color: #666; line-height: 1.7; margin: 0;">
+                    CEOs and senior executives who need a trusted AI advisor on retainer. You're executing on AI initiatives
+                    and need someone who understands your business, can review vendor proposals, prep you for board meetings,
+                    and provide rapid guidance when critical decisions arise.
+                </p>
+            </div>
+
+            <!-- Options -->
+            <div class="fade-in-section" style="display: grid; gap: 2rem; margin-bottom: 3rem;">
+                <!-- Essential Option -->
+                <div style="background: white; padding: 3rem; border-radius: 12px; border: 1px solid var(--border-light);">
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-primary);">Essential Partnership</h3>
+                        <p style="color: var(--accent-sage); font-size: 1.125rem; font-weight: 600; margin: 0;">4 hours per month</p>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">Perfect for strategic guidance on major decisions:</p>
+                        <ul style="color: #666; line-height: 1.8; margin: 0; padding-left: 1.5rem;">
+                            <li>One 60-minute strategic session per month</li>
+                            <li>Email access for critical questions (48-hour response)</li>
+                            <li>Vendor proposal reviews and due diligence</li>
+                            <li>Board presentation prep and rehearsal</li>
+                        </ul>
+                    </div>
+
+                    <p style="font-size: 0.875rem; color: #999; margin: 0;">
+                        <strong>Clear boundaries:</strong> Strategic counsel only. No hands-on implementation or project management.
+                    </p>
+                </div>
+
+                <!-- Premium Option -->
+                <div style="background: white; padding: 3rem; border-radius: 12px; border: 2px solid var(--accent-sage);">
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-primary);">Premium Partnership</h3>
+                        <p style="color: var(--accent-sage); font-size: 1.125rem; font-weight: 600; margin: 0;">8 hours per month</p>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">Everything in Essential, plus:</p>
+                        <ul style="color: #666; line-height: 1.8; margin: 0; padding-left: 1.5rem;">
+                            <li>Two 60-minute sessions per month (or one 2-hour deep dive)</li>
+                            <li>Ad-hoc review of pilot deliverables (24-hour turnaround)</li>
+                            <li>Quarterly roadmap review and recalibration</li>
+                            <li>Priority response for urgent decisions</li>
+                        </ul>
+                    </div>
+
+                    <p style="font-size: 0.875rem; color: #999; margin: 0;">
+                        <strong>Best for:</strong> Active AI programs where you need a consistent strategic sounding board.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="fade-in-section" style="text-align: center; padding: 2.5rem; background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%); border-radius: 12px;">
+                <a href="index.html#contact" class="btn btn-primary">Inquire About a Partnership</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-section">
+        <div class="container fade-in-section" style="max-width: 650px; text-align: center;">
+            <h2 class="section-title">Not Sure Which Fits?</h2>
+            <p style="font-size: 1.125rem; color: #666; margin-bottom: 2rem; line-height: 1.7;">
+                Let's talk through your situation and find the right starting point.
+            </p>
+            <div class="hero-actions">
+                <a href="index.html#contact" class="btn btn-primary">Start a Conversation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Thor Matthiasson. Business Intelligence & AI Strategy Advisory.</p>
+                <div class="footer-links">
+                    <a href="https://www.linkedin.com/in/thor-matthiasson-647a9415/" target="_blank">LinkedIn</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            const sectionsToAnimate = document.querySelectorAll('.fade-in-section');
+            sectionsToAnimate.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Survey Results - Thor AI Advisory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        .results-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .results-header h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .summary-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .summary-card .label {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .chart-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-section h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .dimension-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .dimension-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .dimension-score {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #5a7c6a;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #5a7c6a 0%, #4a6c5a 100%);
+            transition: width 0.3s;
+        }
+
+        .insights-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .insights-box h3 {
+            color: #92400e;
+            margin-bottom: 1rem;
+        }
+
+        .insights-box ul {
+            color: #78350f;
+            line-height: 1.8;
+        }
+
+        .heatmap-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .heatmap-table th,
+        .heatmap-table td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+        }
+
+        .heatmap-table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .heatmap-cell {
+            font-weight: 600;
+            border-radius: 4px;
+        }
+
+        .heatmap-high {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .heatmap-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .heatmap-low {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a574 0%, #b8935f 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        @media (max-width: 768px) {
+            .results-container {
+                padding: 1rem;
+            }
+
+            .chart-container {
+                height: 300px;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="results-container">
+        <div class="results-header">
+            <h1 id="survey-title">Pulse Survey Results</h1>
+            <p id="survey-meta" style="color: #6b7280;"></p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="value" id="total-responses">0</div>
+                <div class="label">Total Responses</div>
+            </div>
+            <div class="summary-card">
+                <div class="value" id="overall-score">0</div>
+                <div class="label">Overall Score</div>
+            </div>
+            <div class="summary-card">
+                <div class="value" id="completion-rate">0%</div>
+                <div class="label">Completion Rate</div>
+            </div>
+            <div class="summary-card">
+                <div class="value" id="avg-time">-</div>
+                <div class="label">Avg. Time</div>
+            </div>
+        </div>
+
+        <!-- Key Insights -->
+        <div class="insights-box">
+            <h3>🔍 Key Insights</h3>
+            <ul id="insights-list">
+                <li>Loading insights...</li>
+            </ul>
+        </div>
+
+        <!-- Dimension Scores -->
+        <div class="chart-section">
+            <h2>Overall Dimension Scores</h2>
+            <div class="breakdown-grid" id="dimension-cards"></div>
+        </div>
+
+        <!-- Radar Chart -->
+        <div class="chart-section">
+            <h2>AI Readiness Radar</h2>
+            <div class="chart-container">
+                <canvas id="radarChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Department Breakdown -->
+        <div class="chart-section">
+            <h2>Breakdown by Department</h2>
+            <div class="chart-container">
+                <canvas id="departmentChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Level Breakdown -->
+        <div class="chart-section">
+            <h2>Breakdown by Level</h2>
+            <div class="chart-container">
+                <canvas id="levelChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Heatmap -->
+        <div class="chart-section">
+            <h2>Dimension Heatmap by Department</h2>
+            <div style="overflow-x: auto;">
+                <table class="heatmap-table" id="heatmap-table">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Data</th>
+                            <th>Governance</th>
+                            <th>Technical</th>
+                            <th>Business</th>
+                            <th>Culture</th>
+                        </tr>
+                    </thead>
+                    <tbody id="heatmap-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Export Buttons -->
+        <div class="export-buttons">
+            <button class="btn btn-primary" onclick="exportToExcel()">Export to Excel</button>
+            <button class="btn btn-secondary" onclick="window.location.href='pulse-admin.html'">Back to Admin</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const SUPABASE_URL = 'https://hzverggjspltpopivtgc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6dmVyZ2dqc3BsdHBvcGl2dGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzUxMDQsImV4cCI6MjA3NTI1MTEwNH0.n8S0BHP33VAP8KMEkHIBHcDdTapBOfnqwB8D1qf9pv4';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let sessionData = null;
+        let responsesData = null;
+
+        // Get session ID from URL
+        function getSessionId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('session');
+        }
+
+        // Load and process data
+        async function loadResults() {
+            const sessionId = getSessionId();
+            if (!sessionId) {
+                alert('No session ID provided');
+                return;
+            }
+
+            try {
+                // Load session with participants and responses
+                const { data: session, error: sessionError } = await supabase
+                    .from('assessment_sessions')
+                    .select(`
+                        *,
+                        organizations (name),
+                        participants (
+                            id,
+                            department,
+                            level,
+                            started_at,
+                            completed_at
+                        )
+                    `)
+                    .eq('id', sessionId)
+                    .single();
+
+                if (sessionError) throw sessionError;
+
+                sessionData = session;
+
+                // Load all responses for this session
+                const { data: responses, error: responsesError } = await supabase
+                    .from('assessment_responses')
+                    .select(`
+                        *,
+                        participants!inner (
+                            department,
+                            level,
+                            session_id
+                        )
+                    `)
+                    .eq('participants.session_id', sessionId);
+
+                if (responsesError) throw responsesError;
+
+                responsesData = responses;
+
+                // Render all visualizations
+                renderSummary();
+                renderDimensionCards();
+                renderRadarChart();
+                renderDepartmentChart();
+                renderLevelChart();
+                renderHeatmap();
+                renderInsights();
+
+            } catch (err) {
+                console.error('Error loading results:', err);
+                alert('Error loading results: ' + err.message);
+            }
+        }
+
+        function renderSummary() {
+            document.getElementById('survey-title').textContent = sessionData.title || 'Pulse Survey Results';
+            document.getElementById('survey-meta').textContent =
+                `${sessionData.organizations?.name || 'Organization'} • Created ${new Date(sessionData.created_at).toLocaleDateString()}`;
+
+            const totalParticipants = sessionData.participants.length;
+            const completedParticipants = sessionData.participants.filter(p => p.completed_at).length;
+            const completionRate = totalParticipants > 0
+                ? Math.round((completedParticipants / totalParticipants) * 100)
+                : 0;
+
+            const overallScore = calculateOverallScore();
+
+            document.getElementById('total-responses').textContent = completedParticipants;
+            document.getElementById('overall-score').textContent = overallScore.toFixed(1);
+            document.getElementById('completion-rate').textContent = completionRate + '%';
+
+            // Calculate avg time
+            const completedWithTime = sessionData.participants.filter(p => p.started_at && p.completed_at);
+            if (completedWithTime.length > 0) {
+                const avgMinutes = completedWithTime.reduce((sum, p) => {
+                    const minutes = (new Date(p.completed_at) - new Date(p.started_at)) / 1000 / 60;
+                    return sum + minutes;
+                }, 0) / completedWithTime.length;
+                document.getElementById('avg-time').textContent = Math.round(avgMinutes) + ' min';
+            }
+        }
+
+        function calculateOverallScore() {
+            if (!responsesData || responsesData.length === 0) return 0;
+
+            // Convert Likert responses to 0-100 scale
+            const scores = responsesData
+                .filter(r => !isNaN(r.response_value))
+                .map(r => {
+                    const val = parseInt(r.response_value);
+                    return ((val - 1) / 4) * 100; // 1-5 scale to 0-100
+                });
+
+            return scores.reduce((a, b) => a + b, 0) / scores.length;
+        }
+
+        function calculateDimensionScores() {
+            const dimensions = ['Data', 'Governance', 'Technical', 'Business', 'Culture'];
+            const scores = {};
+
+            dimensions.forEach(dim => {
+                const dimResponses = responsesData.filter(r => r.dimension === dim && !isNaN(r.response_value));
+                if (dimResponses.length > 0) {
+                    const avg = dimResponses.reduce((sum, r) => {
+                        const val = parseInt(r.response_value);
+                        return sum + ((val - 1) / 4) * 100;
+                    }, 0) / dimResponses.length;
+                    scores[dim] = avg;
+                } else {
+                    scores[dim] = 0;
+                }
+            });
+
+            return scores;
+        }
+
+        function renderDimensionCards() {
+            const scores = calculateDimensionScores();
+            const container = document.getElementById('dimension-cards');
+
+            container.innerHTML = Object.entries(scores).map(([dimension, score]) => `
+                <div class="dimension-card">
+                    <div class="dimension-title">${dimension}</div>
+                    <div class="dimension-score">${score.toFixed(1)}</div>
+                    <div class="score-bar">
+                        <div class="score-fill" style="width: ${score}%"></div>
+                    </div>
+                    <div style="color: #6b7280; font-size: 0.875rem;">
+                        ${score >= 70 ? '✅ Strong' : score >= 50 ? '⚠️ Moderate' : '❌ Needs Attention'}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderRadarChart() {
+            const scores = calculateDimensionScores();
+            const ctx = document.getElementById('radarChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(scores),
+                    datasets: [{
+                        label: 'AI Readiness Score',
+                        data: Object.values(scores),
+                        backgroundColor: 'rgba(90, 124, 106, 0.2)',
+                        borderColor: '#5a7c6a',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#5a7c6a',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#5a7c6a'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderDepartmentChart() {
+            const departments = [...new Set(responsesData.map(r => r.participants.department))];
+            const dimensions = ['Data', 'Governance', 'Technical', 'Business', 'Culture'];
+
+            const datasets = dimensions.map((dim, i) => {
+                const colors = ['#5a7c6a', '#d4a574', '#6b8f71', '#b8935f', '#7c9c86'];
+                const data = departments.map(dept => {
+                    const deptResponses = responsesData.filter(r =>
+                        r.participants.department === dept &&
+                        r.dimension === dim &&
+                        !isNaN(r.response_value)
+                    );
+                    if (deptResponses.length === 0) return 0;
+                    const avg = deptResponses.reduce((sum, r) => {
+                        return sum + ((parseInt(r.response_value) - 1) / 4) * 100;
+                    }, 0) / deptResponses.length;
+                    return avg;
+                });
+
+                return {
+                    label: dim,
+                    data: data,
+                    backgroundColor: colors[i],
+                };
+            });
+
+            const ctx = document.getElementById('departmentChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: departments,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: false
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderLevelChart() {
+            const levels = [...new Set(responsesData.map(r => r.participants.level))];
+            const dimensions = ['Data', 'Governance', 'Technical', 'Business', 'Culture'];
+
+            const datasets = dimensions.map((dim, i) => {
+                const colors = ['#5a7c6a', '#d4a574', '#6b8f71', '#b8935f', '#7c9c86'];
+                const data = levels.map(level => {
+                    const levelResponses = responsesData.filter(r =>
+                        r.participants.level === level &&
+                        r.dimension === dim &&
+                        !isNaN(r.response_value)
+                    );
+                    if (levelResponses.length === 0) return 0;
+                    const avg = levelResponses.reduce((sum, r) => {
+                        return sum + ((parseInt(r.response_value) - 1) / 4) * 100;
+                    }, 0) / levelResponses.length;
+                    return avg;
+                });
+
+                return {
+                    label: dim,
+                    data: data,
+                    backgroundColor: colors[i],
+                };
+            });
+
+            const ctx = document.getElementById('levelChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: levels.map(l => l === 'ic' ? 'Individual Contributor' : l.charAt(0).toUpperCase() + l.slice(1)),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: false
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderHeatmap() {
+            const departments = [...new Set(responsesData.map(r => r.participants.department))];
+            const dimensions = ['Data', 'Governance', 'Technical', 'Business', 'Culture'];
+
+            const tbody = document.getElementById('heatmap-body');
+            tbody.innerHTML = departments.map(dept => {
+                const cells = dimensions.map(dim => {
+                    const deptResponses = responsesData.filter(r =>
+                        r.participants.department === dept &&
+                        r.dimension === dim &&
+                        !isNaN(r.response_value)
+                    );
+                    if (deptResponses.length === 0) return '<td>-</td>';
+
+                    const avg = deptResponses.reduce((sum, r) => {
+                        return sum + ((parseInt(r.response_value) - 1) / 4) * 100;
+                    }, 0) / deptResponses.length;
+
+                    const colorClass = avg >= 70 ? 'heatmap-high' : avg >= 50 ? 'heatmap-medium' : 'heatmap-low';
+
+                    return `<td class="heatmap-cell ${colorClass}">${avg.toFixed(0)}</td>`;
+                }).join('');
+
+                return `<tr><th>${dept}</th>${cells}</tr>`;
+            }).join('');
+        }
+
+        function renderInsights() {
+            const scores = calculateDimensionScores();
+            const insights = [];
+
+            // Find lowest dimension
+            const lowest = Object.entries(scores).reduce((a, b) => a[1] < b[1] ? a : b);
+            insights.push(`<strong>${lowest[0]}</strong> is the lowest-scoring dimension (${lowest[1].toFixed(0)}). This should be the primary focus area.`);
+
+            // Find highest dimension
+            const highest = Object.entries(scores).reduce((a, b) => a[1] > b[1] ? a : b);
+            insights.push(`<strong>${highest[0]}</strong> is a strength (${highest[1].toFixed(0)}). Build on this foundation.`);
+
+            // Department insights
+            const departments = [...new Set(responsesData.map(r => r.participants.department))];
+            if (departments.length > 1) {
+                // Find department with lowest avg score
+                const deptScores = departments.map(dept => {
+                    const deptResponses = responsesData.filter(r => r.participants.department === dept && !isNaN(r.response_value));
+                    const avg = deptResponses.reduce((sum, r) => {
+                        return sum + ((parseInt(r.response_value) - 1) / 4) * 100;
+                    }, 0) / deptResponses.length;
+                    return { dept, avg };
+                });
+                const lowestDept = deptScores.reduce((a, b) => a.avg < b.avg ? a : b);
+                insights.push(`<strong>${lowestDept.dept}</strong> shows the lowest readiness (${lowestDept.avg.toFixed(0)}). Consider targeted interventions.`);
+            }
+
+            document.getElementById('insights-list').innerHTML = insights.map(i => `<li>${i}</li>`).join('');
+        }
+
+        function exportToExcel() {
+            alert('Excel export feature coming soon! For now, you can screenshot or use browser print to PDF.');
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', loadResults);
+    </script>
+</body>
+</html>

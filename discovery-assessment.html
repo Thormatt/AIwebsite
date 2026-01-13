@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery & Gap Assessment - Thor Matthiasson</title>
+    <meta name="description" content="A structured 2-week sprint to assess your AI maturity and deliver a board-ready roadmap with prioritized initiatives.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Timeline visualization */
+        .timeline {
+            position: relative;
+            margin: 3rem 0;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 60px;
+            top: 30px;
+            bottom: -30px;
+            width: 2px;
+            background: var(--border-light);
+            z-index: 1;
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-day {
+            text-align: right;
+            padding-top: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-day span {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--accent-sage);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(90, 124, 106, 0.3);
+            position: relative;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            position: relative;
+        }
+
+        .timeline-content h4 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .timeline-content ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Deliverables cards */
+        .deliverables-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .deliverable-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .deliverable-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-sage);
+        }
+
+        .deliverable-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, var(--accent-sage) 0%, #7a9c8a 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .deliverable-card h4 {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .deliverable-card p {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Process steps */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .process-step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            background: var(--background);
+            border: 2px solid var(--accent-sage);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--accent-sage);
+        }
+
+        .process-step h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .process-step p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .timeline-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .timeline-item::before {
+                display: none;
+            }
+
+            .deliverables-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Investment section */
+        .investment-box {
+            background: linear-gradient(135deg, #fff5ee 0%, #fdf9f4 100%);
+            border: 1px solid var(--gold-light);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem auto;
+            max-width: 600px;
+        }
+
+        .investment-box h3 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin: 1rem 0;
+        }
+
+        .investment-box p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Thor Matthiasson</a>
+            <button class="nav-menu-button" aria-label="Menu" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="nav-links">
+                <a href="thinking.html">Thinking</a>
+                <a href="services.html">Advisory</a>
+                <a href="tools.html">Tools</a>
+                <a href="portfolio.html">Portfolio</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero" style="min-height: 50vh; padding: 8rem 2rem 4rem;">
+        <div class="container" style="max-width: 900px;">
+            <a href="services.html" style="color: var(--accent-sage); text-decoration: none; font-size: 0.9375rem; margin-bottom: 1rem; display: inline-block;">
+                ← Back to Services
+            </a>
+            <h1 style="font-size: 3rem; font-weight: 300; margin-bottom: 1rem; color: var(--text-primary);">
+                Discovery & Gap Assessment
+            </h1>
+            <p style="font-size: 1.375rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 2rem;">
+                A structured 2-week sprint to assess your AI maturity, identify opportunities,
+                and deliver a board-ready roadmap with prioritized initiatives.
+            </p>
+            <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Duration</span>
+                    <p style="font-weight: 600; color: var(--text-primary);">2 weeks</p>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Deliverables</span>
+                    <p style="font-weight: 600; color: var(--text-primary);">Scorecard, heatmap, board brief</p>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Format</span>
+                    <p style="font-weight: 600; color: var(--text-primary);">Intensive sprint</p>
+                </div>
+            </div>
+            <p style="margin-top: 1.5rem; font-size: 1rem; color: var(--text-secondary); line-height: 1.6; max-width: 700px;">
+                You'll leave with an AI maturity score, opportunity heatmap, and a 12-slide executive brief ready for your board—the same outputs I use with ongoing advisory clients.
+            </p>
+            <div style="margin-top: 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <a href="index.html#contact" class="btn btn-primary">Request Strategy Call</a>
+                <a href="#board-ready" class="btn btn-secondary">See Deliverables</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- What You Get Section -->
+    <section style="padding: 4rem 2rem; background: white;">
+        <div class="container" style="max-width: 1000px;">
+            <h2 style="text-align: center; font-size: 2rem; font-weight: 300; margin-bottom: 1rem;">
+                What You'll Receive
+            </h2>
+            <p style="text-align: center; font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                Three strategic documents designed to give your leadership team clarity and confidence in your AI journey
+            </p>
+
+            <div class="deliverables-grid">
+                <div class="deliverable-card">
+                    <div class="deliverable-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <h4>Maturity Assessment</h4>
+                    <p>
+                        Executive scorecard across 8 capability dimensions with peer benchmarks, risk flags, and a clear maturity rating your board can grasp in minutes.
+                    </p>
+                </div>
+
+                <div class="deliverable-card">
+                    <div class="deliverable-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+                            <line x1="9" y1="3" x2="9" y2="18"></line>
+                            <line x1="15" y1="6" x2="15" y2="21"></line>
+                        </svg>
+                    </div>
+                    <h4>Strategic Roadmap</h4>
+                    <p>
+                        12-month roadmap sequencing quick wins and foundational builds, with owners, investment ranges, and KPI targets for the first 90 days.
+                    </p>
+                </div>
+
+                <div class="deliverable-card">
+                    <div class="deliverable-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </div>
+                    <h4>Pilot Charter</h4>
+                    <p>
+                        Pilot charter detailing business case, data requirements, success metrics, governance checkpoints, and change-management talking points.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Board-Ready Package -->
+    <section id="board-ready" style="padding: 3.5rem 2rem; background: var(--background);">
+        <div class="container" style="max-width: 900px;">
+            <h2 style="text-align: center; font-size: 1.9rem; font-weight: 300; margin-bottom: 1rem;">
+                Board-Ready Package
+            </h2>
+            <p style="text-align: center; font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 2.5rem; max-width: 680px; margin-left: auto; margin-right: auto;">
+                The final deliverable is an executive briefing kit you can present immediately—crafted to answer the questions boards, investors, and senior stakeholders ask most.
+            </p>
+
+            <div style="display: grid; gap: 1.5rem;">
+                <div style="display: flex; gap: 1rem; align-items: start;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 4px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        12-slide executive deck covering current state, investment thesis, prioritized roadmap, and risk mitigations.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: start;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 4px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Two-page investment memo summarizing ROI assumptions, required resources, and decision-ready next steps.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: start;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 4px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Risk &amp; governance snapshot with data, compliance, and change-management considerations plus recommended owners.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: start;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 4px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        30-day post-engagement check-in to review early momentum and resolve any questions from leadership.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Timeline -->
+    <section style="padding: 4rem 2rem; background: var(--background);">
+        <div class="container" style="max-width: 900px;">
+            <h2 style="text-align: center; font-size: 2rem; font-weight: 300; margin-bottom: 1rem;">
+                The 2-Week Sprint
+            </h2>
+            <p style="text-align: center; font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 3rem;">
+                A proven process that delivers clarity without disrupting your operations
+            </p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-day">
+                        <span>Days 1-3</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Discovery & Stakeholder Interviews</h4>
+                        <p>Understanding your business context, goals, and constraints</p>
+                        <ul>
+                            <li>90-minute executive kickoff to align on objectives and constraints</li>
+                            <li>4-6 stakeholder interviews across operations, technology, and finance</li>
+                            <li>Data and process inventory to capture the current state</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-day">
+                        <span>Days 4-7</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Analysis & Opportunity Mapping</h4>
+                        <p>Identifying high-impact AI opportunities specific to your business</p>
+                        <ul>
+                            <li>Process and customer journey mapping workshops (2 sessions)</li>
+                            <li>Data readiness scoring across quality, accessibility, and governance</li>
+                            <li>Opportunity heatmap evaluating value, effort, and timeline</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-day">
+                        <span>Days 8-10</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Roadmap Development</h4>
+                        <p>Creating your prioritized implementation plan</p>
+                        <ul>
+                            <li>Initiative prioritization matrix with value vs. feasibility</li>
+                            <li>Investment ranges, resource assumptions, and dependency mapping</li>
+                            <li>Risk and compliance review with recommended guardrails</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-day">
+                        <span>Days 11-14</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Documentation & Presentation</h4>
+                        <p>Delivering board-ready materials and recommendations</p>
+                        <ul>
+                            <li>Executive playback session with your leadership team (60 minutes)</li>
+                            <li>Delivery of briefing deck, investment memo, and pilot charter</li>
+                            <li>Leadership Q&amp;A plus 30-day action plan and kickoff checklist</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Outcomes -->
+    <section style="padding: 4rem 2rem; background: white;">
+        <div class="container" style="max-width: 900px;">
+            <h2 style="text-align: center; font-size: 2rem; font-weight: 300; margin-bottom: 1rem;">
+                What Success Looks Like
+            </h2>
+            <p style="text-align: center; font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 3rem;">
+                Each assessment produces decision-ready outputs executives can act on immediately.
+            </p>
+            <div style="display: grid; gap: 1.5rem;">
+                <div style="display: flex; gap: 1rem; align-items: start;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 4px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Board briefing packages that have shortened approval cycles by up to 50% because stakeholders see the value, risk, and readiness on one page.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: start;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 4px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Prioritized roadmaps that identify at least three quick-win initiatives delivering measurable impact within the first 90 days.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: start;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 4px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Confidence to respond to board and investor questions on ROI, data, and risk—backed by evidence and executive-ready narratives.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section style="padding: 4rem 2rem; background: white;">
+        <div class="container" style="max-width: 1000px;">
+            <h2 style="text-align: center; font-size: 2rem; font-weight: 300; margin-bottom: 3rem;">
+                Our Approach
+            </h2>
+
+            <div class="process-grid">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h4>Listen</h4>
+                    <p>Understanding your unique context, challenges, and aspirations</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h4>Analyze</h4>
+                    <p>Identifying gaps and opportunities specific to your industry</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h4>Prioritize</h4>
+                    <p>Focusing on initiatives with the highest impact and feasibility</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h4>Deliver</h4>
+                    <p>Providing clear, actionable recommendations you can implement</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ideal For Section -->
+    <section style="padding: 4rem 2rem; background: var(--background);">
+        <div class="container" style="max-width: 900px;">
+            <h2 style="text-align: center; font-size: 2rem; font-weight: 300; margin-bottom: 3rem;">
+                This Assessment Is Ideal If You're...
+            </h2>
+
+            <div style="display: grid; gap: 1.5rem; max-width: 700px; margin: 0 auto;">
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        A CEO/Executive seeking clarity on where to start with AI
+                    </p>
+                </div>
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Preparing for board discussions about AI strategy
+                    </p>
+                </div>
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Feeling overwhelmed by vendor pitches and need neutral guidance
+                    </p>
+                </div>
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Looking to identify quick wins while building long-term capability
+                    </p>
+                </div>
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Need to align leadership on AI priorities before investing
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section style="padding: 4rem 2rem; background: white;">
+        <div class="container" style="max-width: 700px; text-align: center;">
+            <h2 style="font-size: 2rem; font-weight: 300; margin-bottom: 1rem;">
+                Ready to Get Started?
+            </h2>
+            <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                Share a few details and I'll send a tailored agenda and scheduling link within one business day.
+            </p>
+            <a href="index.html#contact" class="btn btn-primary" style="display: inline-block;">Request Strategy Call</a>
+        </div>
+    </section>
+
+    <!-- Next Steps -->
+    <section style="padding: 4rem 2rem; background: var(--background);">
+        <div class="container" style="max-width: 700px; text-align: center;">
+            <h2 style="font-size: 2rem; font-weight: 300; margin-bottom: 1rem;">
+                Ready for Clarity?
+            </h2>
+            <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                Let's discuss your situation and determine if this assessment is the right fit for your organization.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="index.html#contact" class="btn btn-primary">Request Strategy Call</a>
+                <a href="fractional-advisor.html" class="btn btn-secondary">Explore Ongoing Advisory</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="https://www.linkedin.com/in/thor-matthiasson-647a9415/" target="_blank">LinkedIn</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
