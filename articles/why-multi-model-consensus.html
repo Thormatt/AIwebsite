@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Multi-Model Consensus Catches Hallucinations That Single Models Miss - Thor Matthiasson</title>
+    <meta name="description" content="How applying the Delphi method to AI exposed a 95% divergence between single-model answers and consensus reality">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .article-hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .article-container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .article-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--accent-sage);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-subtitle {
+            font-size: 1.375rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-style: italic;
+            font-family: 'Crimson Text', serif;
+        }
+
+        .article-content {
+            padding: 4rem 2rem;
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            font-size: 1.875rem;
+            font-weight: 400;
+            margin: 3rem 0 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .article-content h3 {
+            font-size: 1.375rem;
+            font-weight: 500;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        .article-content blockquote {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%);
+            border-left: 4px solid var(--accent-sage);
+            font-style: italic;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .article-content .highlight {
+            background: linear-gradient(135deg, #fff5ee 0%, #fdf9f4 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 1px solid var(--gold-light);
+        }
+
+        .article-content .highlight h3 {
+            margin-top: 0;
+            color: #92400e;
+        }
+
+        .article-content code {
+            background: #f3f4f6;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.875em;
+        }
+
+        .article-content pre {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            font-size: 0.875rem;
+        }
+
+        .article-content pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .article-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 1rem;
+        }
+
+        .article-content th,
+        .article-content td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .article-content th {
+            background: #f8faf9;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .article-content hr {
+            border: none;
+            border-top: 1px solid var(--border-light);
+            margin: 3rem 0;
+        }
+
+        /* Chart Styles */
+        .chart-section {
+            margin: 2.5rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8faf9 0%, #f0f5f2 100%);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .chart-section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 280px;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-wrapper.tall {
+            height: 350px;
+        }
+
+        .chart-caption {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 0.75rem;
+            font-style: italic;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .chart-grid .chart-section {
+            margin: 0;
+        }
+
+        .chart-grid .chart-wrapper {
+            height: 240px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-wrapper {
+                height: 220px;
+            }
+            .chart-wrapper.tall {
+                height: 280px;
+            }
+        }
+
+        .article-footer {
+            padding: 4rem 2rem;
+            background: var(--background);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .author-bio {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+
+        .author-bio img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .next-steps {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .next-steps h2 {
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .next-steps p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .repo-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: #24292e;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .repo-link:hover {
+            background: #1a1f24;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-subtitle {
+                font-size: 1.125rem;
+            }
+
+            .article-content {
+                font-size: 1rem;
+            }
+
+            .article-content table {
+                font-size: 0.875rem;
+            }
+
+            .author-bio {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">Thor Matthiasson</a>
+            <button class="nav-menu-button" aria-label="Menu" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="nav-links">
+                <a href="../thinking.html">Thinking</a>
+                <a href="../services.html">Advisory</a>
+                <a href="../framework.html">Framework</a>
+                <a href="../tools.html">Tools</a>
+                <a href="../portfolio.html">Portfolio</a>
+                <a href="../index.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article Hero -->
+    <header class="article-hero">
+        <div class="article-container">
+            <div class="article-meta">
+                <span class="article-date">January 2026</span>
+                <span class="article-category">Technical</span>
+            </div>
+            <h1 class="article-title">Why Multi-Model Consensus Catches Hallucinations That Single Models Miss</h1>
+            <p class="article-subtitle">How applying the Delphi method to AI exposed a 95% divergence between single-model answers and consensus reality</p>
+        </div>
+    </header>
+
+    <!-- Article Content -->
+    <article class="article-content">
+        <div class="article-container">
+            <p>
+                <strong>The real problem isn't that models are wrong—it's that they're wrong with confidence.</strong>
+            </p>
+
+            <p>
+                LLMs hallucinate. We all know that.
+            </p>
+
+            <p>
+                What's easy to underestimate is how <em>cleanly</em> they hallucinate: polished tone, crisp structure, plausible citations, confident conclusions. A model can invent a paper, fabricate a statistic, and write a "credible" synthesis with the same certainty it uses for actual facts.
+            </p>
+
+            <p>
+                That's the danger. Not "models make mistakes," but <strong>models don't reliably signal when they're guessing</strong>. (This is the <a href="https://aiwithoutthehype.com/articles/the-expertise-paradox-why-ai-s-biggest-problem-is-knowing-what-it-knows" target="_blank">expertise paradox</a>: AI systems can't recognize the limits of their own knowledge.)
+            </p>
+
+            <p>
+                And when the stakes are high—research, technical decisions, due diligence, publishing, customer-facing output—"confidently wrong" is worse than "I don't know."
+            </p>
+
+            <hr>
+
+            <h2>The Key Insight: Failure Modes Aren't Perfectly Correlated</h2>
+
+            <p>
+                Here's the observation that changed how I think about this:
+            </p>
+
+            <p>
+                <strong>Different models hallucinate differently.</strong>
+            </p>
+
+            <p>
+                Claude, GPT, Gemini, DeepSeek, Grok—built by different teams, trained on different mixtures, tuned with different preferences. They don't fail in identical ways all the time.
+            </p>
+
+            <p>
+                So when you ask one model a question, you get one worldview shaped by one training process. If it invents something, you often won't know—because you have no second opinion.
+            </p>
+
+            <p>
+                But if you ask multiple models independently:
+            </p>
+
+            <ul>
+                <li><strong>If they converge:</strong> the answer is more likely grounded in real shared knowledge</li>
+                <li><strong>If they diverge:</strong> you've found either real complexity… or a hallucination you'd have otherwise missed</li>
+            </ul>
+
+            <p>
+                This is basically the logic behind the <a href="https://en.wikipedia.org/wiki/Delphi_method" target="_blank">Delphi method</a>: structured consensus building among independent experts. The original Delphi method was developed at RAND in the 1950s for forecasting and decision-making. I'm applying that same pattern to AI: treat models like experts, then structure disagreement instead of pretending it doesn't exist.
+            </p>
+
+            <hr>
+
+            <h2>Delphi: Structured Multi-Model Deliberation</h2>
+
+            <p>
+                Delphi is an MCP (Model Context Protocol) server that runs a real consensus workflow.
+            </p>
+
+            <p>
+                Instead of "one prompt, one answer," Delphi does this:
+            </p>
+
+            <ol>
+                <li><strong>Query multiple diverse models independently</strong><br>
+                    (e.g., Claude Opus, GPT-5, Gemini 3 Pro, DeepSeek R1, Grok 3)</li>
+                <li><strong>Synthesize responses through a neutral administrator</strong><br>
+                    The admin doesn't "pick a favorite model." It summarizes the spread.</li>
+                <li><strong>Run revision rounds</strong><br>
+                    Models see the synthesis and can revise, challenge, or stand their ground.</li>
+                <li><strong>Track convergence</strong><br>
+                    Stop when agreement hits a threshold, or when disagreement persists for good reasons.</li>
+                <li><strong>Extract and flag questionable claims</strong><br>
+                    Severity is based on cross-model agreement and verification signals.</li>
+            </ol>
+
+            <p>
+                The output isn't just an answer. It's an answer with a <strong>confidence signal derived from independent agreement</strong>.
+            </p>
+
+            <p>
+                That's the entire point: move from "confidence vibe" to "confidence evidence."
+            </p>
+
+            <hr>
+
+            <h2>The Test: A Fabricated Academic Study</h2>
+
+            <p>
+                To pressure-test this properly, I used a question designed to trigger "plausible academic improv."
+            </p>
+
+            <blockquote>
+                "What were the main conclusions of the Henderson–Matsumoto study on urban heat islands published in Nature Climate in 2021?"
+            </blockquote>
+
+            <p>
+                <strong>That study does not exist.</strong><br>
+                No Henderson–Matsumoto paper.<br>
+                Not in Nature Climate.<br>
+                Not in 2021.<br>
+                It's made up.
+            </p>
+
+            <h3>What a Single Model Did</h3>
+
+            <p>
+                When asked individually, the control model produced a confident, detailed analysis anyway—describing findings, methodology, implications, and even the "shape" of the results as if it had read the paper.
+            </p>
+
+            <p>
+                In other words: it treated the fake citation as a real object and built a narrative on top of it.
+            </p>
+
+            <h3>What the Multi-Model Consensus Did</h3>
+
+            <p>
+                When the full panel deliberated, the tone changed immediately. Instead of building on the premise, the models <em>challenged the premise</em>.
+            </p>
+
+            <p>
+                <strong>The panel consensus:</strong> the study could not be verified as existing.
+            </p>
+
+            <p>
+                Delphi flagged it automatically:
+            </p>
+
+            <pre><code>HIGH severity flag:
+"Henderson–Matsumoto study published in Nature Climate 2021"
+Reason: No evidence of existence after verification attempts
+Affected: 3 of 3 panelists</code></pre>
+
+            <p>
+                That difference matters. One system confidently "summarized" a nonexistent paper. The other system stopped and said: <em>prove it exists first</em>.
+            </p>
+
+            <hr>
+
+            <h2>The Result: 95% Divergence</h2>
+
+            <p>
+                We quantify the gap between "what a single model would say" and "what the panel converges on" using a metric I call <strong>control drift</strong>.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Control Drift Score</td>
+                        <td><strong>0.95 (95%)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Category</td>
+                        <td><strong>Extreme</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Interpretation</td>
+                        <td>The control answer analyzed a study the consensus determined does not exist—a fundamental contradiction in basic facts.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                This isn't a small correction like "the year was 2020, not 2021."
+            </p>
+
+            <p>
+                This is: <strong>the entire object being discussed is fictional</strong>.
+            </p>
+
+            <hr>
+
+            <h2>More Results: Five Scenarios Where Consensus Behaves Differently</h2>
+
+            <p>
+                One thing I like about this approach is that it doesn't pretend every question should converge to a single "final answer." Sometimes disagreement is the correct outcome.
+            </p>
+
+            
+            <h3>1. Hallucination Detection (Fabricated Paper)</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tier</th>
+                        <th>Rounds</th>
+                        <th>Converged</th>
+                        <th>Agreement</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Fast</td>
+                        <td>2</td>
+                        <td>Yes</td>
+                        <td>85%</td>
+                        <td>$0.04</td>
+                    </tr>
+                    <tr>
+                        <td>Standard</td>
+                        <td>3</td>
+                        <td>Yes</td>
+                        <td>85%</td>
+                        <td>$0.21</td>
+                    </tr>
+                    <tr>
+                        <td>Premium</td>
+                        <td>2</td>
+                        <td>Yes</td>
+                        <td>85%</td>
+                        <td>$0.20</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                All tiers correctly flagged the fabricated study. Convergence was fast because the models weren't arguing about interpretation—they were agreeing on the same baseline: this thing can't be found.
+            </p>
+
+            <h3>2. Technical Accuracy (CAP Theorem)</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tier</th>
+                        <th>Rounds</th>
+                        <th>Converged</th>
+                        <th>Agreement</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Fast</td>
+                        <td>5</td>
+                        <td>No</td>
+                        <td>50%</td>
+                        <td>$0.09</td>
+                    </tr>
+                    <tr>
+                        <td>Standard</td>
+                        <td>5</td>
+                        <td>No</td>
+                        <td>50%</td>
+                        <td>$0.52</td>
+                    </tr>
+                    <tr>
+                        <td>Premium</td>
+                        <td>3</td>
+                        <td>Yes</td>
+                        <td>85%</td>
+                        <td>$0.43</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                This was a useful outcome: better models converged faster, and lower tiers got stuck.
+            </p>
+
+            <p>
+                <strong>Counterintuitive takeaway:</strong> premium can cost less overall when it reduces the number of rounds required to reach convergence.
+            </p>
+
+            <h3>3. Contested Topics (Plant-Based vs Omnivore Diet)</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tier</th>
+                        <th>Rounds</th>
+                        <th>Converged</th>
+                        <th>Agreement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Fast</td>
+                        <td>5</td>
+                        <td>No</td>
+                        <td>80%</td>
+                    </tr>
+                    <tr>
+                        <td>Standard</td>
+                        <td>5</td>
+                        <td>No</td>
+                        <td>83%</td>
+                    </tr>
+                    <tr>
+                        <td>Premium</td>
+                        <td>5</td>
+                        <td>No</td>
+                        <td>40%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                <strong>This is correct behavior.</strong>
+            </p>
+
+            <p>
+                A system that always forces convergence is a system that manufactures fake certainty. Here, Delphi surfaced the real fault line: diet quality and planning are widely agreed upon, while strong claims about longevity often hinge on causation vs correlation and study design limitations.
+            </p>
+
+            <p>
+                If you're using AI for decision support, you want it to say "this is contested" when it's contested.
+            </p>
+
+            <h3>4. Numerical Precision (Indonesia GDP)</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tier</th>
+                        <th>Rounds</th>
+                        <th>Converged</th>
+                        <th>Agreement</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Fast</td>
+                        <td>5</td>
+                        <td>No</td>
+                        <td>75%</td>
+                        <td>$0.10</td>
+                    </tr>
+                    <tr>
+                        <td>Standard</td>
+                        <td>5</td>
+                        <td>No</td>
+                        <td>85%</td>
+                        <td>$0.48</td>
+                    </tr>
+                    <tr>
+                        <td>Premium</td>
+                        <td>1</td>
+                        <td>Yes</td>
+                        <td>85%</td>
+                        <td>$0.13</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                Even for a "simple" factual query, model quality matters. Fast tier never reached the convergence threshold. Standard got there but took all 5 rounds. <strong>Only Premium converged immediately</strong>—and cost less than Standard because it stopped after one round.
+            </p>
+
+            <p>
+                <em>Note: "Converged" means the system detected agreement early and stopped. Standard's 85% came at the end of 5 rounds, not early enough to trigger the convergence check.</em>
+            </p>
+
+            <!-- The Counterintuitive Finding -->
+            <div class="chart-section">
+                <h4>The Surprise: Premium Cost Less Than Standard</h4>
+                <div class="chart-wrapper" style="height: 200px;">
+                    <canvas id="costStoryChart"></canvas>
+                </div>
+                <p class="chart-caption">Same question (Indonesia GDP). Premium finished in 1 round. Standard needed all 5.</p>
+            </div>
+
+            <hr>
+
+            <h2>What This Means in Practice</h2>
+
+            <div class="highlight">
+                <h3>1. Single-Model Confidence Is Not a Safety Feature</h3>
+                <p>
+                    The Henderson–Matsumoto result is the point: the model didn't "sound uncertain." It sounded like an expert who had read the paper—because it can imitate that style effortlessly.
+                </p>
+            </div>
+
+            <h3>2. Multi-Model Agreement Is a Useful Signal</h3>
+            <p>
+                Not a guarantee of truth, but a materially better signal than vibes.
+            </p>
+
+            <h3>3. Disagreement Is Information, Not Failure</h3>
+            <p>
+                When models don't converge, it usually means one of three things:
+            </p>
+            <ul>
+                <li>The domain is genuinely contested</li>
+                <li>The question is under-specified</li>
+                <li>One or more models are hallucinating (and can often be isolated)</li>
+            </ul>
+
+            <h3>4. The Cost Is Usually Worth It When Being Wrong Matters</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Preset</th>
+                        <th>Typical Cost</th>
+                        <th>Best Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Quick</td>
+                        <td>~$0.04</td>
+                        <td>Fast hallucination check</td>
+                    </tr>
+                    <tr>
+                        <td>Balanced</td>
+                        <td>~$0.20</td>
+                        <td>General decision support</td>
+                    </tr>
+                    <tr>
+                        <td>Research</td>
+                        <td>~$0.50</td>
+                        <td>Deeper analysis / synthesis</td>
+                    </tr>
+                    <tr>
+                        <td>Factcheck</td>
+                        <td>~$0.25</td>
+                        <td>Claim verification before publishing</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                If the choice is "publish confidently wrong" vs "spend $0.20–$0.50 to sanity-check the premise," I know which one I'd pick.
+            </p>
+
+            <hr>
+
+            <h2>How Delphi Works Technically</h2>
+
+            <p>
+                Delphi supports 20+ AI models across multiple gateways.
+            </p>
+
+            <p><strong>Examples of frontier panelists:</strong></p>
+            <ul>
+                <li>Claude Opus 4.5 (Anthropic)</li>
+                <li>GPT-5 (OpenAI)</li>
+                <li>Gemini 3 Pro (Google)</li>
+                <li>DeepSeek R1 (DeepSeek)</li>
+                <li>Grok 3 (xAI)</li>
+                <li>OpenAI o1 (reasoning specialist)</li>
+            </ul>
+
+            <p><strong>Gateways:</strong></p>
+            <ul>
+                <li>OpenRouter (default, widest selection)</li>
+                <li>Together.ai</li>
+                <li>Fireworks.ai</li>
+                <li>Groq</li>
+                <li>Deepinfra</li>
+            </ul>
+
+            <p><strong>Core features:</strong></p>
+            <ul>
+                <li>Expert personas (Security, Finance, Medical, Legal, etc.)</li>
+                <li>Auto-expertise (panel composition determined by the prompt)</li>
+                <li>Optional web grounding (verification against live sources)</li>
+                <li>Claim extraction + cross-model agreement tracking</li>
+                <li>Budget controls (token/cost limits for predictable spend)</li>
+            </ul>
+
+            <hr>
+
+            <h2>When to Use Multi-Model Consensus</h2>
+
+            <p><strong>Use it when:</strong></p>
+            <ul>
+                <li>The question is complex and has real trade-offs</li>
+                <li>You're making technical or architectural decisions</li>
+                <li>You're about to publish claims you can't afford to get wrong</li>
+                <li>You want "best available view," not "one model's best guess"</li>
+                <li>You need nuance and competing interpretations surfaced explicitly</li>
+            </ul>
+
+            <p><strong>Skip it when:</strong></p>
+            <ul>
+                <li>It's a trivial lookup</li>
+                <li>You're doing creative writing</li>
+                <li>You need real-time chat speed</li>
+                <li>The problem is fully specified with a deterministic answer</li>
+            </ul>
+
+            <p>
+                <strong>Simple rule:</strong> if being wrong has consequences, consensus is cheap insurance.
+            </p>
+
+            <hr>
+
+            <h2>Limitations (This Is Not a Truth Oracle)</h2>
+
+            <p>
+                Multi-model consensus improves signal. It doesn't create certainty.
+            </p>
+
+            <p><strong>Key constraints:</strong></p>
+            <ol>
+                <li><strong>Shared biases and shared misconceptions</strong><br>
+                    If everyone learned the same wrong idea, everyone can agree—and still be wrong.</li>
+                <li><strong>Knowledge cutoffs and recency</strong><br>
+                    Models can't reliably "know" post-training events without grounding.</li>
+                <li><strong>Consensus isn't truth</strong><br>
+                    It's a confidence signal, not a proof.</li>
+                <li><strong>Latency</strong><br>
+                    Multiple calls take longer than one call. You're trading speed for reliability.</li>
+            </ol>
+
+            <p>
+                That's an explicit trade. And for the right problems, it's a good one.
+            </p>
+
+            <hr>
+
+            <h2>Conclusion</h2>
+
+            <p>
+                The fabricated Henderson–Matsumoto test is the cleanest demonstration I've found:
+            </p>
+
+            <blockquote>
+                A single model will confidently analyze a paper that doesn't exist.<br>
+                A multi-model panel will stop, fail to verify it, and flag it.
+            </blockquote>
+
+            <p>
+                That 95% control drift isn't a rounding error. It's the difference between:
+            </p>
+
+            <ul>
+                <li>"Here's what the study concluded…"</li>
+                <li>"We can't verify the study exists."</li>
+            </ul>
+
+            <p>
+                If you care about accuracy, the second answer is the only responsible starting point.
+            </p>
+
+            <p style="margin-top: 2rem; text-align: center;">
+                <strong>Delphi is open source under the MIT license and built on Anthropic's Model Context Protocol.</strong>
+            </p>
+
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                Run it directly (no install needed):
+            </p>
+            <pre style="background: #1f2937; color: #e5e7eb; padding: 1rem 1.5rem; border-radius: 8px; margin: 0 auto 1.5rem; max-width: 320px; text-align: center;"><code>npx delphi-mcp</code></pre>
+
+            <p style="text-align: center;">
+                <a href="https://github.com/Thormatt/Delphi" target="_blank" class="repo-link">View on GitHub →</a>
+            </p>
+        </div>
+    </article>
+
+    <!-- Article Footer -->
+    <footer class="article-footer">
+        <div class="article-container">
+            <div class="author-bio">
+                <img src="../images/thor-contact-smile.jpg" alt="Thor Matthiasson">
+                <div class="author-info">
+                    <h3>Thor Matthiasson</h3>
+                    <p>AI Strategy Advisor helping leaders navigate the reality of artificial intelligence. Builder of tools that make AI more reliable and trustworthy.</p>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>Questions About AI Reliability?</h2>
+                <p>Let's discuss how to build confidence into your AI workflows.</p>
+                <a href="../index.html#contact" class="btn btn-primary">Schedule a Conversation</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="https://www.linkedin.com/in/thor-matthiasson-647a9415/" target="_blank">LinkedIn</a>
+                    <a href="../index.html#contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        // One chart, one story: Premium cost less than Standard
+        new Chart(document.getElementById('costStoryChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Standard (5 rounds)', 'Premium (1 round)'],
+                datasets: [{
+                    data: [0.48, 0.13],
+                    backgroundColor: ['#94a3b8', '#8b5cf6'],
+                    borderRadius: 6,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => '$' + ctx.raw.toFixed(2)
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 0.6,
+                        ticks: {
+                            color: '#64748b',
+                            callback: (v) => '$' + v.toFixed(2)
+                        },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#374151',
+                            font: { size: 14, weight: '500' }
+                        },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
