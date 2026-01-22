@@ -10,7 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         .article-hero {
@@ -207,27 +206,134 @@
             font-style: italic;
         }
 
-        .chart-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2.5rem 0;
-        }
-
-        .chart-grid .chart-section {
-            margin: 0;
-        }
-
-        .chart-grid .chart-wrapper {
-            height: 240px;
-        }
-
         @media (max-width: 768px) {
             .chart-wrapper {
                 height: 220px;
             }
             .chart-wrapper.tall {
                 height: 280px;
+            }
+        }
+
+        /* Animated Stats - NYT Style */
+        .stat-highlight {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin: 2.5rem 0;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 16px;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 5rem;
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+
+        .stat-description {
+            font-size: 1rem;
+            color: #cbd5e1;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Animated comparison bars */
+        .comparison-visual {
+            margin: 2.5rem 0;
+            padding: 2rem;
+            background: #fafafa;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .comparison-visual h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.5rem;
+        }
+
+        .comparison-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            gap: 1rem;
+        }
+
+        .comparison-label {
+            width: 140px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .comparison-label small {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .comparison-bar-container {
+            flex: 1;
+            height: 32px;
+            background: #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .comparison-bar {
+            height: 100%;
+            border-radius: 6px;
+            width: 0;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .comparison-bar.standard {
+            background: linear-gradient(90deg, #94a3b8 0%, #64748b 100%);
+        }
+
+        .comparison-bar.premium {
+            background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        .comparison-caption {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .stat-number {
+                font-size: 3.5rem;
+            }
+            .comparison-label {
+                width: 100px;
+                font-size: 0.8rem;
             }
         }
 
@@ -536,6 +642,16 @@ Affected: 3 of 3 panelists</code></pre>
                 This is: <strong>the entire object being discussed is fictional</strong>.
             </p>
 
+            <!-- Animated 95% Stat -->
+            <div class="stat-highlight" id="stat-95">
+                <div class="stat-number" id="stat-counter">0%</div>
+                <div class="stat-label">Control Drift</div>
+                <div class="stat-description">
+                    The single model confidently analyzed a paper that doesn't exist.
+                    The consensus said: "We can't verify this exists."
+                </div>
+            </div>
+
             <hr>
 
             <h2>More Results: Five Scenarios Where Consensus Behaves Differently</h2>
@@ -721,13 +837,28 @@ Affected: 3 of 3 panelists</code></pre>
                 <em>Note: "Converged" means the system detected agreement early and stopped. Standard's 85% came at the end of 5 rounds, not early enough to trigger the convergence check.</em>
             </p>
 
-            <!-- The Counterintuitive Finding -->
-            <div class="chart-section">
+            <!-- Animated Cost Comparison -->
+            <div class="comparison-visual" id="cost-comparison">
                 <h4>The Surprise: Premium Cost Less Than Standard</h4>
-                <div class="chart-wrapper" style="height: 200px;">
-                    <canvas id="costStoryChart"></canvas>
+                <div class="comparison-row">
+                    <div class="comparison-label">
+                        Standard
+                        <small>5 rounds</small>
+                    </div>
+                    <div class="comparison-bar-container">
+                        <div class="comparison-bar standard" id="bar-standard" data-width="80">$0.48</div>
+                    </div>
                 </div>
-                <p class="chart-caption">Same question (Indonesia GDP). Premium finished in 1 round. Standard needed all 5.</p>
+                <div class="comparison-row">
+                    <div class="comparison-label">
+                        Premium
+                        <small>1 round</small>
+                    </div>
+                    <div class="comparison-bar-container">
+                        <div class="comparison-bar premium" id="bar-premium" data-width="22">$0.13</div>
+                    </div>
+                </div>
+                <p class="comparison-caption">Same question (Indonesia GDP). Faster convergence = lower total cost.</p>
             </div>
 
             <hr>
@@ -954,50 +1085,69 @@ Affected: 3 of 3 panelists</code></pre>
 
     <script src="../script.js"></script>
     <script>
-        // One chart, one story: Premium cost less than Standard
-        new Chart(document.getElementById('costStoryChart'), {
-            type: 'bar',
-            data: {
-                labels: ['Standard (5 rounds)', 'Premium (1 round)'],
-                datasets: [{
-                    data: [0.48, 0.13],
-                    backgroundColor: ['#94a3b8', '#8b5cf6'],
-                    borderRadius: 6,
-                    barThickness: 40
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: (ctx) => '$' + ctx.raw.toFixed(2)
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        max: 0.6,
-                        ticks: {
-                            color: '#64748b',
-                            callback: (v) => '$' + v.toFixed(2)
-                        },
-                        grid: { color: 'rgba(0,0,0,0.05)' }
-                    },
-                    y: {
-                        ticks: {
-                            color: '#374151',
-                            font: { size: 14, weight: '500' }
-                        },
-                        grid: { display: false }
-                    }
+        // Simple, reliable scroll animations
+        (function() {
+            let statAnimated = false;
+            let barsAnimated = false;
+
+            // Counter animation for 95% stat
+            function animateCounter() {
+                const counter = document.getElementById('stat-counter');
+                if (!counter || statAnimated) return;
+                statAnimated = true;
+
+                const target = 95;
+                const duration = 2000;
+                const start = performance.now();
+
+                function update(currentTime) {
+                    const elapsed = currentTime - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.round(easeOut * target);
+                    counter.textContent = current + '%';
+                    if (progress < 1) requestAnimationFrame(update);
+                }
+                requestAnimationFrame(update);
+            }
+
+            // Bar animation for cost comparison
+            function animateBars() {
+                if (barsAnimated) return;
+                barsAnimated = true;
+
+                const barStandard = document.getElementById('bar-standard');
+                const barPremium = document.getElementById('bar-premium');
+
+                if (barStandard) {
+                    barStandard.style.width = barStandard.dataset.width + '%';
+                }
+                if (barPremium) {
+                    barPremium.style.width = barPremium.dataset.width + '%';
                 }
             }
-        });
+
+            // Check if element is in viewport
+            function isInViewport(el) {
+                const rect = el.getBoundingClientRect();
+                return rect.top < window.innerHeight * 0.8 && rect.bottom > 0;
+            }
+
+            // Check on scroll
+            function checkAnimations() {
+                const stat = document.getElementById('stat-95');
+                const bars = document.getElementById('cost-comparison');
+
+                if (stat && isInViewport(stat)) animateCounter();
+                if (bars && isInViewport(bars)) animateBars();
+            }
+
+            // Run on scroll and on load
+            window.addEventListener('scroll', checkAnimations);
+            window.addEventListener('load', checkAnimations);
+            // Also run after a short delay to catch elements already in view
+            setTimeout(checkAnimations, 100);
+        })();
     </script>
 </body>
 </html>
