@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Why Multi-Model Consensus Catches Hallucinations That Single Models Miss - Thor Matthiasson</title>
-    <meta name="description" content="How applying the Delphi method to AI exposed a 95% divergence between single-model answers and consensus reality">
+    <meta name="description" content="How applying the Delphi method to AI caught a hallucination that a single model confidently missed">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -430,7 +430,7 @@
     <!-- Navigation -->
     <nav class="nav">
         <div class="nav-container">
-            <a href="../index.html" class="nav-logo">Thor Matthiasson</a>
+            <a href="../index.html" class="nav-logo">aiwiththor</a>
             <button class="nav-menu-button" aria-label="Menu" aria-expanded="false">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -440,8 +440,7 @@
             </button>
             <div class="nav-links">
                 <a href="../thinking.html">Articles</a>
-                <a href="../services.html">Advisory</a>
-                <a href="../framework.html">Framework</a>
+                <a href="../services.html">Services</a>
                 <a href="../tools.html">Tools</a>
                 <a href="../portfolio.html">Portfolio</a>
                 <a href="../index.html#contact">Contact</a>
@@ -457,7 +456,7 @@
                 <span class="article-category">Technical</span>
             </div>
             <h1 class="article-title">Why Multi-Model Consensus Catches Hallucinations That Single Models Miss</h1>
-            <p class="article-subtitle">How applying the Delphi method to AI exposed a 95% divergence between single-model answers and consensus reality</p>
+            <p class="article-subtitle">How applying the Delphi method to AI caught a hallucination that a single model confidently missed</p>
         </div>
     </header>
 
@@ -509,7 +508,7 @@
             </p>
 
             <ul>
-                <li><strong>If they converge:</strong> the answer is more likely grounded in real shared knowledge</li>
+                <li><strong>If they converge:</strong> the answer is more likely grounded in real shared knowledge (though not guaranteed—see <a href="#limitations">Limitations</a>)</li>
                 <li><strong>If they diverge:</strong> you've found either real complexity… or a hallucination you'd have otherwise missed</li>
             </ul>
 
@@ -605,55 +604,6 @@ Affected: 3 of 3 panelists</code></pre>
 
             <hr>
 
-            <h2>The Result: 95% Divergence</h2>
-
-            <p>
-                We quantify the gap between "what a single model would say" and "what the panel converges on" using a metric I call <strong>control drift</strong>.
-            </p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Metric</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Control Drift Score</td>
-                        <td><strong>0.95 (95%)</strong></td>
-                    </tr>
-                    <tr>
-                        <td>Category</td>
-                        <td><strong>Extreme</strong></td>
-                    </tr>
-                    <tr>
-                        <td>Interpretation</td>
-                        <td>The control answer analyzed a study the consensus determined does not exist—a fundamental contradiction in basic facts.</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p>
-                This isn't a small correction like "the year was 2020, not 2021."
-            </p>
-
-            <p>
-                This is: <strong>the entire object being discussed is fictional</strong>.
-            </p>
-
-            <!-- Animated 95% Stat -->
-            <div class="stat-highlight" id="stat-95">
-                <div class="stat-number" id="stat-counter">0%</div>
-                <div class="stat-label">Control Drift</div>
-                <div class="stat-description">
-                    The single model confidently analyzed a paper that doesn't exist.
-                    The consensus said: "We can't verify this exists."
-                </div>
-            </div>
-
-            <hr>
-
             <h2>More Results: Five Scenarios Where Consensus Behaves Differently</h2>
 
             <p>
@@ -662,6 +612,10 @@ Affected: 3 of 3 panelists</code></pre>
 
             
             <h3>1. Hallucination Detection (Fabricated Paper)</h3>
+
+            <p><strong>The prompt:</strong> <em>"What were the main conclusions of the Henderson–Matsumoto study on urban heat islands published in Nature Climate in 2021?"</em></p>
+
+            <p><strong>Why this test:</strong> The study doesn't exist. This tests whether models will fabricate plausible-sounding analysis or correctly flag that the source cannot be verified.</p>
 
             <table>
                 <thead>
@@ -703,6 +657,10 @@ Affected: 3 of 3 panelists</code></pre>
             </p>
 
             <h3>2. Technical Accuracy (CAP Theorem)</h3>
+
+            <p><strong>The prompt:</strong> <em>"Explain CAP theorem and which distributed databases violate which constraints"</em></p>
+
+            <p><strong>Why this test:</strong> CAP theorem is well-established computer science, but the nuances—which databases make which trade-offs, and when—require precise technical knowledge. This tests whether models can converge on accurate technical detail, not just surface-level explanations.</p>
 
             <table>
                 <thead>
@@ -749,6 +707,10 @@ Affected: 3 of 3 panelists</code></pre>
 
             <h3>3. Contested Topics (Plant-Based vs Omnivore Diet)</h3>
 
+            <p><strong>The prompt:</strong> <em>"Is a plant-based diet healthier than an omnivore diet for longevity?"</em></p>
+
+            <p><strong>Why this test:</strong> This is deliberately contested territory where scientific consensus is incomplete. The goal isn't convergence—it's to see whether the system correctly identifies genuine disagreement rather than manufacturing false certainty.</p>
+
             <table>
                 <thead>
                     <tr>
@@ -793,6 +755,10 @@ Affected: 3 of 3 panelists</code></pre>
             </p>
 
             <h3>4. Numerical Precision (Indonesia GDP)</h3>
+
+            <p><strong>The prompt:</strong> <em>"What is Indonesia's GDP in 2023?"</em></p>
+
+            <p><strong>Why this test:</strong> A factual query with a specific numerical answer. This tests whether models can agree on precise data points, and reveals how model quality affects convergence speed on "simple" lookups.</p>
 
             <table>
                 <thead>
@@ -957,6 +923,7 @@ Affected: 3 of 3 panelists</code></pre>
                 <li>Expert personas (Security, Finance, Medical, Legal, etc.)</li>
                 <li>Auto-expertise (panel composition determined by the prompt)</li>
                 <li>Optional web grounding (verification against live sources)</li>
+                <li>Synthesis verification (<code>groundSynthesis: true</code>) — catches confabulated citations</li>
                 <li>Claim extraction + cross-model agreement tracking</li>
                 <li>Budget controls (token/cost limits for predictable spend)</li>
             </ul>
@@ -988,7 +955,7 @@ Affected: 3 of 3 panelists</code></pre>
 
             <hr>
 
-            <h2>Limitations (This Is Not a Truth Oracle)</h2>
+            <h2 id="limitations">Limitations (This Is Not a Truth Oracle)</h2>
 
             <p>
                 Multi-model consensus improves signal. It doesn't create certainty.
@@ -996,8 +963,8 @@ Affected: 3 of 3 panelists</code></pre>
 
             <p><strong>Key constraints:</strong></p>
             <ol>
-                <li><strong>Shared biases and shared misconceptions</strong><br>
-                    If everyone learned the same wrong idea, everyone can agree—and still be wrong.</li>
+                <li><strong>Shared confabulation—the blind spot</strong><br>
+                    This is more subtle than "everyone learned the wrong fact." In testing, we found all four models agreeing on a citation—"RARR benchmark showed 80%→30% accuracy drops"—that sounded plausible but was completely misapplied. RARR is a real paper, but about attribution revision, not RAG accuracy. The models confabulated a plausible-sounding reference <em>together</em> because they share similar training data patterns. Independent answering doesn't prevent this.</li>
                 <li><strong>Knowledge cutoffs and recency</strong><br>
                     Models can't reliably "know" post-training events without grounding.</li>
                 <li><strong>Consensus isn't truth</strong><br>
@@ -1005,6 +972,23 @@ Affected: 3 of 3 panelists</code></pre>
                 <li><strong>Latency</strong><br>
                     Multiple calls take longer than one call. You're trading speed for reliability.</li>
             </ol>
+
+            <h3>The Solution: Synthesis Verification</h3>
+
+            <p>
+                To address the shared confabulation problem, Delphi now supports optional <strong>citation verification</strong>: the admin can check specific claims against web search <em>after</em> panelists answer independently. The consensus stays "pure" (no grounding during deliberation), but confabulated citations get caught before the final output.
+            </p>
+
+            <p>
+                In testing, synthesis verification correctly flagged the fabricated RARR citation as "HIGH severity—not found in web search." The panelists didn't know they were wrong. The verification layer caught it.
+            </p>
+
+            <p><strong>What consensus catches vs. what it misses:</strong></p>
+            <ul>
+                <li><strong>✓ Individual model errors</strong> — Henderson-Matsumoto worked because models <em>disagreed</em> and flagged it</li>
+                <li><strong>✗ Shared confabulation</strong> — RARR failed because all models <em>agreed</em> on the wrong citation</li>
+                <li><strong>✓ With verification enabled</strong> — catches both types</li>
+            </ul>
 
             <p>
                 That's an explicit trade. And for the right problems, it's a good one.
@@ -1024,7 +1008,7 @@ Affected: 3 of 3 panelists</code></pre>
             </blockquote>
 
             <p>
-                That 95% control drift isn't a rounding error. It's the difference between:
+                The control drift between single-model and consensus answers isn't a rounding error. It's the difference between:
             </p>
 
             <ul>
@@ -1074,8 +1058,9 @@ Affected: 3 of 3 panelists</code></pre>
     <div class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2026 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <p>&copy; 2026 aiwiththor. AI Strategy & Implementation.</p>
                 <div class="footer-links">
+                    <a href="https://aiwithoutthehype.com" target="_blank">AI Without the Hype</a>
                     <a href="https://www.linkedin.com/in/thor-matthiasson-647a9415/" target="_blank">LinkedIn</a>
                     <a href="../index.html#contact">Contact</a>
                 </div>
@@ -1085,31 +1070,9 @@ Affected: 3 of 3 panelists</code></pre>
 
     <script src="../script.js"></script>
     <script>
-        // Simple, reliable scroll animations
+        // Scroll animations for cost comparison bars
         (function() {
-            let statAnimated = false;
             let barsAnimated = false;
-
-            // Counter animation for 95% stat
-            function animateCounter() {
-                const counter = document.getElementById('stat-counter');
-                if (!counter || statAnimated) return;
-                statAnimated = true;
-
-                const target = 95;
-                const duration = 2000;
-                const start = performance.now();
-
-                function update(currentTime) {
-                    const elapsed = currentTime - start;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const easeOut = 1 - Math.pow(1 - progress, 3);
-                    const current = Math.round(easeOut * target);
-                    counter.textContent = current + '%';
-                    if (progress < 1) requestAnimationFrame(update);
-                }
-                requestAnimationFrame(update);
-            }
 
             // Bar animation for cost comparison
             function animateBars() {
@@ -1135,17 +1098,13 @@ Affected: 3 of 3 panelists</code></pre>
 
             // Check on scroll
             function checkAnimations() {
-                const stat = document.getElementById('stat-95');
                 const bars = document.getElementById('cost-comparison');
-
-                if (stat && isInViewport(stat)) animateCounter();
                 if (bars && isInViewport(bars)) animateBars();
             }
 
             // Run on scroll and on load
             window.addEventListener('scroll', checkAnimations);
             window.addEventListener('load', checkAnimations);
-            // Also run after a short delay to catch elements already in view
             setTimeout(checkAnimations, 100);
         })();
     </script>

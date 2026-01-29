@@ -169,7 +169,7 @@ body {
     margin: 0 auto;
     padding: 0 var(--space-md);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-xl);
     width: 100%;
 }
@@ -1209,9 +1209,10 @@ section {
     }
 
     .hero-image img {
-        width: 180%;
-        height: 180%;
-        transform: translate(5%, 0%);
+        width: 140%;
+        height: 140%;
+        object-position: center 15%;
+        transform: translate(-14%, 0%);
     }
 
     .hero-content {
@@ -1366,19 +1367,6 @@ section {
 }
 
 /* Additional animations */
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.stat-card {
-    animation: float 3s ease-in-out infinite;
-}
-
 @keyframes fadeInUp {
     from {
         opacity: 0;
