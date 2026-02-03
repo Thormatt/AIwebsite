@@ -152,6 +152,37 @@ export function Credibility() {
             ))}
           </div>
         </div>
+
+        {/* Speaking & Accomplishments */}
+        <div className="mt-20 pt-12 border-t border-border">
+          <p className="text-micro text-accent mb-6">Speaking & advisory</p>
+          <h3 className="text-display-md mb-12 max-w-2xl">
+            From panels to boardrooms.
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="relative aspect-[4/5] rounded-xl overflow-hidden group">
+              <img
+                src="/images/speaking-national-security-panel.jpg"
+                alt="Thor speaking at national security panel"
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+              />
+            </div>
+            <div className="relative aspect-[4/5] rounded-xl overflow-hidden group">
+              <img
+                src="/images/speaking-google-event.jpg"
+                alt="Thor speaking at Google event"
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+              />
+            </div>
+            <div className="relative aspect-[4/5] rounded-xl overflow-hidden group">
+              <img
+                src="/images/speaking-workshop.jpg"
+                alt="Thor leading AI workshop"
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
