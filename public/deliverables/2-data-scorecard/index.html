@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Readiness Scorecard - Meridian Financial Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <style>
+        .content-page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-md);
+        }
+
+        .overall-score-card {
+            background: linear-gradient(135deg, var(--sage-pale) 0%, var(--navy-pale) 100%);
+            border-radius: 16px;
+            padding: var(--space-xl);
+            text-align: center;
+            margin: var(--space-xl) 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .score-number {
+            font-size: 4rem;
+            font-weight: 300;
+            color: var(--navy);
+            margin-bottom: var(--space-sm);
+        }
+
+        .score-suffix {
+            font-size: 2rem;
+            color: var(--text-muted);
+        }
+
+        .score-label {
+            font-size: 1.5rem;
+            color: var(--sage);
+            margin-bottom: var(--space-sm);
+            font-weight: 400;
+        }
+
+        .score-interpretation {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            font-family: var(--font-serif);
+        }
+
+        .dimension-card {
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .dimension-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-sm);
+        }
+
+        .dimension-name {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .dimension-score {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--navy);
+        }
+
+        .dimension-assessment {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-style: italic;
+        }
+
+        .blockers-grid {
+            display: grid;
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .blocker-card {
+            background: #fff5f5;
+            border: 2px solid #fcc;
+            border-radius: 12px;
+            padding: var(--space-md);
+        }
+
+        .blocker-card h4 {
+            color: #c00;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .blocker-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--space-sm);
+        }
+
+        .blocker-impact {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .quick-wins-grid {
+            display: grid;
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .quick-win-card {
+            background: var(--white);
+            border: 2px solid var(--sage-light);
+            border-radius: 12px;
+            padding: var(--space-md);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--space-md);
+            align-items: center;
+        }
+
+        .quick-win-content h4 {
+            color: var(--sage);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .quick-win-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.9375rem;
+        }
+
+        .quick-win-metrics {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .metric {
+            text-align: center;
+            padding: var(--space-sm);
+            background: var(--background);
+            border-radius: 8px;
+            min-width: 80px;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--navy);
+        }
+
+        .nav-breadcrumb {
+            padding: calc(var(--space-sm) + 60px) var(--space-md) var(--space-sm);
+            background: var(--background);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-breadcrumb a {
+            color: var(--sage);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .nav-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="deliverable-page">
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">Thor Matthiasson</a>
+            <div class="nav-links">
+                <a href="../../index.html">Home</a>
+                <a href="../../framework.html">Framework</a>
+                <a href="../index.html">Deliverables</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="nav-breadcrumb container">
+        <a href="../index.html">← Back to Deliverables</a>
+    </div>
+
+    <!-- Cover Page -->
+    <div class="cover-page">
+        <div class="cover-logo">
+            <img src="../shared/meridian-logo.svg" alt="Meridian Financial Services">
+        </div>
+        <h1 class="cover-title">Data Readiness Scorecard</h1>
+        <p class="cover-subtitle">AI Enablement Assessment</p>
+        <p class="cover-company">Meridian Financial Services</p>
+        <p class="cover-date">February 2026 | Confidential</p>
+    </div>
+
+    <!-- Content Pages -->
+    <div class="content-page">
+        <!-- Overall Score -->
+        <div class="overall-score-card">
+            <div class="score-number">58<span class="score-suffix">/100</span></div>
+            <div class="score-label">Moderate Data Readiness</div>
+            <p class="score-interpretation">
+                "You have data, but it's siloed and poorly governed"
+            </p>
+        </div>
+
+        <!-- Data Dimensions -->
+        <section>
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Data Dimension Scores
+            </h2>
+
+            <div class="dimension-card">
+                <div class="dimension-header">
+                    <div class="dimension-name">Data Availability</div>
+                    <div class="dimension-score">75/100</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill good" style="width: 75%;"></div>
+                </div>
+                <p class="dimension-assessment">
+                    <span class="badge badge-good">Good</span> Comprehensive customer, transaction, and operational data
+                    across core banking, CRM, and wealth management systems.
+                </p>
+            </div>
+
+            <div class="dimension-card">
+                <div class="dimension-header">
+                    <div class="dimension-name">Data Quality</div>
+                    <div class="dimension-score">45/100</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill moderate" style="width: 45%;"></div>
+                </div>
+                <p class="dimension-assessment">
+                    <span class="badge badge-medium">Needs Work</span> Inconsistent standards, duplicate records in CRM (est. 12%),
+                    missing/incomplete fields in 20% of wealth management profiles.
+                </p>
+            </div>
+
+            <div class="dimension-card">
+                <div class="dimension-header">
+                    <div class="dimension-name">Data Governance</div>
+                    <div class="dimension-score">30/100</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill low" style="width: 30%;"></div>
+                </div>
+                <p class="dimension-assessment">
+                    <span class="badge badge-critical">Critical Gap</span> No data catalog, no metadata management,
+                    unclear data ownership, ad hoc quality checks.
+                </p>
+            </div>
+
+            <div class="dimension-card">
+                <div class="dimension-header">
+                    <div class="dimension-name">Data Security & Privacy</div>
+                    <div class="dimension-score">65/100</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill good" style="width: 65%;"></div>
+                </div>
+                <p class="dimension-assessment">
+                    <span class="badge badge-good">Acceptable</span> SOC 2 compliant, encryption at rest/transit,
+                    role-based access controls, but no AI-specific privacy frameworks.
+                </p>
+            </div>
+
+            <div class="dimension-card">
+                <div class="dimension-header">
+                    <div class="dimension-name">Data Accessibility</div>
+                    <div class="dimension-score">50/100</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill moderate" style="width: 50%;"></div>
+                </div>
+                <p class="dimension-assessment">
+                    <span class="badge badge-medium">Moderate</span> APIs exist but not well-documented, cross-functional
+                    data requests take 2-4 weeks, siloed access permissions.
+                </p>
+            </div>
+
+            <div class="dimension-card">
+                <div class="dimension-header">
+                    <div class="dimension-name">Data Lineage & Observability</div>
+                    <div class="dimension-score">40/100</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill moderate" style="width: 40%;"></div>
+                </div>
+                <p class="dimension-assessment">
+                    <span class="badge badge-medium">Weak</span> Limited traceability, no automated lineage tracking,
+                    manual impact analysis when schema changes.
+                </p>
+            </div>
+        </section>
+
+        <!-- Top Blockers -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Top 3 AI Blockers
+            </h2>
+
+            <div class="blockers-grid">
+                <div class="blocker-card">
+                    <h4>1. No Data Catalog or Metadata Management</h4>
+                    <p>
+                        Teams don't know what data exists, where it lives, or who owns it. Data scientists spend
+                        60% of their time hunting for data instead of building models.
+                    </p>
+                    <div class="blocker-impact">
+                        <strong>Impact:</strong> Delays every AI initiative by 4-6 weeks
+                    </div>
+                </div>
+
+                <div class="blocker-card">
+                    <h4>2. Inconsistent Quality Standards Across Systems</h4>
+                    <p>
+                        Each department defines "customer" differently. Core Banking uses SSN as key, CRM uses email,
+                        Wealth Management uses account ID. No master data management (MDM) strategy.
+                    </p>
+                    <div class="blocker-impact">
+                        <strong>Impact:</strong> AI models trained on bad data = bad predictions
+                    </div>
+                </div>
+
+                <div class="blocker-card">
+                    <h4>3. Siloed Access (Marketing Can't See Sales Data)</h4>
+                    <p>
+                        Rigid access controls prevent cross-functional AI use cases. Marketing team cannot access
+                        transaction data needed for personalization AI, citing "privacy concerns" without formal policy.
+                    </p>
+                    <div class="blocker-impact">
+                        <strong>Impact:</strong> Blocks 3 of 4 prioritized AI use cases
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Wins -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Quick Wins (30-60 Days)
+            </h2>
+
+            <div class="quick-wins-grid">
+                <div class="quick-win-card">
+                    <div class="quick-win-content">
+                        <h4>Deploy Data Catalog (e.g., Alation, Collibra)</h4>
+                        <p>
+                            Automated discovery and cataloging of all data assets. Teams can search, understand,
+                            and request access to data in self-service mode.
+                        </p>
+                    </div>
+                    <div class="quick-win-metrics">
+                        <div class="metric">
+                            <div class="metric-label">Effort</div>
+                            <div class="metric-value">Low</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Impact</div>
+                            <div class="metric-value">High</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-win-card">
+                    <div class="quick-win-content">
+                        <h4>Implement Basic Data Quality Rules</h4>
+                        <p>
+                            Define and enforce 5-10 critical quality rules (e.g., required fields, format validation,
+                            duplicate detection) using existing tools (dbt, Great Expectations).
+                        </p>
+                    </div>
+                    <div class="quick-win-metrics">
+                        <div class="metric">
+                            <div class="metric-label">Effort</div>
+                            <div class="metric-value">Low</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Impact</div>
+                            <div class="metric-value">Med</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-win-card">
+                    <div class="quick-win-content">
+                        <h4>Create Cross-Functional Data Access Policy</h4>
+                        <p>
+                            Legal + Compliance + IT define formal policy for cross-departmental data sharing with
+                            PII masking and audit logging.
+                        </p>
+                    </div>
+                    <div class="quick-win-metrics">
+                        <div class="metric">
+                            <div class="metric-label">Effort</div>
+                            <div class="metric-value">Med</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Impact</div>
+                            <div class="metric-value">High</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Truncation Notice -->
+        <div class="truncation-notice">
+            <h3>📄 Full Scorecard Continues...</h3>
+            <p>
+                This sample showcases the first 2-3 pages of the Data Readiness Scorecard.
+                The complete deliverable includes 10 additional pages covering:
+            </p>
+            <ul style="list-style: none; margin-top: var(--space-sm); color: var(--text-secondary);">
+                <li>→ Detailed data architecture diagrams</li>
+                <li>→ System-by-system data quality assessments</li>
+                <li>→ Remediation roadmap with timelines & owners</li>
+                <li>→ Vendor recommendations for data tools</li>
+                <li>→ Cost estimates for data infrastructure upgrades</li>
+                <li>→ Data governance operating model design</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="../../index.html">Home</a>
+                    <a href="../index.html">Deliverables</a>
+                    <a href="mailto:thor@aiwiththor.com">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

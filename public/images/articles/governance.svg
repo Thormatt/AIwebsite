@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0b"/>
+      <stop offset="100%" style="stop-color:#141419"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg4)"/>
+  <!-- Shield with checkmark -->
+  <path d="M400,100 L500,150 L500,280 Q500,350 400,400 Q300,350 300,280 L300,150 Z" fill="none" stroke="#f97316" stroke-width="3"/>
+  <!-- Checkmark inside -->
+  <path d="M350,250 L380,290 L450,200" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Guardrails on sides -->
+  <rect x="150" y="150" width="8" height="200" fill="#f97316" opacity="0.3" rx="4"/>
+  <rect x="642" y="150" width="8" height="200" fill="#f97316" opacity="0.3" rx="4"/>
+</svg>

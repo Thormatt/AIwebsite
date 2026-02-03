@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive AI Assessment Report - Meridian Financial Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        .content-page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-md);
+        }
+
+        .page-header {
+            text-align: center;
+            padding: var(--space-xl) 0;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: var(--space-xl);
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--navy);
+            margin-bottom: var(--space-sm);
+        }
+
+        .page-header p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            font-style: italic;
+            font-family: var(--font-serif);
+        }
+
+        .quadrant-matrix {
+            max-width: 600px;
+            margin: var(--space-xl) auto;
+            aspect-ratio: 1;
+            position: relative;
+            border: 2px solid var(--border);
+        }
+
+        .quadrant {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-md);
+            text-align: center;
+        }
+
+        .quadrant.q1 {
+            top: 0;
+            right: 0;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        }
+
+        .quadrant.q2 {
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+        }
+
+        .quadrant.q3 {
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        }
+
+        .quadrant.q4 {
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(135deg, #fef3cd 0%, #f8d7da 100%);
+            border: 3px solid var(--gold);
+        }
+
+        .quadrant-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--space-xs);
+        }
+
+        .quadrant-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: var(--space-xs);
+        }
+
+        .quadrant-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .axis-label {
+            position: absolute;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .axis-label.x-axis {
+            bottom: -30px;
+            right: -80px;
+        }
+
+        .axis-label.y-axis {
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .chart-wrapper {
+            max-width: 600px;
+            margin: var(--space-xl) auto;
+            padding: var(--space-lg);
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .nav-breadcrumb {
+            padding: calc(var(--space-sm) + 60px) var(--space-md) var(--space-sm);
+            background: var(--background);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-breadcrumb a {
+            color: var(--sage);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .nav-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-breadcrumb span {
+            color: var(--text-muted);
+            margin: 0 0.5rem;
+        }
+    </style>
+</head>
+<body class="deliverable-page">
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">Thor Matthiasson</a>
+            <div class="nav-links">
+                <a href="../../index.html">Home</a>
+                <a href="../../framework.html">Framework</a>
+                <a href="../index.html">Deliverables</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="nav-breadcrumb container">
+        <a href="../index.html">← Back to Deliverables</a>
+    </div>
+
+    <!-- Cover Page -->
+    <div class="cover-page">
+        <div class="cover-logo">
+            <img src="../shared/meridian-logo.svg" alt="Meridian Financial Services">
+        </div>
+        <h1 class="cover-title">Executive AI Assessment Report</h1>
+        <p class="cover-subtitle">Organizational Readiness & Strategic Roadmap</p>
+        <p class="cover-company">Meridian Financial Services</p>
+        <p class="cover-date">February 2026 | Confidential</p>
+    </div>
+
+    <!-- Content Pages -->
+    <div class="content-page">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Executive Summary</h1>
+            <p>Assessment conducted January 20-31, 2026</p>
+        </div>
+
+        <!-- Executive Summary Section -->
+        <section class="executive-summary">
+            <div class="summary-score">2.4 / 5.0</div>
+            <div class="summary-label">Overall AI Readiness - Emerging Stage</div>
+
+            <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--space-md);">
+                Meridian Financial Services demonstrates <strong style="color: var(--sage);">solid technical foundations</strong>
+                but faces significant gaps in governance, strategy, and organizational alignment. The assessment reveals a
+                "Frustration Zone" pattern: high technical literacy paired with low strategic maturity, resulting in
+                underutilized AI capabilities and fragmented initiatives.
+            </p>
+
+            <h3 style="font-size: 1.25rem; font-weight: 500; margin: var(--space-md) 0 var(--space-sm);">
+                Critical Insights
+            </h3>
+
+            <ul class="key-findings">
+                <li><strong>Strong technical capability (3.5/5)</strong> is hampered by weak governance (1.5/5), creating compliance risk and duplicated efforts across departments</li>
+                <li><strong>No formal AI strategy</strong> - existing use cases (chatbot, fraud detection) were implemented opportunistically without business case validation</li>
+                <li><strong>Data infrastructure is acceptable (3.0/5)</strong> but siloed - Marketing cannot access Sales data, limiting AI personalization potential</li>
+                <li><strong>Cultural readiness is moderate (2.5/5)</strong> - leadership support exists but employee awareness and training are insufficient</li>
+            </ul>
+
+            <h3 style="font-size: 1.25rem; font-weight: 500; margin: var(--space-lg) 0 var(--space-sm);">
+                Investment Recommendation
+            </h3>
+
+            <p style="color: var(--text-secondary); line-height: 1.7;">
+                <strong style="color: var(--navy);">$2.8M over 18 months</strong> to address governance gaps,
+                pilot 4 high-value use cases, and build scalable AI operating model. Projected 3.2x ROI based on
+                operational efficiency gains and revenue growth in wealth management personalization.
+            </p>
+        </section>
+
+        <!-- Maturity Heatmap -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                AI Maturity Heatmap
+            </h2>
+
+            <div class="heatmap-table">
+                <table style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;">Dimension</th>
+                            <th>Score</th>
+                            <th>Level</th>
+                            <th>Gap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Strategy & Vision</strong></td>
+                            <td class="heatmap-cell-low">2.0</td>
+                            <td>Opportunistic</td>
+                            <td><span class="badge badge-high">High</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Data & Infrastructure</strong></td>
+                            <td class="heatmap-cell-medium">3.5</td>
+                            <td>Structured</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>People & Skills</strong></td>
+                            <td class="heatmap-cell-low">2.5</td>
+                            <td>Developing</td>
+                            <td><span class="badge badge-high">High</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Technology & Tools</strong></td>
+                            <td class="heatmap-cell-medium">3.0</td>
+                            <td>Capable</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Governance & Ethics</strong></td>
+                            <td class="heatmap-cell-low">1.5</td>
+                            <td>Ad Hoc</td>
+                            <td><span class="badge badge-critical">Critical</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Operations & Process</strong></td>
+                            <td class="heatmap-cell-low">2.0</td>
+                            <td>Experimental</td>
+                            <td><span class="badge badge-high">High</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Culture & Change</strong></td>
+                            <td class="heatmap-cell-low">2.5</td>
+                            <td>Aware</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Value & Impact</strong></td>
+                            <td class="heatmap-cell-low">2.0</td>
+                            <td>Anecdotal</td>
+                            <td><span class="badge badge-high">High</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p style="margin-top: var(--space-md); color: var(--text-muted); font-style: italic; font-family: var(--font-serif);">
+                Note: Scores range from 1 (nascent) to 5 (optimized). Industry benchmark for mid-market financial services: 2.8/5.
+            </p>
+        </section>
+
+        <!-- Radar Chart -->
+        <div class="chart-wrapper">
+            <h3 style="text-align: center; font-size: 1.25rem; font-weight: 500; margin-bottom: var(--space-md); color: var(--navy);">
+                8-Dimension Maturity Profile
+            </h3>
+            <canvas id="maturityRadar"></canvas>
+        </div>
+
+        <!-- Quadrant Placement -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Strategic Position: Frustration Zone
+            </h2>
+
+            <div class="quadrant-matrix">
+                <div class="axis-label y-axis">AI Maturity (High →)</div>
+                <div class="axis-label x-axis">AI Literacy (High →)</div>
+
+                <div class="quadrant q1">
+                    <div class="quadrant-label">Q1</div>
+                    <div class="quadrant-title">Transformation</div>
+                    <div class="quadrant-desc">High literacy, high maturity</div>
+                </div>
+
+                <div class="quadrant q2">
+                    <div class="quadrant-label">Q2</div>
+                    <div class="quadrant-title">Awareness</div>
+                    <div class="quadrant-desc">Low literacy, high maturity</div>
+                </div>
+
+                <div class="quadrant q3">
+                    <div class="quadrant-label">Q3</div>
+                    <div class="quadrant-title">Novice</div>
+                    <div class="quadrant-desc">Low literacy, low maturity</div>
+                </div>
+
+                <div class="quadrant q4">
+                    <div class="quadrant-label">Q4 - MERIDIAN</div>
+                    <div class="quadrant-title">Frustration</div>
+                    <div class="quadrant-desc">High literacy, low maturity<br><em>"Good ideas, poor execution"</em></div>
+                </div>
+            </div>
+
+            <p style="margin-top: var(--space-lg); color: var(--text-secondary); line-height: 1.7; text-align: center; max-width: 720px; margin-left: auto; margin-right: auto;">
+                <strong style="color: var(--navy);">Implication:</strong> Your team understands AI's potential
+                (literacy = high) but lacks the governance, processes, and structure to execute systematically
+                (maturity = low). This creates frustration, duplicated work, and risk exposure. <strong style="color: var(--sage);">
+                Priority: Build operating model before scaling use cases.</strong>
+            </p>
+        </section>
+
+        <!-- Truncation Notice -->
+        <div class="truncation-notice">
+            <h3>📄 Full Report Continues...</h3>
+            <p>
+                This sample showcases the first 3 pages of the Executive Assessment Report.
+                The complete deliverable includes 15 additional pages covering:
+            </p>
+            <ul style="list-style: none; margin-top: var(--space-sm); color: var(--text-secondary);">
+                <li>→ Detailed dimension-by-dimension analysis with evidence</li>
+                <li>→ Interview synthesis (10 stakeholders across departments)</li>
+                <li>→ Risk assessment & compliance gap analysis</li>
+                <li>→ Competitive benchmarking (peer financial institutions)</li>
+                <li>→ Quick wins vs. strategic initiatives roadmap</li>
+                <li>→ Organizational change management recommendations</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="../../index.html">Home</a>
+                    <a href="../index.html">Deliverables</a>
+                    <a href="mailto:thor@aiwiththor.com">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Radar Chart
+        const ctx = document.getElementById('maturityRadar').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: [
+                    'Strategy',
+                    'Data',
+                    'People',
+                    'Technology',
+                    'Governance',
+                    'Operations',
+                    'Culture',
+                    'Value'
+                ],
+                datasets: [{
+                    label: 'Meridian Current State',
+                    data: [2.0, 3.5, 2.5, 3.0, 1.5, 2.0, 2.5, 2.0],
+                    fill: true,
+                    backgroundColor: 'rgba(74, 93, 78, 0.2)',
+                    borderColor: '#4a5d4e',
+                    pointBackgroundColor: '#4a5d4e',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#4a5d4e'
+                }, {
+                    label: 'Industry Benchmark',
+                    data: [2.8, 3.2, 2.9, 3.1, 2.6, 2.7, 2.8, 2.5],
+                    fill: true,
+                    backgroundColor: 'rgba(212, 165, 116, 0.1)',
+                    borderColor: '#d4a574',
+                    borderDash: [5, 5],
+                    pointBackgroundColor: '#d4a574',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#d4a574'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true,
+                            color: '#e5e5e5'
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 5,
+                        ticks: {
+                            stepSize: 1,
+                            font: {
+                                size: 11
+                            }
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 13,
+                                weight: '500'
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 13
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

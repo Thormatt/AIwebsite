@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0b"/>
+      <stop offset="100%" style="stop-color:#141419"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg5)"/>
+  <!-- Stacked layers representing LLM architecture -->
+  <rect x="250" y="100" width="300" height="40" rx="5" fill="none" stroke="#f97316" stroke-width="2" opacity="0.4"/>
+  <rect x="250" y="160" width="300" height="40" rx="5" fill="none" stroke="#f97316" stroke-width="2" opacity="0.5"/>
+  <rect x="250" y="220" width="300" height="40" rx="5" fill="none" stroke="#f97316" stroke-width="2" opacity="0.6"/>
+  <rect x="250" y="280" width="300" height="40" rx="5" fill="none" stroke="#f97316" stroke-width="2" opacity="0.8"/>
+  <rect x="250" y="340" width="300" height="40" rx="5" fill="#f97316" opacity="0.3"/>
+  <!-- Selection indicator -->
+  <circle cx="580" cy="300" r="20" fill="none" stroke="#22c55e" stroke-width="3"/>
+  <path d="M570,300 L578,310 L595,290" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round"/>
+  <!-- Magnifying glass -->
+  <circle cx="180" cy="250" r="40" fill="none" stroke="#f97316" stroke-width="3"/>
+  <line x1="210" y1="280" x2="240" y2="310" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+</svg>

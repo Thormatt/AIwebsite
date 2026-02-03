@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90-Day Action Plan - Meridian Financial Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <style>
+        .content-page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-md);
+        }
+
+        .timeline-visual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+            margin: var(--space-xl) 0;
+        }
+
+        .month-card {
+            background: var(--white);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            padding: var(--space-md);
+            position: relative;
+        }
+
+        .month-card.month-1 {
+            border-color: var(--sage);
+            background: linear-gradient(135deg, var(--sage-pale) 0%, var(--white) 100%);
+        }
+
+        .month-card.month-2 {
+            border-color: var(--navy-light);
+        }
+
+        .month-card.month-3 {
+            border-color: var(--gold-light);
+        }
+
+        .month-header {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: var(--space-xs);
+        }
+
+        .month-focus {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: var(--space-sm);
+        }
+
+        .month-highlights {
+            list-style: none;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .month-highlights li {
+            padding: 0.375rem 0;
+            padding-left: var(--space-sm);
+            position: relative;
+        }
+
+        .month-highlights li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--sage);
+            font-weight: bold;
+        }
+
+        .detailed-plan {
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .week-section {
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .week-section:last-child {
+            border-bottom: none;
+        }
+
+        .week-header {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--sage);
+            margin-bottom: var(--space-sm);
+        }
+
+        .week-tasks {
+            list-style: none;
+            margin-top: var(--space-sm);
+        }
+
+        .week-tasks li {
+            padding: var(--space-xs) 0;
+            padding-left: var(--space-md);
+            position: relative;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .week-tasks li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--sage);
+        }
+
+        .deliverables-box {
+            background: var(--background);
+            padding: var(--space-sm);
+            border-radius: 8px;
+            margin-top: var(--space-sm);
+        }
+
+        .deliverables-box strong {
+            color: var(--navy);
+            font-size: 0.875rem;
+        }
+
+        .owner-tag {
+            display: inline-block;
+            background: var(--sage-pale);
+            color: var(--sage);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .metric-card {
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: var(--space-md);
+        }
+
+        .metric-name {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: var(--space-xs);
+        }
+
+        .metric-target {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: var(--space-xs);
+        }
+
+        .metric-baseline {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .nav-breadcrumb {
+            padding: calc(var(--space-sm) + 60px) var(--space-md) var(--space-sm);
+            background: var(--background);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-breadcrumb a {
+            color: var(--sage);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .nav-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .timeline-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="deliverable-page">
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">Thor Matthiasson</a>
+            <div class="nav-links">
+                <a href="../../index.html">Home</a>
+                <a href="../../framework.html">Framework</a>
+                <a href="../index.html">Deliverables</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="nav-breadcrumb container">
+        <a href="../index.html">← Back to Deliverables</a>
+    </div>
+
+    <!-- Cover Page -->
+    <div class="cover-page">
+        <div class="cover-logo">
+            <img src="../shared/meridian-logo.svg" alt="Meridian Financial Services">
+        </div>
+        <h1 class="cover-title">90-Day Action Plan</h1>
+        <p class="cover-subtitle">Foundation → Pilot → Scale</p>
+        <p class="cover-company">Meridian Financial Services</p>
+        <p class="cover-date">Q1-Q2 2026 | Confidential</p>
+    </div>
+
+    <!-- Content Pages -->
+    <div class="content-page">
+        <!-- Timeline Overview -->
+        <section>
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                3-Month Timeline Overview
+            </h2>
+
+            <div class="timeline-visual">
+                <div class="month-card month-1">
+                    <div class="month-header">Month 1: Foundation</div>
+                    <div class="month-focus">Build governance & select pilots</div>
+                    <ul class="month-highlights">
+                        <li>Form AI governance committee</li>
+                        <li>Draft AI policy & ethics framework</li>
+                        <li>Select pilot use case</li>
+                        <li>Define success metrics</li>
+                        <li>Secure data access agreements</li>
+                    </ul>
+                </div>
+
+                <div class="month-card month-2">
+                    <div class="month-header">Month 2: Pilot</div>
+                    <div class="month-focus">Execute & iterate</div>
+                    <ul class="month-highlights">
+                        <li>Pilot kickoff (Loan Pre-Screening)</li>
+                        <li>Initial model training</li>
+                        <li>User acceptance testing</li>
+                        <li>Refine based on feedback</li>
+                        <li>Mid-pilot checkpoint review</li>
+                    </ul>
+                </div>
+
+                <div class="month-card month-3">
+                    <div class="month-header">Month 3: Scale</div>
+                    <div class="month-focus">Deploy & plan next wave</div>
+                    <ul class="month-highlights">
+                        <li>Production deployment (limited rollout)</li>
+                        <li>Metrics review & validation</li>
+                        <li>Document lessons learned</li>
+                        <li>Plan Use Case #2 (FAQ Automation)</li>
+                        <li>Present results to board</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Month 1 Detailed Breakdown -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Month 1: Detailed Breakdown
+            </h2>
+
+            <div class="detailed-plan">
+                <div class="week-section">
+                    <div class="week-header">Week 1-2: Governance & Policy</div>
+                    <ul class="week-tasks">
+                        <li>
+                            Form AI Governance Committee: CTO (chair), CFO, Legal, Compliance, Risk, HR
+                            <span class="owner-tag">CTO</span>
+                        </li>
+                        <li>
+                            Draft AI Policy covering: responsible use, data privacy, model approval process, human oversight requirements
+                            <span class="owner-tag">Legal + Compliance</span>
+                        </li>
+                        <li>
+                            Establish ethics framework: bias testing, explainability standards, appeals process for AI decisions
+                            <span class="owner-tag">Legal + Risk</span>
+                        </li>
+                        <li>
+                            Create model risk management (MRM) process aligned with SR 11-7 guidance
+                            <span class="owner-tag">Risk Management</span>
+                        </li>
+                    </ul>
+                    <div class="deliverables-box">
+                        <strong>Deliverables:</strong> AI Policy (draft), Governance Committee charter, MRM process documentation
+                    </div>
+                </div>
+
+                <div class="week-section">
+                    <div class="week-header">Week 3-4: Pilot Selection & Planning</div>
+                    <ul class="week-tasks">
+                        <li>
+                            Finalize pilot use case: Loan Application Pre-Screening (confirmed based on Opportunity Matrix)
+                            <span class="owner-tag">Lending Operations</span>
+                        </li>
+                        <li>
+                            Define success metrics: 40% reduction in manual review time, 95%+ accuracy, 0 fair lending violations
+                            <span class="owner-tag">Lending + Risk</span>
+                        </li>
+                        <li>
+                            Secure data access: Legal approves use of historical loan data for model training
+                            <span class="owner-tag">Legal + IT</span>
+                        </li>
+                        <li>
+                            Draft pilot charter: scope, timeline, budget ($180K), team roles, decision gates
+                            <span class="owner-tag">PMO</span>
+                        </li>
+                        <li>
+                            Identify 3rd party vendor for ML platform (shortlist: Dataiku, H2O.ai, AWS SageMaker)
+                            <span class="owner-tag">IT Architecture</span>
+                        </li>
+                    </ul>
+                    <div class="deliverables-box">
+                        <strong>Deliverables:</strong> Pilot charter, Success metrics dashboard (template), Data access agreements signed
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Month 2 & 3 Preview -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Month 2-3: High-Level Preview
+            </h2>
+
+            <div class="timeline">
+                <div class="timeline-phase">
+                    <div class="phase-header">
+                        <div class="phase-title">Month 2: Pilot Execution</div>
+                        <div class="phase-duration">Weeks 5-8</div>
+                    </div>
+                    <ul class="phase-tasks">
+                        <li>Week 5: Pilot kickoff, vendor onboarding, historical data extraction (24 months of loan apps)</li>
+                        <li>Week 6-7: Model training, initial testing, bias & fairness audits</li>
+                        <li>Week 8: User acceptance testing with 5 loan officers, refine based on feedback</li>
+                    </ul>
+                    <div style="margin-top: var(--space-sm); padding: var(--space-sm); background: var(--sage-pale); border-radius: 8px;">
+                        <strong style="color: var(--sage);">Checkpoint:</strong> Mid-pilot review with governance committee (Week 7)
+                    </div>
+                </div>
+
+                <div class="timeline-phase">
+                    <div class="phase-header">
+                        <div class="phase-title">Month 3: Production & Planning</div>
+                        <div class="phase-duration">Weeks 9-12</div>
+                    </div>
+                    <ul class="phase-tasks">
+                        <li>Week 9: Production deployment to 20% of loan applications (limited rollout)</li>
+                        <li>Week 10-11: Monitor metrics daily, address edge cases, human-in-loop validation</li>
+                        <li>Week 12: Full metrics review, lessons learned documentation, board presentation prep</li>
+                    </ul>
+                    <div style="margin-top: var(--space-sm); padding: var(--space-sm); background: var(--gold-light); border-radius: 8px; color: var(--text-primary);">
+                        <strong>Go/No-Go Decision:</strong> Scale to 100% of loans OR iterate for another month
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Success Metrics Dashboard -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Pilot Success Metrics (Sample)
+            </h2>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-name">Manual Review Time Reduction</div>
+                    <div class="metric-target">40%</div>
+                    <div class="metric-baseline">Baseline: 22 min/application</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-name">Model Accuracy</div>
+                    <div class="metric-target">95%+</div>
+                    <div class="metric-baseline">Human benchmark: 92%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-name">Fair Lending Violations</div>
+                    <div class="metric-target">0</div>
+                    <div class="metric-baseline">Strict compliance requirement</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-name">User Satisfaction (Loan Officers)</div>
+                    <div class="metric-target">4.0/5.0</div>
+                    <div class="metric-baseline">Survey post-UAT</div>
+                </div>
+            </div>
+
+            <p style="margin-top: var(--space-md); color: var(--text-muted); font-style: italic; font-family: var(--font-serif); text-align: center;">
+                Metrics tracked weekly, reviewed with governance committee bi-weekly
+            </p>
+        </section>
+
+        <!-- Truncation Notice -->
+        <div class="truncation-notice">
+            <h3>📄 Full Action Plan Continues...</h3>
+            <p>
+                This sample showcases the first 2-3 pages of the 90-Day Action Plan.
+                The complete deliverable includes 8 additional pages covering:
+            </p>
+            <ul style="list-style: none; margin-top: var(--space-sm); color: var(--text-secondary);">
+                <li>→ Detailed task lists with owners and due dates (RACI matrix)</li>
+                <li>→ Budget breakdown by category and month</li>
+                <li>→ Risk mitigation strategies and contingency plans</li>
+                <li>→ Weekly check-in agendas with governance committee</li>
+                <li>→ Communication plan (stakeholder mapping, messaging)</li>
+                <li>→ Resource allocation (team members, technology, budget)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="../../index.html">Home</a>
+                    <a href="../index.html">Deliverables</a>
+                    <a href="mailto:thor@aiwiththor.com">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technology Recommendations - Meridian Financial Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <style>
+        .content-page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-md);
+        }
+
+        .stack-overview {
+            background: linear-gradient(135deg, var(--sage-pale) 0%, var(--navy-pale) 100%);
+            border-radius: 16px;
+            padding: var(--space-xl);
+            margin: var(--space-xl) 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .stack-overview h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: var(--space-md);
+        }
+
+        .stack-layer {
+            background: var(--white);
+            padding: var(--space-md);
+            border-radius: 8px;
+            margin-bottom: var(--space-sm);
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: var(--space-md);
+            align-items: center;
+        }
+
+        .layer-name {
+            font-weight: 600;
+            color: var(--sage);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .layer-tech {
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .layer-rationale {
+            grid-column: 2;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .decision-matrix {
+            margin: var(--space-xl) 0;
+        }
+
+        .matrix-table {
+            width: 100%;
+            background: var(--white);
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .matrix-table thead {
+            background: var(--sage-pale);
+        }
+
+        .matrix-table th {
+            padding: var(--space-md);
+            text-align: left;
+            font-weight: 600;
+            color: var(--navy);
+            border-bottom: 2px solid var(--sage);
+        }
+
+        .matrix-table td {
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-secondary);
+        }
+
+        .matrix-table tr:hover {
+            background: var(--background);
+        }
+
+        .recommendation-badge {
+            background: var(--sage);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .vendor-grid {
+            display: grid;
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .vendor-category {
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: var(--space-lg);
+        }
+
+        .vendor-category h4 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: var(--space-md);
+        }
+
+        .vendor-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+        }
+
+        .vendor-card {
+            background: var(--background);
+            padding: var(--space-md);
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+
+        .vendor-card.top-pick {
+            border: 2px solid var(--sage);
+            background: var(--sage-pale);
+        }
+
+        .vendor-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .vendor-strength {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .vendor-cost {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .fit-score {
+            display: inline-block;
+            background: var(--sage);
+            color: var(--white);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: var(--space-xs);
+        }
+
+        .architecture-diagram {
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: var(--space-xl);
+            margin: var(--space-xl) 0;
+            text-align: center;
+        }
+
+        .arch-box {
+            display: inline-block;
+            background: var(--sage-pale);
+            border: 2px solid var(--sage);
+            border-radius: 8px;
+            padding: var(--space-md);
+            margin: var(--space-sm);
+            min-width: 150px;
+        }
+
+        .arch-box.existing {
+            background: var(--background);
+            border-color: var(--border);
+            border-style: dashed;
+        }
+
+        .arch-label {
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 0.875rem;
+        }
+
+        .arch-tech {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: var(--space-xs);
+        }
+
+        .arch-arrow {
+            display: inline-block;
+            font-size: 1.5rem;
+            color: var(--sage);
+            margin: 0 var(--space-sm);
+        }
+
+        .nav-breadcrumb {
+            padding: calc(var(--space-sm) + 60px) var(--space-md) var(--space-sm);
+            background: var(--background);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-breadcrumb a {
+            color: var(--sage);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .nav-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .stack-layer {
+                grid-template-columns: 1fr;
+            }
+
+            .layer-rationale {
+                grid-column: 1;
+            }
+
+            .vendor-options {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-box {
+                display: block;
+                margin: var(--space-sm) auto;
+            }
+
+            .arch-arrow {
+                display: block;
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body class="deliverable-page">
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">Thor Matthiasson</a>
+            <div class="nav-links">
+                <a href="../../index.html">Home</a>
+                <a href="../../framework.html">Framework</a>
+                <a href="../index.html">Deliverables</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="nav-breadcrumb container">
+        <a href="../index.html">← Back to Deliverables</a>
+    </div>
+
+    <!-- Cover Page -->
+    <div class="cover-page">
+        <div class="cover-logo">
+            <img src="../shared/meridian-logo.svg" alt="Meridian Financial Services">
+        </div>
+        <h1 class="cover-title">Technology Recommendations</h1>
+        <p class="cover-subtitle">AI Platform & Vendor Selection Guide</p>
+        <p class="cover-company">Meridian Financial Services</p>
+        <p class="cover-date">February 2026 | Confidential</p>
+    </div>
+
+    <!-- Content Pages -->
+    <div class="content-page">
+        <!-- Technology Stack Overview -->
+        <section>
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Recommended Technology Stack
+            </h2>
+
+            <div class="stack-overview">
+                <h3>AI Platform Architecture</h3>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-md); line-height: 1.7;">
+                    Designed to leverage existing Microsoft relationship while adding best-of-breed AI components.
+                </p>
+
+                <div class="stack-layer">
+                    <div class="layer-name">Foundation</div>
+                    <div class="layer-tech"><strong>Azure OpenAI Service</strong></div>
+                    <div class="layer-rationale">Existing Microsoft EA, SOC 2 compliant, regional data residency</div>
+                </div>
+
+                <div class="stack-layer">
+                    <div class="layer-name">Orchestration</div>
+                    <div class="layer-tech"><strong>LangChain</strong> + <strong>Semantic Kernel</strong></div>
+                    <div class="layer-rationale">Open-source flexibility, large community, Microsoft integration</div>
+                </div>
+
+                <div class="stack-layer">
+                    <div class="layer-name">Vector Database</div>
+                    <div class="layer-tech"><strong>Pinecone</strong></div>
+                    <div class="layer-rationale">Managed service, scales to millions of vectors, 99.9% SLA</div>
+                </div>
+
+                <div class="stack-layer">
+                    <div class="layer-name">Observability</div>
+                    <div class="layer-tech"><strong>LangSmith</strong> + <strong>Azure Monitor</strong></div>
+                    <div class="layer-rationale">LLM-specific tracing + existing monitoring infrastructure</div>
+                </div>
+
+                <div class="stack-layer">
+                    <div class="layer-name">Data Platform</div>
+                    <div class="layer-tech"><strong>Snowflake</strong> (existing)</div>
+                    <div class="layer-rationale">Already in use, no migration needed, good AI integrations</div>
+                </div>
+
+                <div class="stack-layer">
+                    <div class="layer-name">ML Platform</div>
+                    <div class="layer-tech"><strong>Dataiku</strong> or <strong>H2O.ai</strong></div>
+                    <div class="layer-rationale">Low-code for citizen data scientists, enterprise governance</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Build vs. Buy Decision -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Build vs. Buy Analysis
+            </h2>
+
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Build</th>
+                        <th>Buy</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>LLM Foundation</strong></td>
+                        <td>Cost: High | Time: 18+ months | Risk: Very High</td>
+                        <td>Cost: Moderate | Time: Weeks | Risk: Low</td>
+                        <td><span class="recommendation-badge">Buy</span> Azure OpenAI</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ML Platform</strong></td>
+                        <td>Cost: High | Time: 12+ months | Risk: High</td>
+                        <td>Cost: Moderate | Time: 1-2 months | Risk: Low</td>
+                        <td><span class="recommendation-badge">Buy</span> Dataiku/H2O.ai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use Case Apps</strong></td>
+                        <td>Cost: Moderate | Time: 3-6 months | Risk: Medium</td>
+                        <td>Cost: High | Time: Varies | Risk: Medium</td>
+                        <td><span class="recommendation-badge">Build</span> Custom apps</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Pipeline</strong></td>
+                        <td>Cost: Low | Time: 1-2 months | Risk: Low</td>
+                        <td>Cost: Moderate | Time: 1 month | Risk: Low</td>
+                        <td><span class="recommendation-badge">Hybrid</span> Extend existing ETL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Governance Tools</strong></td>
+                        <td>Cost: High | Time: 6+ months | Risk: High</td>
+                        <td>Cost: Moderate | Time: 2-3 months | Risk: Low</td>
+                        <td><span class="recommendation-badge">Buy</span> Alation/Collibra</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: var(--space-md); color: var(--text-muted); font-style: italic; font-family: var(--font-serif); text-align: center;">
+                <strong>Overall Recommendation:</strong> Hybrid approach - buy platform & infrastructure, build use cases
+            </p>
+        </section>
+
+        <!-- Vendor Shortlist -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Vendor Shortlist by Category
+            </h2>
+
+            <div class="vendor-grid">
+                <!-- ML Platform -->
+                <div class="vendor-category">
+                    <h4>ML/AI Platform</h4>
+                    <div class="vendor-options">
+                        <div class="vendor-card top-pick">
+                            <div class="vendor-name">Dataiku</div>
+                            <div class="vendor-strength"><strong>Strength:</strong> Best-in-class UI, citizen data scientist focus</div>
+                            <div class="vendor-cost">Cost: $150K-$250K/year</div>
+                            <div class="fit-score">Fit: 9/10</div>
+                        </div>
+                        <div class="vendor-card">
+                            <div class="vendor-name">H2O.ai</div>
+                            <div class="vendor-strength"><strong>Strength:</strong> AutoML, open-source roots</div>
+                            <div class="vendor-cost">Cost: $100K-$180K/year</div>
+                            <div class="fit-score">Fit: 8/10</div>
+                        </div>
+                        <div class="vendor-card">
+                            <div class="vendor-name">AWS SageMaker</div>
+                            <div class="vendor-strength"><strong>Strength:</strong> Deep AWS integration</div>
+                            <div class="vendor-cost">Cost: Pay-as-you-go</div>
+                            <div class="fit-score">Fit: 6/10</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Catalog -->
+                <div class="vendor-category">
+                    <h4>Data Catalog & Governance</h4>
+                    <div class="vendor-options">
+                        <div class="vendor-card top-pick">
+                            <div class="vendor-name">Alation</div>
+                            <div class="vendor-strength"><strong>Strength:</strong> Best search UX, Snowflake integration</div>
+                            <div class="vendor-cost">Cost: $80K-$120K/year</div>
+                            <div class="fit-score">Fit: 9/10</div>
+                        </div>
+                        <div class="vendor-card">
+                            <div class="vendor-name">Collibra</div>
+                            <div class="vendor-strength"><strong>Strength:</strong> Enterprise governance, compliance focus</div>
+                            <div class="vendor-cost">Cost: $100K-$150K/year</div>
+                            <div class="fit-score">Fit: 8/10</div>
+                        </div>
+                        <div class="vendor-card">
+                            <div class="vendor-name">Azure Purview</div>
+                            <div class="vendor-strength"><strong>Strength:</strong> Native Azure integration</div>
+                            <div class="vendor-cost">Cost: $30K-$60K/year</div>
+                            <div class="fit-score">Fit: 7/10</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Observability -->
+                <div class="vendor-category">
+                    <h4>LLM Observability & Monitoring</h4>
+                    <div class="vendor-options">
+                        <div class="vendor-card top-pick">
+                            <div class="vendor-name">LangSmith</div>
+                            <div class="vendor-strength"><strong>Strength:</strong> Built by LangChain team, deep tracing</div>
+                            <div class="vendor-cost">Cost: $2K-$5K/month</div>
+                            <div class="fit-score">Fit: 10/10</div>
+                        </div>
+                        <div class="vendor-card">
+                            <div class="vendor-name">Arize AI</div>
+                            <div class="vendor-strength"><strong>Strength:</strong> ML monitoring focus, drift detection</div>
+                            <div class="vendor-cost">Cost: $3K-$8K/month</div>
+                            <div class="fit-score">Fit: 8/10</div>
+                        </div>
+                        <div class="vendor-card">
+                            <div class="vendor-name">Datadog</div>
+                            <div class="vendor-strength"><strong>Strength:</strong> Unified monitoring (already in use)</div>
+                            <div class="vendor-cost">Cost: Incremental add-on</div>
+                            <div class="fit-score">Fit: 7/10</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integration Architecture -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Integration Architecture
+            </h2>
+
+            <div class="architecture-diagram">
+                <h3 style="font-size: 1.25rem; margin-bottom: var(--space-lg); color: var(--navy);">
+                    How New AI Components Connect to Existing Systems
+                </h3>
+
+                <div style="margin: var(--space-xl) 0;">
+                    <!-- Row 1: Existing Systems -->
+                    <div class="arch-box existing">
+                        <div class="arch-label">Core Banking</div>
+                        <div class="arch-tech">(Existing)</div>
+                    </div>
+                    <div class="arch-box existing">
+                        <div class="arch-label">CRM (Salesforce)</div>
+                        <div class="arch-tech">(Existing)</div>
+                    </div>
+                    <div class="arch-box existing">
+                        <div class="arch-label">Wealth Mgmt</div>
+                        <div class="arch-tech">(Existing)</div>
+                    </div>
+
+                    <div style="margin: var(--space-md) 0;">
+                        <span class="arch-arrow">↓</span>
+                    </div>
+
+                    <!-- Row 2: Data Layer -->
+                    <div class="arch-box existing">
+                        <div class="arch-label">Snowflake</div>
+                        <div class="arch-tech">Data Warehouse (Existing)</div>
+                    </div>
+
+                    <div style="margin: var(--space-md) 0;">
+                        <span class="arch-arrow">↓</span>
+                    </div>
+
+                    <!-- Row 3: AI Layer (New) -->
+                    <div class="arch-box">
+                        <div class="arch-label">Dataiku/H2O.ai</div>
+                        <div class="arch-tech">ML Platform (New)</div>
+                    </div>
+                    <div class="arch-box">
+                        <div class="arch-label">Azure OpenAI</div>
+                        <div class="arch-tech">LLM Service (New)</div>
+                    </div>
+                    <div class="arch-box">
+                        <div class="arch-label">Pinecone</div>
+                        <div class="arch-tech">Vector DB (New)</div>
+                    </div>
+
+                    <div style="margin: var(--space-md) 0;">
+                        <span class="arch-arrow">↓</span>
+                    </div>
+
+                    <!-- Row 4: Use Cases -->
+                    <div class="arch-box">
+                        <div class="arch-label">Loan Pre-Screening</div>
+                        <div class="arch-tech">Custom App</div>
+                    </div>
+                    <div class="arch-box">
+                        <div class="arch-label">FAQ Bot</div>
+                        <div class="arch-tech">Custom App</div>
+                    </div>
+                </div>
+
+                <p style="margin-top: var(--space-lg); font-size: 0.875rem; color: var(--text-muted); font-style: italic;">
+                    <strong>Integration Points:</strong> REST APIs, Azure Event Hub for real-time data, Snowflake as central data hub
+                </p>
+            </div>
+        </section>
+
+        <!-- Truncation Notice -->
+        <div class="truncation-notice">
+            <h3>📄 Full Recommendations Continue...</h3>
+            <p>
+                This sample showcases the first 2-3 pages of the Technology Recommendations.
+                The complete deliverable includes 12 additional pages covering:
+            </p>
+            <ul style="list-style: none; margin-top: var(--space-sm); color: var(--text-secondary);">
+                <li>→ Vendor RFP templates with evaluation criteria</li>
+                <li>→ Detailed cost models (3-year TCO analysis)</li>
+                <li>→ Implementation timelines with dependencies</li>
+                <li>→ Team skill gap analysis & hiring/training plans</li>
+                <li>→ Security & compliance requirements mapping</li>
+                <li>→ Proof-of-concept (POC) playbooks for vendor evaluation</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="../../index.html">Home</a>
+                    <a href="../index.html">Deliverables</a>
+                    <a href="mailto:thor@aiwiththor.com">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

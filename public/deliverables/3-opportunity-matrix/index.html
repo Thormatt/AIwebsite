@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prioritized Opportunity Matrix - Meridian Financial Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        .content-page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-md);
+        }
+
+        .matrix-overview {
+            background: linear-gradient(135deg, var(--sage-pale) 0%, var(--navy-pale) 100%);
+            border-radius: 16px;
+            padding: var(--space-xl);
+            margin: var(--space-xl) 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .matrix-overview h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: var(--space-md);
+        }
+
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .stat-box {
+            background: var(--white);
+            padding: var(--space-md);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-box .number {
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--navy);
+        }
+
+        .stat-box .label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: var(--space-xs);
+        }
+
+        .chart-wrapper {
+            background: var(--white);
+            padding: var(--space-xl);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            margin: var(--space-xl) 0;
+        }
+
+        .shortlist-table {
+            width: 100%;
+            background: var(--white);
+            border-collapse: collapse;
+            margin: var(--space-xl) 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .shortlist-table thead {
+            background: var(--sage-pale);
+        }
+
+        .shortlist-table th {
+            padding: var(--space-md);
+            text-align: left;
+            font-weight: 600;
+            color: var(--navy);
+            border-bottom: 2px solid var(--sage);
+        }
+
+        .shortlist-table td {
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-secondary);
+        }
+
+        .shortlist-table tr:hover {
+            background: var(--background);
+        }
+
+        .shortlist-table .priority-1 {
+            border-left: 4px solid #2ecc71;
+        }
+
+        .shortlist-table .priority-2 {
+            border-left: 4px solid #27ae60;
+        }
+
+        .shortlist-table .priority-3 {
+            border-left: 4px solid #3498db;
+        }
+
+        .shortlist-table .priority-4 {
+            border-left: 4px solid #2980b9;
+        }
+
+        .nav-breadcrumb {
+            padding: calc(var(--space-sm) + 60px) var(--space-md) var(--space-sm);
+            background: var(--background);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-breadcrumb a {
+            color: var(--sage);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .nav-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .overview-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .shortlist-table {
+                font-size: 0.875rem;
+            }
+
+            .shortlist-table th,
+            .shortlist-table td {
+                padding: var(--space-sm);
+            }
+        }
+    </style>
+</head>
+<body class="deliverable-page">
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">Thor Matthiasson</a>
+            <div class="nav-links">
+                <a href="../../index.html">Home</a>
+                <a href="../../framework.html">Framework</a>
+                <a href="../index.html">Deliverables</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="nav-breadcrumb container">
+        <a href="../index.html">← Back to Deliverables</a>
+    </div>
+
+    <!-- Cover Page -->
+    <div class="cover-page">
+        <div class="cover-logo">
+            <img src="../shared/meridian-logo.svg" alt="Meridian Financial Services">
+        </div>
+        <h1 class="cover-title">Prioritized Opportunity Matrix</h1>
+        <p class="cover-subtitle">AI Use Case Analysis & Pilot Recommendations</p>
+        <p class="cover-company">Meridian Financial Services</p>
+        <p class="cover-date">February 2026 | Confidential</p>
+    </div>
+
+    <!-- Content Pages -->
+    <div class="content-page">
+        <!-- Matrix Overview -->
+        <div class="matrix-overview">
+            <h3>Assessment Overview</h3>
+            <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--space-md);">
+                Evaluated 12 potential AI use cases across all business units. Prioritized based on business value,
+                implementation effort, data readiness, and strategic alignment. <strong style="color: var(--sage);">
+                4 use cases shortlisted for pilot phase.</strong>
+            </p>
+
+            <div class="overview-stats">
+                <div class="stat-box">
+                    <div class="number">12</div>
+                    <div class="label">Use Cases Evaluated</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">4</div>
+                    <div class="label">Shortlisted for Pilots</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">$8.2M</div>
+                    <div class="label">Combined Annual Value</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2x2 Matrix Visualization -->
+        <section>
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Value vs. Effort Matrix
+            </h2>
+
+            <div class="chart-wrapper">
+                <canvas id="opportunityMatrix"></canvas>
+            </div>
+
+            <p style="margin-top: var(--space-md); color: var(--text-muted); font-style: italic; font-family: var(--font-serif); text-align: center;">
+                <strong>Green</strong> = Quick Wins (prioritize first) |
+                <strong>Blue</strong> = Strategic Investments (plan for scale) |
+                <strong>Gray</strong> = Deferred (not prioritized)
+            </p>
+        </section>
+
+        <!-- Shortlist Details -->
+        <section style="margin-top: var(--space-2xl);">
+            <h2 style="font-size: 2rem; font-weight: 400; margin-bottom: var(--space-lg); color: var(--navy);">
+                Pilot Shortlist Details
+            </h2>
+
+            <table class="shortlist-table">
+                <thead>
+                    <tr>
+                        <th>Use Case</th>
+                        <th>Annual Value</th>
+                        <th>Effort (Months)</th>
+                        <th>Risk</th>
+                        <th>Owner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="priority-1">
+                        <td>
+                            <strong style="color: var(--navy);">1. Loan Application Pre-Screening</strong><br>
+                            <span style="font-size: 0.875rem; color: var(--text-muted);">
+                                AI triages loan apps, auto-approves low-risk, flags high-risk for manual review
+                            </span>
+                        </td>
+                        <td><strong>$1.2M</strong><br><span style="font-size: 0.875rem; color: var(--text-muted);">Cost reduction</span></td>
+                        <td>3-4</td>
+                        <td><span class="badge badge-low">Low</span></td>
+                        <td>Lending Operations</td>
+                    </tr>
+                    <tr class="priority-2">
+                        <td>
+                            <strong style="color: var(--navy);">2. Customer Service FAQ Automation</strong><br>
+                            <span style="font-size: 0.875rem; color: var(--text-muted);">
+                                LLM-powered chatbot handles 70% of tier-1 inquiries, escalates complex issues
+                            </span>
+                        </td>
+                        <td><strong>$800K</strong><br><span style="font-size: 0.875rem; color: var(--text-muted);">Cost reduction</span></td>
+                        <td>2-3</td>
+                        <td><span class="badge badge-low">Low</span></td>
+                        <td>Customer Support</td>
+                    </tr>
+                    <tr class="priority-3">
+                        <td>
+                            <strong style="color: var(--navy);">3. Credit Risk Modeling Enhancement</strong><br>
+                            <span style="font-size: 0.875rem; color: var(--text-muted);">
+                                Improve default prediction accuracy by 15% using gradient boosting models
+                            </span>
+                        </td>
+                        <td><strong>$3.5M</strong><br><span style="font-size: 0.875rem; color: var(--text-muted);">Risk mitigation</span></td>
+                        <td>8-10</td>
+                        <td><span class="badge badge-medium">Medium</span></td>
+                        <td>Risk Management</td>
+                    </tr>
+                    <tr class="priority-4">
+                        <td>
+                            <strong style="color: var(--navy);">4. Personalized Wealth Advisor (Robo-Advisory)</strong><br>
+                            <span style="font-size: 0.875rem; color: var(--text-muted);">
+                                AI-driven portfolio recommendations for clients under $500K AUM
+                            </span>
+                        </td>
+                        <td><strong>$2.7M</strong><br><span style="font-size: 0.875rem; color: var(--text-muted);">Revenue growth</span></td>
+                        <td>9-12</td>
+                        <td><span class="badge badge-medium">Medium</span></td>
+                        <td>Wealth Management</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Next Steps -->
+        <section style="margin-top: var(--space-2xl); background: var(--background); padding: var(--space-lg); border-radius: 12px;">
+            <h2 style="font-size: 1.5rem; font-weight: 500; margin-bottom: var(--space-md); color: var(--navy);">
+                Recommended Next Steps
+            </h2>
+
+            <ol style="color: var(--text-secondary); line-height: 1.8; padding-left: var(--space-md);">
+                <li><strong>Begin pilot charters for top 2 Quick Wins</strong> (Loan Pre-Screening + FAQ Automation) - target pilot kickoff within 30 days</li>
+                <li><strong>Conduct detailed business case analysis</strong> for Strategic Investments (#3 and #4) - validate ROI assumptions with Finance</li>
+                <li><strong>Defer remaining 8 use cases</strong> to Phase 2 (post-pilot learnings) - reassess in Q3 2026</li>
+                <li><strong>Establish pilot success criteria</strong> - define metrics, timelines, and go/no-go decision gates</li>
+            </ol>
+        </section>
+
+        <!-- Truncation Notice -->
+        <div class="truncation-notice">
+            <h3>📄 Full Matrix Continues...</h3>
+            <p>
+                This sample showcases the first 2-3 pages of the Opportunity Matrix.
+                The complete deliverable includes 15 additional pages covering:
+            </p>
+            <ul style="list-style: none; margin-top: var(--space-sm); color: var(--text-secondary);">
+                <li>→ Detailed business cases with ROI calculations</li>
+                <li>→ Technical requirements and architecture diagrams</li>
+                <li>→ Risk analysis and mitigation strategies</li>
+                <li>→ Resource requirements (team, budget, timeline)</li>
+                <li>→ All 12 use cases with full scoring methodology</li>
+                <li>→ Competitive benchmarking (peer financial institutions)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Thor Matthiasson. AI Strategy & Advisory.</p>
+                <div class="footer-links">
+                    <a href="../../index.html">Home</a>
+                    <a href="../index.html">Deliverables</a>
+                    <a href="mailto:thor@aiwiththor.com">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Opportunity Matrix Scatter Plot
+        const ctx = document.getElementById('opportunityMatrix').getContext('2d');
+
+        // Use case data: [x: effort (months), y: value ($M)]
+        const quickWins = [
+            { x: 3.5, y: 1.2, label: '1. Loan Pre-Screening', color: '#2ecc71' },
+            { x: 2.5, y: 0.8, label: '2. FAQ Automation', color: '#27ae60' }
+        ];
+
+        const strategic = [
+            { x: 9, y: 3.5, label: '3. Credit Risk Model', color: '#3498db' },
+            { x: 10.5, y: 2.7, label: '4. Robo-Advisory', color: '#2980b9' }
+        ];
+
+        const deferred = [
+            { x: 6, y: 0.5, label: 'Fraud Detection Upgrade', color: '#95a5a6' },
+            { x: 7, y: 0.7, label: 'Document Processing', color: '#95a5a6' },
+            { x: 8, y: 1.0, label: 'Churn Prediction', color: '#95a5a6' },
+            { x: 5, y: 0.4, label: 'Email Prioritization', color: '#95a5a6' },
+            { x: 11, y: 1.8, label: 'Branch Optimization', color: '#95a5a6' },
+            { x: 12, y: 2.0, label: 'Trading Algorithm', color: '#95a5a6' },
+            { x: 9, y: 0.9, label: 'Compliance Monitoring', color: '#95a5a6' },
+            { x: 7, y: 0.6, label: 'Lead Scoring', color: '#95a5a6' }
+        ];
+
+        new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'Quick Wins',
+                        data: quickWins,
+                        backgroundColor: quickWins.map(d => d.color),
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        pointRadius: 10,
+                        pointHoverRadius: 12
+                    },
+                    {
+                        label: 'Strategic Investments',
+                        data: strategic,
+                        backgroundColor: strategic.map(d => d.color),
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        pointRadius: 10,
+                        pointHoverRadius: 12
+                    },
+                    {
+                        label: 'Deferred',
+                        data: deferred,
+                        backgroundColor: '#bdc3c7',
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Implementation Effort (Months) →',
+                            font: { size: 14, weight: '500' }
+                        },
+                        min: 0,
+                        max: 13,
+                        ticks: { stepSize: 2 }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Annual Business Value ($M) →',
+                            font: { size: 14, weight: '500' }
+                        },
+                        min: 0,
+                        max: 4,
+                        ticks: { stepSize: 0.5 }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: { size: 13 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const point = context.raw;
+                                return point.label + ': $' + point.y + 'M value, ' + point.x + ' months';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

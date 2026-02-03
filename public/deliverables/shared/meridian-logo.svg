@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <!-- M shape representing Meridian -->
+  <path d="M20 45V15L30 30L40 15V45" stroke="#2c3e50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Circular accent -->
+  <circle cx="30" cy="30" r="24" stroke="#4a5d4e" stroke-width="1.5" fill="none" opacity="0.3"/>
+
+  <!-- Company name -->
+  <text x="65" y="28" font-family="Inter, sans-serif" font-size="16" font-weight="600" fill="#2c3e50">
+    MERIDIAN
+  </text>
+  <text x="65" y="43" font-family="Inter, sans-serif" font-size="10" font-weight="400" fill="#4a5d4e">
+    FINANCIAL SERVICES
+  </text>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0b"/>
+      <stop offset="100%" style="stop-color:#141419"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg6)"/>
+  <!-- Pilot to production pipeline -->
+  <circle cx="150" cy="250" r="50" fill="none" stroke="#f97316" stroke-width="2"/>
+  <text x="150" y="255" text-anchor="middle" fill="#f97316" font-size="14" font-weight="500">PILOT</text>
+  <!-- Arrow -->
+  <line x1="220" y1="250" x2="480" y2="250" stroke="#f97316" stroke-width="2" stroke-dasharray="10,5"/>
+  <polygon points="480,240 510,250 480,260" fill="#f97316"/>
+  <!-- Production (larger, emphasized) -->
+  <rect x="530" y="180" width="150" height="140" rx="10" fill="none" stroke="#22c55e" stroke-width="3"/>
+  <text x="605" y="245" text-anchor="middle" fill="#22c55e" font-size="14" font-weight="600">PRODUCTION</text>
+  <text x="605" y="265" text-anchor="middle" fill="#22c55e" font-size="12" opacity="0.7">at scale</text>
+  <!-- Growth indicator -->
+  <path d="M560,300 L580,280 L600,290 L620,260 L640,270 L660,230" fill="none" stroke="#22c55e" stroke-width="2"/>
+</svg>

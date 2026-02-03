@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Presentation - Meridian Financial Services AI Strategy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-2xl);
+            background: var(--white);
+            text-align: center;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--navy);
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.02em;
+        }
+
+        .slide h2 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: var(--sage);
+            margin-bottom: var(--space-md);
+        }
+
+        .slide h3 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        .slide-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .slide-content p {
+            font-size: 1.375rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-md);
+        }
+
+        .slide-content ul {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            text-align: left;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .slide-content ul li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .slide-navigation {
+            position: fixed;
+            bottom: var(--space-lg);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: var(--space-xs);
+            z-index: 100;
+        }
+
+        .slide-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .slide-dot.active {
+            background: var(--sage);
+            transform: scale(1.3);
+        }
+
+        .slide-dot:hover {
+            background: var(--sage-light);
+        }
+
+        .stat-large {
+            font-size: 4rem;
+            font-weight: 300;
+            color: var(--gold);
+            margin: var(--space-md) 0;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+            max-width: 900px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--navy);
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-item .label {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .chart-slide-wrapper {
+            max-width: 700px;
+            margin: var(--space-xl) auto;
+        }
+
+        .investment-box {
+            background: linear-gradient(135deg, var(--sage-pale) 0%, var(--navy-pale) 100%);
+            border-radius: 16px;
+            padding: var(--space-xl);
+            margin: var(--space-lg) 0;
+            max-width: 700px;
+        }
+
+        .investment-box .amount {
+            font-size: 4rem;
+            font-weight: 300;
+            color: var(--navy);
+        }
+
+        .investment-box .timeline {
+            font-size: 1.5rem;
+            color: var(--sage);
+            margin: var(--space-sm) 0;
+        }
+
+        .investment-box .roi {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .risk-grid {
+            display: grid;
+            gap: var(--space-md);
+            text-align: left;
+            max-width: 800px;
+            margin: var(--space-lg) auto;
+        }
+
+        .risk-item {
+            background: var(--background);
+            padding: var(--space-md);
+            border-radius: 8px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .risk-item .risk-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: var(--space-xs);
+        }
+
+        .risk-item .mitigation {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .slide-header {
+            position: absolute;
+            top: var(--space-lg);
+            right: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .slide-header img {
+            height: 30px;
+        }
+
+        .exit-link {
+            position: absolute;
+            top: var(--space-md);
+            left: var(--space-md);
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            z-index: 200;
+        }
+
+        .exit-link:hover {
+            color: var(--sage);
+        }
+
+        @media (max-width: 768px) {
+            .slide h1 {
+                font-size: 2rem;
+            }
+
+            .slide h2 {
+                font-size: 1.75rem;
+            }
+
+            .slide-content p {
+                font-size: 1.125rem;
+            }
+
+            .stat-large {
+                font-size: 2.5rem;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-md);
+            }
+        }
+    </style>
+</head>
+<body class="deliverable-page">
+    <a href="../index.html" class="exit-link">← Exit Presentation</a>
+
+    <div class="slide-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <div class="slide-header">
+                <img src="../shared/meridian-logo.svg" alt="Meridian Financial Services">
+            </div>
+            <h1>AI Strategy & Investment Recommendation</h1>
+            <h2>Board of Directors</h2>
+            <p style="font-size: 1.125rem; color: var(--text-muted); margin-top: var(--space-lg);">
+                February 2026 | Confidential
+            </p>
+        </div>
+
+        <!-- Slide 2: The Problem -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="../shared/meridian-logo.svg" alt="Meridian">
+            </div>
+            <div class="slide-content">
+                <h2>The Problem</h2>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <span class="number">+40%</span>
+                        <span class="label">Customer acquisition costs (2-year trend)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="number">Flat</span>
+                        <span class="label">Operational efficiency (plateauing despite investment)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="number">5+</span>
+                        <span class="label">Competitors launching AI-powered products</span>
+                    </div>
+                </div>
+                <p style="margin-top: var(--space-xl); font-style: italic; font-family: var(--font-serif);">
+                    "We're falling behind in the AI race while our costs are rising"
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Current State Assessment -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="../shared/meridian-logo.svg" alt="Meridian">
+            </div>
+            <div class="slide-content">
+                <h2>Current State Assessment</h2>
+                <div class="stat-large">2.4 / 5.0</div>
+                <p style="font-size: 1.5rem; color: var(--sage); margin-bottom: var(--space-lg);">Overall AI Readiness - Emerging Stage</p>
+                <div class="chart-slide-wrapper">
+                    <canvas id="maturityChart"></canvas>
+                </div>
+                <p style="margin-top: var(--space-md); font-size: 1.125rem;">
+                    <strong style="color: var(--navy);">Key Gap:</strong> Strong technical capability, weak governance & strategy
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 4: The Opportunity -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="../shared/meridian-logo.svg" alt="Meridian">
+            </div>
+            <div class="slide-content">
+                <h2>The Opportunity</h2>
+                <h3 style="margin-bottom: var(--space-lg);">4 High-Value Use Cases Identified</h3>
+                <ul style="font-size: 1.125rem;">
+                    <li><strong>Loan Pre-Screening:</strong> $1.2M annual value, 3-4 months to deploy</li>
+                    <li><strong>FAQ Automation:</strong> $800K annual value, 2-3 months to deploy</li>
+                    <li><strong>Credit Risk Modeling:</strong> $3.5M annual value, 8-10 months to deploy</li>
+                    <li><strong>Robo-Advisory:</strong> $2.7M annual value, 9-12 months to deploy</li>
+                </ul>
+                <div class="stat-large" style="margin-top: var(--space-xl);">$8.2M</div>
+                <p style="font-size: 1.25rem; color: var(--text-secondary);">Combined annual value potential</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Investment Request -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="../shared/meridian-logo.svg" alt="Meridian">
+            </div>
+            <div class="slide-content">
+                <h2>Investment Recommendation</h2>
+                <div class="investment-box">
+                    <div class="amount">$2.8M</div>
+                    <div class="timeline">Over 18 months</div>
+                    <div class="roi">Projected 3.2x ROI</div>
+                </div>
+                <h3 style="margin-top: var(--space-xl);">Timeline</h3>
+                <div class="stat-grid" style="margin-top: var(--space-md);">
+                    <div class="stat-item">
+                        <span class="number">Q2 2026</span>
+                        <span class="label">Foundation & pilot launch</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="number">Q3 2026</span>
+                        <span class="label">Pilot validation & scale prep</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="number">Q4 2026</span>
+                        <span class="label">Production rollout & next wave</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Risk & Mitigation -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="../shared/meridian-logo.svg" alt="Meridian">
+            </div>
+            <div class="slide-content">
+                <h2>Key Risks & Mitigations</h2>
+                <div class="risk-grid">
+                    <div class="risk-item">
+                        <div class="risk-title">Regulatory Compliance Risk</div>
+                        <div class="mitigation">
+                            <strong>Mitigation:</strong> Built-in model risk management (MRM) aligned with SR 11-7,
+                            Legal & Compliance oversight at every stage
+                        </div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-title">Talent & Skills Gap</div>
+                        <div class="mitigation">
+                            <strong>Mitigation:</strong> Hybrid approach - upskill existing team + hire 2 ML engineers,
+                            leverage 3rd party platform vendors to accelerate
+                        </div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-title">Pilot Failure / Poor ROI</div>
+                        <div class="mitigation">
+                            <strong>Mitigation:</strong> Gated approach with clear success criteria and go/no-go decision points,
+                            conservative ROI estimates with 30% buffer
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Truncation Notice -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="../shared/meridian-logo.svg" alt="Meridian">
+            </div>
+            <div class="slide-content">
+                <div class="truncation-notice" style="margin: 0;">
+                    <h3>📄 Full Deck Continues...</h3>
+                    <p>
+                        This sample showcases the first 6 slides of the Board Presentation.
+                        The complete deck includes 15 additional slides covering:
+                    </p>
+                    <ul style="list-style: none; margin-top: var(--space-sm); color: var(--text-secondary); font-size: 1rem;">
+                        <li>→ Detailed financial model & ROI breakdown</li>
+                        <li>→ Competitive analysis (peer banks' AI initiatives)</li>
+                        <li>→ Implementation roadmap with milestones</li>
+                        <li>→ Organizational changes required</li>
+                        <li>→ Success stories from peer institutions</li>
+                        <li>→ Appendix: full assessment results</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Navigation -->
+    <div class="slide-navigation">
+        <div class="slide-dot active" data-slide="0"></div>
+        <div class="slide-dot" data-slide="1"></div>
+        <div class="slide-dot" data-slide="2"></div>
+        <div class="slide-dot" data-slide="3"></div>
+        <div class="slide-dot" data-slide="4"></div>
+        <div class="slide-dot" data-slide="5"></div>
+        <div class="slide-dot" data-slide="6"></div>
+    </div>
+
+    <script>
+        // Slide navigation
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slide-dot');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+
+            currentSlide = (n + slides.length) % slides.length;
+
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        // Dot navigation
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                showSlide(parseInt(dot.dataset.slide));
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                showSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft') {
+                showSlide(currentSlide - 1);
+            }
+        });
+
+        // Chart for Slide 3
+        const ctx = document.getElementById('maturityChart');
+        if (ctx) {
+            new Chart(ctx.getContext('2d'), {
+                type: 'radar',
+                data: {
+                    labels: ['Strategy', 'Data', 'People', 'Technology', 'Governance', 'Operations', 'Culture', 'Value'],
+                    datasets: [{
+                        label: 'Meridian',
+                        data: [2.0, 3.5, 2.5, 3.0, 1.5, 2.0, 2.5, 2.0],
+                        fill: true,
+                        backgroundColor: 'rgba(74, 93, 78, 0.3)',
+                        borderColor: '#4a5d4e',
+                        pointBackgroundColor: '#4a5d4e',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#4a5d4e',
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            angleLines: { display: true, color: '#e5e5e5' },
+                            suggestedMin: 0,
+                            suggestedMax: 5,
+                            ticks: { stepSize: 1, font: { size: 12 } },
+                            pointLabels: { font: { size: 14, weight: '500' } }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

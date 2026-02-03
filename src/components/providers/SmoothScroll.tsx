@@ -1,0 +1,90 @@
+'use client';
+
+import { useEffect, useRef, useState, createContext, useContext } from 'react';
+import Lenis from 'lenis';
+import { gsap, ScrollTrigger } from '@/lib/gsap';
+
+// Context for Lenis instance
+const LenisContext = createContext<Lenis | null>(null);
+
+export function useLenis() {
+  return useContext(LenisContext);
+}
+
+interface SmoothScrollProviderProps {
+  children: React.ReactNode;
+}
+
+export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
+  const lenisRef = useRef<Lenis | null>(null);
+  const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
+
+  useEffect(() => {
+    // Initialize Lenis smooth scroll
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      touchMultiplier: 2,
+      infinite: false,
+    });
+
+    lenisRef.current = lenis;
+    setLenisInstance(lenis);
+
+    // Connect Lenis to ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+
+    // Add Lenis to GSAP ticker
+    const onTick = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(onTick);
+
+    // Disable GSAP's default lag smoothing
+    gsap.ticker.lagSmoothing(0);
+
+    // Cleanup
+    return () => {
+      lenis.off('scroll', ScrollTrigger.update);
+      lenis.destroy();
+      gsap.ticker.remove(onTick);
+      setLenisInstance(null);
+    };
+  }, []);
+
+  return (
+    <LenisContext.Provider value={lenisInstance}>
+      {children}
+    </LenisContext.Provider>
+  );
+}
+
+// Hook for scrolling to elements
+export function useScrollTo() {
+  const lenis = useLenis();
+
+  const scrollTo = (
+    target: string | HTMLElement | number,
+    options?: {
+      offset?: number;
+      duration?: number;
+      immediate?: boolean;
+      lock?: boolean;
+      force?: boolean;
+    }
+  ) => {
+    if (!lenis) {
+      // Fallback to native scroll if Lenis isn't available
+      if (typeof target === 'string') {
+        document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
+      } else if (typeof target === 'number') {
+        window.scrollTo({ top: target, behavior: 'smooth' });
+      }
+      return;
+    }
+
+    lenis.scrollTo(target, options);
+  };
+
+  return scrollTo;
+}
