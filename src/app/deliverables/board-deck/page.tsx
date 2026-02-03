@@ -67,7 +67,7 @@ export default function BoardDeck() {
             suggestedMin: 0,
             suggestedMax: 5,
             ticks: { stepSize: 1, color: '#94a3b8', backdropColor: 'transparent' },
-            pointLabels: { color: '#f8fafc', font: { size: 14, weight: '600' } },
+            pointLabels: { color: '#f8fafc', font: { size: 14, weight: 600 } },
           },
         },
         plugins: { legend: { display: false } },

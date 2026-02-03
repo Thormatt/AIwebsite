@@ -65,7 +65,7 @@ export default function ExecutiveAssessment() {
             },
             pointLabels: {
               color: '#f8fafc',
-              font: { size: 13, weight: '600' },
+              font: { size: 13, weight: 600 },
             },
           },
         },

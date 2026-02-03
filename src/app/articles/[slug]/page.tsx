@@ -18,7 +18,7 @@ function renderInlineText(text: string) {
 // Simple markdown renderer
 function renderMarkdown(content: string) {
   const lines = content.trim().split('\n');
-  const elements: JSX.Element[] = [];
+  const elements: React.ReactElement[] = [];
   let i = 0;
   let key = 0;
 

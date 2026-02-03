@@ -2,11 +2,10 @@
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Observer } from 'gsap/Observer';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger, Observer);
+  gsap.registerPlugin(ScrollTrigger);
 }
 
 // Premium easing functions
@@ -214,4 +213,4 @@ export const animations = {
   },
 };
 
-export { gsap, ScrollTrigger, Observer, customEases };
+export { gsap, ScrollTrigger, customEases };

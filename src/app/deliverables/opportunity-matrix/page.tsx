@@ -83,14 +83,14 @@ export default function OpportunityMatrix() {
         aspectRatio: 1.5,
         scales: {
           x: {
-            title: { display: true, text: 'Implementation Effort (Months) →', color: '#94a3b8', font: { size: 14, weight: '600' } },
+            title: { display: true, text: 'Implementation Effort (Months) →', color: '#94a3b8', font: { size: 14, weight: 600 } },
             min: 0,
             max: 13,
             ticks: { stepSize: 2, color: '#94a3b8' },
             grid: { color: 'rgba(255, 255, 255, 0.05)' },
           },
           y: {
-            title: { display: true, text: 'Annual Business Value ($M) →', color: '#94a3b8', font: { size: 14, weight: '600' } },
+            title: { display: true, text: 'Annual Business Value ($M) →', color: '#94a3b8', font: { size: 14, weight: 600 } },
             min: 0,
             max: 4,
             ticks: { stepSize: 0.5, color: '#94a3b8' },
