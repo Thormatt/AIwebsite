@@ -106,8 +106,8 @@ export function Solution() {
 
       <div className="container relative z-10">
         {/* Opening statement */}
-        <div className="mb-20 md:mb-32">
-          <p className="text-micro text-accent mb-6">The difference</p>
+        <div style={{ marginBottom: '10rem' }}>
+          <p className="text-micro text-accent" style={{ marginBottom: '2rem' }}>The difference</p>
           <h2 ref={textRef} className="text-display-xl max-w-5xl">
             <span className="scramble-text">Most consultants talk.</span>
             <br />
@@ -156,9 +156,10 @@ export function Solution() {
             <p className="text-display-lg text-white max-w-3xl">
               Executive strategy with hands-on delivery.
               <br />
-              Built to production, not just slides.
-              <br />
-              <span className="font-bold">No strategy decks collecting dust.</span>
+              <span className="font-bold">Built to production, not just slides.</span>
+            </p>
+            <p className="text-body text-white/60 mt-6 max-w-2xl">
+              Production means: integrated, permissioned, evaluated, monitored, owned.
             </p>
           </div>
         </div>

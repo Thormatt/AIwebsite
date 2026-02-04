@@ -9,7 +9,7 @@ const faqs = [
   {
     question: 'How do I know which service is right for me?',
     answer:
-      'Start with the Executive AI Assessment if you need clarity on where you stand and what to do next. The Fractional AI Lead engagement is ideal if you already know your direction but need ongoing strategic guidance and implementation support.',
+      'Start with the AI Value + Risk Brief if you need clarity on where you stand and what to do next. If you have a specific workflow ready to ship, the Production Workflow Launch gets it live in 6–8 weeks. The Fractional Head of AI Delivery is ideal if you need ongoing strategic guidance, governance, and implementation oversight.',
   },
   {
     question: 'What industries do you work with?',
@@ -22,14 +22,19 @@ const faqs = [
       'Yes. I provide vendor-agnostic guidance on AI platforms, tools, and service providers. This includes technical evaluation, contract review support, and implementation planning. I don\'t take referral fees or have vendor partnerships — my recommendations are based solely on what\'s right for your situation.',
   },
   {
-    question: 'What does the Executive AI Assessment include?',
+    question: 'What does the AI Value + Risk Brief include?',
     answer:
-      'The 2-week Executive AI Assessment includes stakeholder interviews, data readiness evaluation, capability gap analysis, and a prioritized roadmap. You receive board-ready deliverables including an executive summary, detailed findings report, and 90-day action plan.',
+      'The 10-business-day AI Value + Risk Brief includes stakeholder interviews, data readiness evaluation, capability gap analysis, reference architecture, ROI modeling, governance mapping, and a prioritized roadmap. You receive nine exec-ready deliverables including an executive summary, detailed findings report, and 90-day action plan.',
   },
   {
     question: 'How much hands-on work is involved?',
     answer:
-      'It depends on what you need. I can be as hands-on as joining technical reviews and writing requirements, or as strategic as reviewing decisions and preparing board presentations. Most Fractional AI Lead engagements involve 8-12 hours per week, scaled to your needs.',
+      'It depends on what you need. I can be as hands-on as joining technical reviews and writing requirements, or as strategic as reviewing decisions and preparing leadership presentations. Most Fractional Head of AI Delivery engagements involve 8-12 hours per week, scaled to your needs.',
+  },
+  {
+    question: 'What kind of workflow do you typically ship first?',
+    answer:
+      'It depends on where the highest ROI sits. Common first workflows include document processing pipelines, customer support triage, internal knowledge search, and agentic reporting workflows. During the Workflow Selection phase, we score candidates on business impact, data readiness, and integration complexity to pick the right one.',
   },
   {
     question: 'What makes your approach different?',

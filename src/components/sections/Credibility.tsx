@@ -32,7 +32,7 @@ const credentials = [
       </svg>
     ),
     stat: 'Executive',
-    label: 'Board-ready alignment',
+    label: 'Exec-ready alignment',
   },
   {
     icon: (
@@ -52,6 +52,8 @@ const expertise = [
   'ML Operations',
   'Enterprise Integration',
   'Executive Advisory',
+  'AI Governance',
+  'Agentic Workflows',
 ];
 
 export function Credibility() {
@@ -107,8 +109,8 @@ export function Credibility() {
     <section ref={sectionRef} className="section bg-bg-secondary">
       <div className="container max-w-5xl">
         {/* Section Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="credibility-title text-display-md text-text-primary mb-4">
+        <div className="text-center" style={{ marginBottom: '5rem' }}>
+          <h2 className="credibility-title text-display-md text-text-primary" style={{ marginBottom: '1.5rem' }}>
             Experience that <GradientText>ships</GradientText>
           </h2>
           <p className="text-body-lg text-text-secondary max-w-2xl mx-auto text-center">
@@ -117,7 +119,7 @@ export function Credibility() {
         </div>
 
         {/* Credentials Grid */}
-        <div className="credentials-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
+        <div className="credentials-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-24">
           {credentials.map((cred, index) => (
             <div
               key={index}
@@ -135,8 +137,8 @@ export function Credibility() {
         </div>
 
         {/* Expertise Tags */}
-        <div className="expertise-section text-center">
-          <p className="text-text-muted text-sm uppercase tracking-wider mb-4">
+        <div className="expertise-section text-center mt-20">
+          <p className="text-text-muted text-sm uppercase tracking-wider mb-6">
             Areas of Expertise
           </p>
           <div className="flex flex-wrap justify-center gap-3">
@@ -154,10 +156,10 @@ export function Credibility() {
         </div>
 
         {/* Speaking & Accomplishments */}
-        <div className="mt-20 pt-12 border-t border-border">
-          <p className="text-micro text-accent mb-6">Speaking & advisory</p>
-          <h3 className="text-display-md mb-12 max-w-2xl">
-            From panels to boardrooms.
+        <div className="mt-32 pt-20 border-t border-border">
+          <p className="text-micro text-accent mb-8">Speaking & advisory</p>
+          <h3 className="text-display-md mb-16 max-w-2xl">
+            From panels to executive tables.
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="relative aspect-[4/5] rounded-xl overflow-hidden group">

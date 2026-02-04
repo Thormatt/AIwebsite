@@ -49,7 +49,7 @@ export function ServicesHero() {
         </h1>
 
         <p className="services-hero-desc text-body-lg text-text-secondary max-w-2xl mx-auto text-center">
-          Two ways to work together — both designed to move you from AI
+          Three ways to work together — each designed to move you from AI
           potential to measurable business outcomes.
         </p>
       </div>

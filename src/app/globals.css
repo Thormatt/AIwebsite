@@ -67,7 +67,7 @@
   --font-body: 'Inter', system-ui, sans-serif;
 
   /* Spacing */
-  --section-gap: clamp(6rem, 15vh, 12rem);
+  --section-gap: clamp(8rem, 18vh, 16rem);
   --container-padding: clamp(1.5rem, 5vw, 3rem);
 }
 

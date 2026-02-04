@@ -29,9 +29,9 @@ const steps = [
   },
   {
     number: '02',
-    title: 'Assessment',
+    title: 'Assessment & Architecture',
     description:
-      'Structured analysis of your current AI capabilities, data readiness, and organizational alignment.',
+      'Structured analysis of your current AI capabilities, data readiness, and a vendor-agnostic reference architecture.',
     icon: (
       <svg
         className="w-8 h-8"
@@ -50,9 +50,9 @@ const steps = [
   },
   {
     number: '03',
-    title: 'Roadmap',
+    title: 'Roadmap & Governance',
     description:
-      'Prioritized action plan with clear milestones, resource requirements, and expected outcomes.',
+      'Prioritized action plan with governance mapping, ROI modeling, and clear milestones with owners.',
     icon: (
       <svg
         className="w-8 h-8"
@@ -71,9 +71,9 @@ const steps = [
   },
   {
     number: '04',
-    title: 'Execution',
+    title: 'Build & Ship',
     description:
-      'Implementation support that ensures your AI initiatives move from strategy to shipped systems.',
+      'Hands-on delivery that takes your highest-value workflow from prototype to production.',
     icon: (
       <svg
         className="w-8 h-8"
@@ -148,8 +148,8 @@ export function Process() {
     <section ref={sectionRef} className="section">
       <div className="container max-w-4xl">
         {/* Section Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="process-title text-display-md text-text-primary mb-4 text-center">
+        <div className="text-center" style={{ marginBottom: '5rem' }}>
+          <h2 className="process-title text-display-md text-text-primary text-center" style={{ marginBottom: '1.5rem' }}>
             A Proven <GradientText>Process</GradientText>
           </h2>
           <p className="text-body-lg text-text-secondary text-center" style={{ maxWidth: '672px', margin: '0 auto' }}>

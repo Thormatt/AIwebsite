@@ -95,7 +95,7 @@ export default function ActionPlan() {
                     'Metrics review & validation',
                     'Document lessons learned',
                     'Plan Use Case #2 (FAQ Automation)',
-                    'Present results to board'
+                    'Present results to leadership'
                   ].map((item, i) => (
                     <li key={i} className="flex gap-2">
                       <span className="text-text-muted flex-shrink-0">✓</span>

@@ -77,13 +77,13 @@ export function Hero() {
 
       // Content fades and moves up on scroll
       gsap.to('.hero-content', {
-        y: -100,
+        y: -60,
         opacity: 0,
         ease: 'none',
         scrollTrigger: {
           trigger: containerRef.current,
-          start: 'top top+=120',
-          end: '80% top+=120',
+          start: '40% top',
+          end: '95% top',
           scrub: 1,
         },
       });
@@ -136,11 +136,11 @@ export function Hero() {
         {/* Subtitle */}
         <div className="hero-subtitle max-w-2xl" style={{ marginBottom: '3.5rem' }}>
           <p className="text-body-lg text-text-secondary mb-6">
-            AI is on the board agenda. Delivery is the hard part.
+            AI is on the leadership agenda. The question now: value or risk?
           </p>
           <p className="text-body-lg text-text-secondary">
-            I help executive teams decide what to build, then build the first
-            system with them so it actually ships.
+            I help executive teams assess what matters, ship the first workflow
+            to production, and stand up the governance to scale it.
           </p>
         </div>
 
@@ -167,7 +167,7 @@ export function Hero() {
           <div className="hero-stat">
             <p className="text-micro text-accent">Executive alignment</p>
             <p className="text-display-md text-text-primary mt-2 md:whitespace-nowrap">
-              Board-ready direction
+              Exec-ready direction
             </p>
             <p className="text-small text-text-secondary mt-2">
               Clear priorities, risks, and ROI.

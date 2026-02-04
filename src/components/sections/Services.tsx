@@ -8,33 +8,49 @@ const services = [
   {
     id: 'discovery',
     number: '01',
-    title: 'Executive AI Assessment',
-    duration: '2 weeks',
+    title: 'AI Value + Risk Brief',
+    duration: '10 business days',
     price: '$15k–$25k',
     description: 'Align leadership on priorities, risks, and what to build first.',
     outcomes: [
       'Executive alignment + priority use cases',
       'Data and capability gap analysis',
-      'Board-ready decision brief',
+      'Exec-ready decision brief',
       '90-day delivery plan with owners',
     ],
     cta: 'Start assessment',
   },
   {
-    id: 'advisory',
+    id: 'production',
     number: '02',
-    title: 'Fractional AI Lead',
+    title: 'Production Workflow Launch',
+    duration: '6–8 weeks',
+    price: "Let\u2019s talk",
+    description: 'Pick one high-value workflow and ship it to production — integrated, evaluated, and owned by your team.',
+    outcomes: [
+      'Production-grade AI workflow',
+      'Integration with existing systems',
+      'Evaluation framework + monitoring',
+      'Team training + runbook handoff',
+    ],
+    cta: 'Ship a workflow',
+    featured: true,
+  },
+  {
+    id: 'advisory',
+    number: '03',
+    title: 'Fractional Head of AI Delivery',
     duration: 'Ongoing',
     price: '$10k–$15k/mo',
     description: 'Executive AI leadership with hands-on delivery. I guide decisions and build the first system with your team.',
     outcomes: [
-      'Weekly exec alignment + roadmap reviews',
-      'Vendor due diligence + stack decisions',
-      'Build oversight + implementation support',
-      'Team enablement + knowledge transfer',
+      'Exec steering cadence + decision log',
+      'Portfolio prioritization + intake',
+      'Vendor/tooling rationalization',
+      'Governance gates + evaluation standards',
+      'Delivery oversight + capability transfer',
     ],
     cta: 'Get leadership',
-    featured: true,
   },
 ];
 
@@ -70,24 +86,24 @@ export function Services() {
       <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-[#e85d04]/5 rounded-full blur-[150px]" />
 
       <div className="container relative z-10">
-        <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
-          <div className="mb-24 md:mb-32">
-            <p className="text-micro text-accent mb-8">Two ways to work together</p>
-            <h2 className="text-display-xl mb-10">
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '12rem' }}>
+            <p className="text-micro text-accent mb-8">Three ways to work together</p>
+            <h2 className="text-display-xl" style={{ marginBottom: '3rem' }}>
               Pick your
               <br />
               <span className="text-gradient">starting point.</span>
             </h2>
             <p className="text-body-lg text-text-secondary" style={{ maxWidth: '36rem' }}>
-              Both get you to working systems faster than any traditional consulting engagement.
+              Three paths to working systems — faster than any traditional consulting engagement.
             </p>
           </div>
 
-          <div className="services-grid grid lg:grid-cols-2 gap-10 lg:gap-12">
+          <div className="services-grid grid lg:grid-cols-3 gap-10 lg:gap-8">
             {services.map((service) => (
               <div
                 key={service.id}
-                className={`service-card relative rounded-2xl transition-all duration-300 h-full lg:min-h-[520px] ${
+                className={`service-card relative rounded-2xl transition-all duration-300 h-full ${
                   service.featured
                     ? 'glass-card-accent'
                     : 'glass-card'

@@ -8,34 +8,34 @@ import { gsap } from '@/lib/gsap';
 
 const services = [
   {
-    title: 'Weekly Strategy Sessions',
+    title: 'Exec Steering',
     description:
-      'Regular check-ins to review progress, address challenges, and adjust course as needed.',
+      'Weekly cadence with decision logs, priority reviews, and exec prep so leadership stays aligned.',
   },
   {
-    title: 'Board-Ready Materials',
+    title: 'Portfolio Prioritization',
     description:
-      'Presentations, reports, and documentation that communicate AI initiatives to leadership.',
+      'Use-case intake, scoring, and sequencing to focus resources on highest-ROI AI initiatives.',
   },
   {
-    title: 'Vendor Due Diligence',
+    title: 'Vendor Rationalization',
     description:
-      'Independent evaluation of AI tools, platforms, and service providers.',
+      'Independent evaluation of AI tools, platforms, and service providers — no referral fees, no bias.',
   },
   {
-    title: 'Implementation Oversight',
+    title: 'Governance Gates',
     description:
-      'Hands-on guidance during critical phases of AI project execution.',
+      'Evaluation standards, approval workflows, and compliance checkpoints for every AI initiative.',
   },
   {
-    title: 'Team Enablement',
+    title: 'Delivery Oversight',
     description:
-      'Building internal AI capabilities through coaching and knowledge transfer.',
+      'Hands-on guidance during build and integration phases to keep projects on track and on spec.',
   },
   {
-    title: 'Roadmap Reviews',
+    title: 'Capability Transfer',
     description:
-      'Quarterly strategic reviews to ensure alignment with business objectives.',
+      'Structured enablement so your team owns the AI practice after I step out.',
   },
 ];
 
@@ -83,11 +83,11 @@ export function FractionalAdvisor() {
               Ongoing Engagement
             </Badge>
             <h2 className="advisor-title text-display-md text-text-primary mb-6">
-              Fractional AI <span className="text-accent">Lead</span>
+              Fractional Head of AI <span className="text-accent">Delivery</span>
             </h2>
             <p className="text-body-lg text-text-secondary" style={{ maxWidth: '540px' }}>
               Executive AI leadership with hands-on delivery. I stay in the room
-              for board prep, vendor diligence, and roadmap decisions.
+              for exec prep, vendor diligence, and roadmap decisions.
             </p>
           </div>
           <Link href="/#contact" className="btn btn-primary">
@@ -141,7 +141,7 @@ export function FractionalAdvisor() {
             </div>
             <div>
               <h4 className="font-semibold text-text-primary mb-2">
-                Board-Level Oversight
+                Exec-Level Oversight
               </h4>
               <p className="text-text-secondary text-small">
                 Executives who need a trusted AI advisor for high-stakes

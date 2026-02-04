@@ -102,7 +102,7 @@ export default function BoardDeck() {
               <h1 className="text-display-xl mb-8">
                 AI Strategy &<br /><span className="text-gradient">Investment Recommendation</span>
               </h1>
-              <p className="text-display-md text-text-secondary">Board of Directors</p>
+              <p className="text-display-md text-text-secondary">Executive Leadership</p>
               <p className="text-small text-text-muted mt-8 italic">February 2026 | Confidential</p>
             </div>
           </div>
@@ -252,7 +252,7 @@ export default function BoardDeck() {
                     <h3 className="text-display-md" style={{ textAlign: 'center' }}>Full Deck Continues...</h3>
                   </div>
                   <p className="text-body-lg text-text-secondary mb-12 leading-relaxed italic">
-                    This sample showcases the first 6 slides of the Board Presentation.
+                    This sample showcases the first 6 slides of the Executive Presentation.
                     The complete deck includes 15 additional slides covering:
                   </p>
                   <ul className="text-left max-w-2xl mx-auto space-y-5 text-body-lg text-text-secondary">

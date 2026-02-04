@@ -8,69 +8,65 @@ import { gsap } from '@/lib/gsap';
 
 const phases = [
   {
-    title: 'Discovery Session',
-    duration: 'Day 1-2',
+    title: 'Workflow Selection',
+    duration: 'Week 1–2',
     description:
-      'Deep dive into your AI initiatives, data landscape, and organizational readiness.',
+      'Identify the highest-ROI workflow, map current state, and define success criteria with stakeholders.',
     items: [
-      '90-minute executive interview',
-      'Stakeholder mapping',
-      'Current state documentation',
+      'Use-case scoring + selection',
+      'Current-state workflow mapping',
+      'Success metrics + acceptance criteria',
     ],
   },
   {
-    title: 'Analysis & Assessment',
-    duration: 'Day 3-7',
+    title: 'Build & Integrate',
+    duration: 'Week 3–5',
     description:
-      'Comprehensive evaluation against proven frameworks and industry benchmarks.',
+      'Build the AI workflow and integrate it with your existing systems, data, and permissions model.',
     items: [
-      'Data readiness scoring',
-      'Capability gap analysis',
-      'Risk assessment',
+      'AI workflow development',
+      'System integration + data pipelines',
+      'Permission + access controls',
     ],
   },
   {
-    title: 'Roadmap Development',
-    duration: 'Day 8-10',
+    title: 'Evaluate & Harden',
+    duration: 'Week 5–6',
     description:
-      'Prioritized recommendations with clear timelines and resource requirements.',
+      'Systematic evaluation against success criteria, edge case testing, and production hardening.',
     items: [
-      'Quick win identification',
-      'Strategic initiative planning',
-      'Investment roadmap',
+      'Evaluation framework setup',
+      'Edge case + failure mode testing',
+      'Monitoring + alerting configuration',
     ],
   },
   {
-    title: 'Executive Presentation',
-    duration: 'Day 11-14',
+    title: 'Launch & Transfer',
+    duration: 'Week 7–8',
     description:
-      'Exec-ready deliverables with clear next steps and decision points.',
+      'Production launch with team training, documentation, and full ownership handoff.',
     items: [
-      'Executive summary',
-      'Detailed findings report',
-      'Implementation playbook',
+      'Production deployment',
+      'Team training sessions',
+      'Runbook + handoff documentation',
     ],
   },
 ];
 
 const deliverables = [
-  'Executive AI Assessment Report',
-  'Data Readiness Scorecard',
-  'Prioritized Opportunity Matrix',
-  '90-Day Action Plan',
-  'Executive Presentation Deck',
-  'Technology Recommendations',
-  'Reference Architecture',
-  'ROI Model + Assumptions',
-  'Governance & Compliance Mapping',
+  'Production-grade AI workflow',
+  'Integration with existing systems',
+  'Evaluation framework + monitoring',
+  'Team training',
+  'Runbook + handoff docs',
 ];
 
-export function DiscoveryAssessment() {
+export function ProductionWorkflow() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(() => {
     gsap.fromTo(
-      '.discovery-title',
+      '.workflow-title',
       { opacity: 0, y: 40 },
       {
         opacity: 1,
@@ -84,7 +80,7 @@ export function DiscoveryAssessment() {
     );
 
     gsap.fromTo(
-      '.phase-card',
+      '.workflow-phase-card',
       { opacity: 0, y: 30 },
       {
         opacity: 1,
@@ -92,7 +88,7 @@ export function DiscoveryAssessment() {
         duration: 0.6,
         stagger: 0.1,
         scrollTrigger: {
-          trigger: '.phases-grid',
+          trigger: '.workflow-phases-grid',
           start: 'top 80%',
         },
       }
@@ -100,24 +96,24 @@ export function DiscoveryAssessment() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="discovery" className="section bg-bg-secondary">
+    <section ref={sectionRef} id="production" className="section">
       <div className="container" style={{ maxWidth: '1024px', margin: '0 auto' }}>
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-32">
           <div>
             <Badge variant="primary" className="mb-4">
-              10 Business Days
+              6–8 Week Engagement
             </Badge>
-            <h2 className="discovery-title text-display-md text-text-primary mb-6">
-              AI Value + Risk <span className="text-accent">Brief</span>
+            <h2 className="workflow-title text-display-md text-text-primary mb-6">
+              Production Workflow <span className="text-accent">Launch</span>
             </h2>
             <p className="text-body-lg text-text-secondary" style={{ maxWidth: '540px' }}>
-              A focused diagnostic that aligns leadership on priorities,
-              risks, and what to build first.
+              Pick one high-value workflow and ship it to production — integrated,
+              evaluated, and owned by your team.
             </p>
           </div>
           <Link href="/#contact" className="btn btn-primary">
-            Start Assessment
+            Ship a Workflow
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -125,11 +121,11 @@ export function DiscoveryAssessment() {
         </div>
 
         {/* Phases Grid */}
-        <div className="phases-grid grid md:grid-cols-2 gap-x-10 gap-y-12 lg:gap-x-12 lg:gap-y-14">
+        <div className="workflow-phases-grid grid md:grid-cols-2 gap-x-10 gap-y-12 lg:gap-x-12 lg:gap-y-14">
           {phases.map((phase, index) => (
             <div
               key={index}
-              className="phase-card bg-bg-tertiary border border-border p-8 md:p-10"
+              className="workflow-phase-card bg-bg-secondary border border-border p-8 md:p-10"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-body-lg font-semibold text-text-primary">
@@ -156,7 +152,7 @@ export function DiscoveryAssessment() {
         </div>
 
         {/* Deliverables */}
-        <div className="bg-bg-tertiary border border-border p-8 md:p-12 mt-32">
+        <div className="bg-bg-secondary border border-border p-8 md:p-12 mt-32">
           <h3 className="text-display-sm text-text-primary mb-16 text-center">
             What You&apos;ll Receive
           </h3>
@@ -164,7 +160,7 @@ export function DiscoveryAssessment() {
             {deliverables.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center gap-4 p-5 bg-bg-secondary border border-border"
+                className="flex items-center gap-4 p-5 bg-bg-tertiary border border-border"
               >
                 <span className="text-accent">📄</span>
                 <span className="text-small text-text-secondary">{item}</span>

@@ -34,8 +34,8 @@ const deliverables = [
   },
   {
     number: '05',
-    title: 'Board Presentation Deck',
-    description: 'Executive-ready slide deck distilling the assessment into strategic narrative, investment case, risk analysis, and decision recommendations for board approval.',
+    title: 'Executive Presentation Deck',
+    description: 'Executive-ready slide deck distilling the assessment into strategic narrative, investment case, risk analysis, and decision recommendations for leadership approval.',
     pages: '20-25 slides',
     href: '/deliverables/board-deck',
   },
@@ -45,6 +45,27 @@ const deliverables = [
     description: 'Build-vs-buy analysis, vendor shortlists, integration architecture, and technology stack recommendations tailored to existing infrastructure and capabilities.',
     pages: '14-18 pages',
     href: '/deliverables/tech-recommendations',
+  },
+  {
+    number: '07',
+    title: 'Reference Architecture',
+    description: 'Vendor-agnostic system architecture showing how AI workflows connect to your existing data, infrastructure, and permission model.',
+    pages: '8-12 pages',
+    href: '/deliverables/reference-architecture',
+  },
+  {
+    number: '08',
+    title: 'ROI Model + Assumptions',
+    description: 'Financial model quantifying expected returns, cost drivers, and sensitivity analysis for each prioritized AI initiative.',
+    pages: '10-14 pages',
+    href: '/deliverables/roi-model',
+  },
+  {
+    number: '09',
+    title: 'Governance & Compliance Mapping',
+    description: 'Policy framework mapping AI initiatives to regulatory requirements, internal controls, and approval workflows.',
+    pages: '10-15 pages',
+    href: '/deliverables/governance-mapping',
   },
 ];
 
@@ -121,7 +142,7 @@ export default function DeliverablesHub() {
                 </div>
                 <div>
                   <dt className="text-micro text-accent mb-2">Engagement Trigger</dt>
-                  <dd className="text-body text-text-primary">CTO building AI roadmap for board</dd>
+                  <dd className="text-body text-text-primary">CTO building AI roadmap for leadership</dd>
                 </div>
               </div>
             </div>
@@ -133,7 +154,7 @@ export default function DeliverablesHub() {
       <section className="section bg-bg-primary border-t border-border">
         <div className="container">
           <div className="mb-16">
-            <p className="text-micro text-accent mb-6">Six strategic deliverables</p>
+            <p className="text-micro text-accent mb-6">Nine strategic deliverables</p>
             <h2 className="text-display-lg max-w-3xl">
               The complete <span className="text-gradient">decision package.</span>
             </h2>
