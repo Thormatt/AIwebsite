@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+/* Hide hero elements before GSAP animates them in (prevents flash) */
+.hero-line,
+.hero-subtitle,
+.hero-cta,
+.hero-stat {
+  opacity: 0;
+}
+
 /* ============================================
    AI With Thor - Brutalist Editorial Design
    High contrast, bold typography, no fluff
