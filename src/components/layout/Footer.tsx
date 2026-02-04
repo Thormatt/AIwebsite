@@ -63,7 +63,7 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between gap-4 text-micro text-text-muted">
           <span>&copy; {year} Thor Matthiasson</span>
-          <span>San Francisco Bay Area</span>
+          <span>New York Metropolitan Area</span>
         </div>
       </div>
     </footer>
