@@ -103,12 +103,14 @@ export function DiscoveryAssessment() {
     <section ref={sectionRef} id="discovery" className="section bg-bg-secondary">
       <div className="container" style={{ maxWidth: '1024px', margin: '0 auto' }}>
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-32">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-8" style={{ marginBottom: '5rem' }}>
           <div>
-            <Badge variant="primary" className="mb-4">
-              10 Business Days
-            </Badge>
-            <h2 className="discovery-title text-display-md text-text-primary mb-6">
+            <div style={{ marginBottom: '1.5rem' }}>
+              <Badge variant="primary">
+                10 Business Days
+              </Badge>
+            </div>
+            <h2 className="discovery-title text-display-md text-text-primary" style={{ marginBottom: '1.5rem' }}>
               AI Value + Risk <span className="text-accent">Brief</span>
             </h2>
             <p className="text-body-lg text-text-secondary" style={{ maxWidth: '540px' }}>
@@ -125,19 +127,20 @@ export function DiscoveryAssessment() {
         </div>
 
         {/* Phases Grid */}
-        <div className="phases-grid grid md:grid-cols-2 gap-x-10 gap-y-12 lg:gap-x-12 lg:gap-y-14">
+        <div className="phases-grid grid md:grid-cols-2" style={{ columnGap: '2.5rem', rowGap: '3rem' }}>
           {phases.map((phase, index) => (
             <div
               key={index}
-              className="phase-card bg-bg-tertiary border border-border p-8 md:p-10"
+              className="phase-card bg-bg-tertiary border border-border"
+              style={{ padding: '2.5rem' }}
             >
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between" style={{ marginBottom: '1.5rem' }}>
                 <h3 className="text-body-lg font-semibold text-text-primary">
                   {phase.title}
                 </h3>
                 <span className="text-micro text-text-muted">{phase.duration}</span>
               </div>
-              <p className="text-text-secondary text-small mb-8">
+              <p className="text-text-secondary text-small" style={{ marginBottom: '2rem' }}>
                 {phase.description}
               </p>
               <ul className="space-y-4">
@@ -156,8 +159,8 @@ export function DiscoveryAssessment() {
         </div>
 
         {/* Deliverables */}
-        <div className="bg-bg-tertiary border border-border p-8 md:p-12 mt-32">
-          <h3 className="text-display-sm text-text-primary mb-16 text-center">
+        <div className="bg-bg-tertiary border border-border" style={{ padding: '3rem', marginTop: '5rem' }}>
+          <h3 className="text-display-sm text-text-primary text-center" style={{ marginBottom: '3rem' }}>
             What You&apos;ll Receive
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

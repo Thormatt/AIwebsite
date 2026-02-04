@@ -152,13 +152,13 @@ export function Solution() {
 
         {/* Build section */}
         <div className="build-section relative">
-          <div className="build-reveal p-8 md:p-16 rounded-2xl" style={{ background: 'linear-gradient(135deg, #e85d04 0%, #f97316 100%)' }}>
+          <div className="build-reveal rounded-2xl" style={{ padding: '3.5rem', background: 'linear-gradient(135deg, #e85d04 0%, #f97316 100%)' }}>
             <p className="text-display-lg text-white max-w-3xl">
               Executive strategy with hands-on delivery.
               <br />
               <span className="font-bold">Built to production, not just slides.</span>
             </p>
-            <p className="text-body text-white/60 mt-6 max-w-2xl">
+            <p className="text-body text-white/60 max-w-2xl" style={{ marginTop: '2rem' }}>
               Production means: integrated, permissioned, evaluated, monitored, owned.
             </p>
           </div>

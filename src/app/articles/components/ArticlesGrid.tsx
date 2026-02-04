@@ -8,28 +8,87 @@ import { Badge } from '@/components/ui/Badge';
 import { useGSAP } from '@/hooks/useGSAP';
 import { gsap } from '@/lib/gsap';
 
-// Article data - in a real app, this would come from a CMS or file system
 const articles = [
   {
     slug: 'multi-model-consensus',
-    title: 'Why Multi-Model Consensus Beats Single-Model Thinking',
+    title: 'Why Multi-Model Consensus Catches Hallucinations That Single Models Miss',
     excerpt:
-      'The surprising accuracy gains from combining multiple AI perspectives on complex problems.',
-    category: 'AI Strategy',
-    date: '2024-01-15',
-    readingTime: '8 min',
+      'How applying the Delphi method to AI caught a hallucination that a single model confidently missed.',
+    category: 'Technical',
+    date: '2026-01-15',
+    readingTime: '12 min',
     image: '/images/articles/multi-model-consensus-pop.png',
     featured: true,
+  },
+  {
+    slug: 'what-to-tell-your-board',
+    title: 'What to Tell Your Board About AI',
+    excerpt:
+      'Board members are asking about AI. Most executives are giving the wrong answers. Here\'s what to say instead.',
+    category: 'Leadership',
+    date: '2025-07-01',
+    readingTime: '7 min',
+    image: '/images/articles/leadership.svg',
+  },
+  {
+    slug: 'build-vs-buy',
+    title: 'Build vs Buy: The Question You\'re Asking Wrong',
+    excerpt:
+      'The build-vs-buy debate in AI is a false binary. Here\'s the framework that actually works.',
+    category: 'AI Strategy',
+    date: '2025-04-01',
+    readingTime: '8 min',
+    image: '/images/articles/governance.svg',
+  },
+  {
+    slug: 'silicon-ceiling',
+    title: 'Breaking Through the Silicon Ceiling: Why AI Adoption Stalls After the C-Suite',
+    excerpt:
+      'Executives buy the vision. Middle managers kill the execution. How to bridge the gap.',
+    category: 'Leadership',
+    date: '2024-12-15',
+    readingTime: '8 min',
+    image: '/images/articles/leadership.svg',
+  },
+  {
+    slug: 'ai-pilot-to-production',
+    title: 'From Pilot to Production: The 90-Day AI Value Framework',
+    excerpt:
+      'Why 87% of AI pilots never make it to production — and the framework that changes that.',
+    category: 'Implementation',
+    date: '2024-12-01',
+    readingTime: '10 min',
+    image: '/images/articles/pilot.svg',
+  },
+  {
+    slug: 'billion-dollar-mistake',
+    title: 'The $1 Billion AI Mistake CEOs Are Making Right Now',
+    excerpt:
+      'The biggest AI failure isn\'t technical. It\'s organizational. Here\'s the pattern destroying value at scale.',
+    category: 'AI Strategy',
+    date: '2024-12-01',
+    readingTime: '6 min',
+    image: '/images/articles/implementation.svg',
   },
   {
     slug: 'ai-implementation-traps',
     title: 'The 5 Traps That Kill AI Implementations',
     excerpt:
-      'Why 74% of AI projects fail to deliver value — and how to avoid their fate.',
+      'Why 74% of enterprise AI projects fail to deliver business value — and the patterns that separate the 26% that succeed.',
     category: 'Implementation',
-    date: '2024-01-08',
-    readingTime: '6 min',
+    date: '2024-11-15',
+    readingTime: '7 min',
     image: '/images/articles/ai-implementation-traps-pop.png',
+  },
+  {
+    slug: 'why-ai-projects-fail',
+    title: 'Why Most AI Projects Fail (And How to Avoid It)',
+    excerpt:
+      'The uncomfortable truth about AI project failure and the patterns that predict success.',
+    category: 'Implementation',
+    date: '2024-11-01',
+    readingTime: '7 min',
+    image: '/images/articles/implementation.svg',
   },
   {
     slug: 'executive-ai-literacy',
@@ -41,39 +100,9 @@ const articles = [
     readingTime: '5 min',
     image: '/images/articles/executive-ai-literacy-pop.png',
   },
-  {
-    slug: 'ai-governance-framework',
-    title: 'Building an AI Governance Framework That Works',
-    excerpt:
-      'Practical guardrails for responsible AI deployment without killing innovation.',
-    category: 'Governance',
-    date: '2023-12-20',
-    readingTime: '7 min',
-    image: '/images/articles/governance.svg',
-  },
-  {
-    slug: 'llm-selection-guide',
-    title: 'LLM Selection: Beyond the Benchmarks',
-    excerpt:
-      'What the leaderboards don\'t tell you about choosing the right language model.',
-    category: 'Technical',
-    date: '2023-12-15',
-    readingTime: '10 min',
-    image: '/images/articles/llm.svg',
-  },
-  {
-    slug: 'ai-pilot-to-production',
-    title: 'From AI Pilot to Production: The Missing Playbook',
-    excerpt:
-      'Why 95% of AI pilots never scale — and the specific steps that change that.',
-    category: 'Implementation',
-    date: '2023-12-10',
-    readingTime: '9 min',
-    image: '/images/articles/pilot.svg',
-  },
 ];
 
-const categories = ['All', 'AI Strategy', 'Implementation', 'Leadership', 'Technical', 'Governance'];
+const categories = ['All', 'AI Strategy', 'Implementation', 'Leadership', 'Technical'];
 
 export function ArticlesGrid() {
   const sectionRef = useRef<HTMLElement>(null);

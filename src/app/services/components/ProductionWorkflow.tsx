@@ -99,12 +99,14 @@ export function ProductionWorkflow() {
     <section ref={sectionRef} id="production" className="section">
       <div className="container" style={{ maxWidth: '1024px', margin: '0 auto' }}>
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-32">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-8" style={{ marginBottom: '5rem' }}>
           <div>
-            <Badge variant="primary" className="mb-4">
-              6–8 Week Engagement
-            </Badge>
-            <h2 className="workflow-title text-display-md text-text-primary mb-6">
+            <div style={{ marginBottom: '1.5rem' }}>
+              <Badge variant="primary">
+                6–8 Week Engagement
+              </Badge>
+            </div>
+            <h2 className="workflow-title text-display-md text-text-primary" style={{ marginBottom: '1.5rem' }}>
               Production Workflow <span className="text-accent">Launch</span>
             </h2>
             <p className="text-body-lg text-text-secondary" style={{ maxWidth: '540px' }}>
@@ -121,19 +123,20 @@ export function ProductionWorkflow() {
         </div>
 
         {/* Phases Grid */}
-        <div className="workflow-phases-grid grid md:grid-cols-2 gap-x-10 gap-y-12 lg:gap-x-12 lg:gap-y-14">
+        <div className="workflow-phases-grid grid md:grid-cols-2" style={{ columnGap: '2.5rem', rowGap: '3rem' }}>
           {phases.map((phase, index) => (
             <div
               key={index}
-              className="workflow-phase-card bg-bg-secondary border border-border p-8 md:p-10"
+              className="workflow-phase-card bg-bg-secondary border border-border"
+              style={{ padding: '2.5rem' }}
             >
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between" style={{ marginBottom: '1.5rem' }}>
                 <h3 className="text-body-lg font-semibold text-text-primary">
                   {phase.title}
                 </h3>
                 <span className="text-micro text-text-muted">{phase.duration}</span>
               </div>
-              <p className="text-text-secondary text-small mb-8">
+              <p className="text-text-secondary text-small" style={{ marginBottom: '2rem' }}>
                 {phase.description}
               </p>
               <ul className="space-y-4">
@@ -152,8 +155,8 @@ export function ProductionWorkflow() {
         </div>
 
         {/* Deliverables */}
-        <div className="bg-bg-secondary border border-border p-8 md:p-12 mt-32">
-          <h3 className="text-display-sm text-text-primary mb-16 text-center">
+        <div className="bg-bg-secondary border border-border" style={{ padding: '3rem', marginTop: '5rem' }}>
+          <h3 className="text-display-sm text-text-primary text-center" style={{ marginBottom: '3rem' }}>
             What You&apos;ll Receive
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

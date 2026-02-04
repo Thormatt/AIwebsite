@@ -40,15 +40,15 @@ export function ServicesHero() {
       <div className="absolute inset-0 bg-gradient-radial pointer-events-none" />
 
       <div className="container relative text-center" style={{ maxWidth: '896px', margin: '0 auto' }}>
-        <p className="services-hero-eyebrow text-text-accent text-sm md:text-base font-medium tracking-wide uppercase mb-4">
+        <p className="services-hero-eyebrow text-text-accent text-sm md:text-base font-medium tracking-wide uppercase" style={{ marginBottom: '1.5rem' }}>
           Services
         </p>
 
-        <h1 className="services-hero-title text-display-lg text-text-primary mb-6">
+        <h1 className="services-hero-title text-display-lg text-text-primary" style={{ marginBottom: '2rem' }}>
           Strategy That <GradientText>Ships</GradientText>
         </h1>
 
-        <p className="services-hero-desc text-body-lg text-text-secondary max-w-2xl mx-auto text-center">
+        <p className="services-hero-desc text-body-lg text-text-secondary mx-auto" style={{ maxWidth: '40rem', textAlign: 'center' }}>
           Three ways to work together — each designed to move you from AI
           potential to measurable business outcomes.
         </p>

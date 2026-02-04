@@ -176,7 +176,7 @@ export function Hero() {
 
           <div className="hero-stat">
             <p className="text-micro text-accent">Hands-on delivery</p>
-            <p className="text-display-md text-text-primary mt-2">First system shipped</p>
+            <p className="text-display-md text-text-primary mt-2 md:whitespace-nowrap">First system shipped</p>
             <p className="text-small text-text-secondary mt-2">
               Built with your team, not above them.
             </p>
@@ -184,7 +184,7 @@ export function Hero() {
 
           <div className="hero-stat">
             <p className="text-micro text-accent">Team enablement</p>
-            <p className="text-display-md text-text-primary mt-2">Capability transferred</p>
+            <p className="text-display-md text-text-primary mt-2 md:whitespace-nowrap">Capability transferred</p>
             <p className="text-small text-text-secondary mt-2">
               So it scales after I step out.
             </p>

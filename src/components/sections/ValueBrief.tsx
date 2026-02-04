@@ -109,8 +109,8 @@ export function ValueBrief() {
           </div>
 
           {/* Result card */}
-          <div className="result-card p-10 md:p-14 rounded-2xl" style={{ marginTop: '6rem', background: 'linear-gradient(135deg, #e85d04 0%, #f97316 100%)' }}>
-            <p className="text-micro text-white/70 mb-4">The result</p>
+          <div className="result-card rounded-2xl" style={{ marginTop: '6rem', padding: '3.5rem', background: 'linear-gradient(135deg, #e85d04 0%, #f97316 100%)' }}>
+            <p className="text-micro text-white/70" style={{ marginBottom: '1.5rem' }}>The result</p>
             <p className="text-display-lg text-white max-w-2xl">
               Everything your leadership team needs to make the AI call.
             </p>

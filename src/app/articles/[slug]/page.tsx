@@ -3,19 +3,69 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/Badge';
 import { Fragment } from 'react';
+import { articles } from '@/lib/articles';
 
-// Helper to render inline bold text
 function renderInlineText(text: string) {
-  const parts = text.split(/(\*\*.*?\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i}>{part.slice(2, -2)}</strong>;
+  const parts: React.ReactNode[] = [];
+  let remaining = text;
+  let key = 0;
+
+  while (remaining.length > 0) {
+    // Links: [text](url)
+    const linkMatch = remaining.match(/^([\s\S]*?)\[([^\]]+)\]\(([^)]+)\)([\s\S]*)/);
+    if (linkMatch) {
+      if (linkMatch[1]) {
+        parts.push(...renderInlineFormatting(linkMatch[1], key));
+        key += 10;
+      }
+      parts.push(
+        <a key={key++} href={linkMatch[3]} target={linkMatch[3].startsWith('http') ? '_blank' : undefined} rel={linkMatch[3].startsWith('http') ? 'noopener noreferrer' : undefined}>
+          {linkMatch[2]}
+        </a>
+      );
+      remaining = linkMatch[4];
+      continue;
     }
-    return <Fragment key={i}>{part}</Fragment>;
-  });
+
+    parts.push(...renderInlineFormatting(remaining, key));
+    break;
+  }
+
+  return parts;
 }
 
-// Simple markdown renderer
+function renderInlineFormatting(text: string, startKey: number): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  // Split on bold (**), italic (*), and inline code (`)
+  const regex = /(\*\*.*?\*\*|\*[^*]+?\*|`[^`]+?`)/g;
+  let lastIndex = 0;
+  let match;
+  let key = startKey;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(<Fragment key={key++}>{text.slice(lastIndex, match.index)}</Fragment>);
+    }
+
+    const token = match[1];
+    if (token.startsWith('**') && token.endsWith('**')) {
+      parts.push(<strong key={key++}>{token.slice(2, -2)}</strong>);
+    } else if (token.startsWith('`') && token.endsWith('`')) {
+      parts.push(<code key={key++}>{token.slice(1, -1)}</code>);
+    } else if (token.startsWith('*') && token.endsWith('*')) {
+      parts.push(<em key={key++}>{token.slice(1, -1)}</em>);
+    }
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(<Fragment key={key++}>{text.slice(lastIndex)}</Fragment>);
+  }
+
+  return parts;
+}
+
 function renderMarkdown(content: string) {
   const lines = content.trim().split('\n');
   const elements: React.ReactElement[] = [];
@@ -23,34 +73,146 @@ function renderMarkdown(content: string) {
   let key = 0;
 
   while (i < lines.length) {
-    const line = lines[i].trim();
+    const line = lines[i];
+    const trimmed = line.trim();
 
     // Skip empty lines
-    if (!line) {
+    if (!trimmed) {
       i++;
       continue;
     }
 
-    // H2 heading
-    if (line.startsWith('## ')) {
+    // Horizontal rule
+    if (trimmed === '---') {
+      elements.push(<hr key={key++} />);
+      i++;
+      continue;
+    }
+
+    // Fenced code block
+    if (trimmed.startsWith('```')) {
+      const codeLines: string[] = [];
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith('```')) {
+        codeLines.push(lines[i]);
+        i++;
+      }
+      i++; // skip closing ```
       elements.push(
-        <h2 key={key++}>{line.slice(3)}</h2>
+        <pre key={key++}><code>{codeLines.join('\n')}</code></pre>
+      );
+      continue;
+    }
+
+    // Highlight callout box ::: highlight ... :::
+    if (trimmed.startsWith('::: highlight') || trimmed.startsWith('::: warning')) {
+      const variant = trimmed.includes('warning') ? 'warning' : 'highlight';
+      const boxLines: string[] = [];
+      i++;
+      while (i < lines.length && lines[i].trim() !== ':::') {
+        boxLines.push(lines[i]);
+        i++;
+      }
+      i++; // skip closing :::
+      const boxContent = boxLines.join('\n');
+      elements.push(
+        <div key={key++} className={`article-${variant}`}>
+          {renderMarkdown(boxContent)}
+        </div>
+      );
+      continue;
+    }
+
+    // H2 heading
+    if (trimmed.startsWith('## ')) {
+      const headingText = trimmed.slice(3);
+      const idMatch = headingText.match(/^(.+?)(?:\s*\{#(.+?)\})?$/);
+      const id = idMatch?.[2] || headingText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      elements.push(
+        <h2 key={key++} id={id}>{idMatch?.[1] || headingText}</h2>
       );
       i++;
       continue;
     }
 
     // H3 heading
-    if (line.startsWith('### ')) {
+    if (trimmed.startsWith('### ')) {
       elements.push(
-        <h3 key={key++}>{line.slice(4)}</h3>
+        <h3 key={key++}>{trimmed.slice(4)}</h3>
       );
       i++;
       continue;
     }
 
+    // Table (GFM)
+    if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+      const tableRows: string[][] = [];
+      let hasHeader = false;
+
+      while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+        const row = lines[i].trim();
+        // Check if separator row
+        if (row.match(/^\|[\s-:|]+\|$/)) {
+          hasHeader = true;
+          i++;
+          continue;
+        }
+        const cells = row.split('|').slice(1, -1).map(c => c.trim());
+        tableRows.push(cells);
+        i++;
+      }
+
+      if (tableRows.length > 0) {
+        const headerRow = hasHeader ? tableRows[0] : null;
+        const bodyRows = hasHeader ? tableRows.slice(1) : tableRows;
+
+        elements.push(
+          <div key={key++} className="table-wrapper">
+            <table>
+              {headerRow && (
+                <thead>
+                  <tr>
+                    {headerRow.map((cell, ci) => (
+                      <th key={ci}>{renderInlineText(cell)}</th>
+                    ))}
+                  </tr>
+                </thead>
+              )}
+              <tbody>
+                {bodyRows.map((row, ri) => (
+                  <tr key={ri}>
+                    {row.map((cell, ci) => (
+                      <td key={ci}>{renderInlineText(cell)}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      }
+      continue;
+    }
+
+    // Blockquote
+    if (trimmed.startsWith('> ')) {
+      const quoteLines: string[] = [];
+      while (i < lines.length && lines[i].trim().startsWith('> ')) {
+        quoteLines.push(lines[i].trim().slice(2));
+        i++;
+      }
+      elements.push(
+        <blockquote key={key++}>
+          {quoteLines.map((ql, qi) => (
+            <p key={qi}>{renderInlineText(ql)}</p>
+          ))}
+        </blockquote>
+      );
+      continue;
+    }
+
     // Unordered list
-    if (line.startsWith('- ')) {
+    if (trimmed.startsWith('- ')) {
       const items: string[] = [];
       while (i < lines.length && lines[i].trim().startsWith('- ')) {
         items.push(lines[i].trim().slice(2));
@@ -67,7 +229,7 @@ function renderMarkdown(content: string) {
     }
 
     // Ordered list
-    if (/^\d+\.\s/.test(line)) {
+    if (/^\d+\.\s/.test(trimmed)) {
       const items: string[] = [];
       while (i < lines.length && /^\d+\.\s/.test(lines[i].trim())) {
         items.push(lines[i].trim().replace(/^\d+\.\s*/, ''));
@@ -84,10 +246,10 @@ function renderMarkdown(content: string) {
     }
 
     // Special "The Fix:" callout
-    if (line.startsWith('**The Fix:**')) {
+    if (trimmed.startsWith('**The Fix:**')) {
       elements.push(
         <div key={key++} className="article-callout">
-          {renderInlineText(line)}
+          {renderInlineText(trimmed)}
         </div>
       );
       i++;
@@ -96,168 +258,13 @@ function renderMarkdown(content: string) {
 
     // Regular paragraph
     elements.push(
-      <p key={key++}>{renderInlineText(line)}</p>
+      <p key={key++}>{renderInlineText(trimmed)}</p>
     );
     i++;
   }
 
   return elements;
 }
-
-// Article data
-const articles: Record<
-  string,
-  {
-    title: string;
-    excerpt: string;
-    category: string;
-    date: string;
-    readingTime: string;
-    content: string;
-  }
-> = {
-  'multi-model-consensus': {
-    title: 'Why Multi-Model Consensus Beats Single-Model Thinking',
-    excerpt:
-      'The surprising accuracy gains from combining multiple AI perspectives on complex problems.',
-    category: 'AI Strategy',
-    date: '2024-01-15',
-    readingTime: '8 min',
-    content: `
-## The Problem with Single-Model Dependency
-
-Most organizations approach AI implementation with a single-model mindset. They pick a language model, integrate it, and hope for the best. This approach has fundamental limitations that become apparent at scale.
-
-## What is Multi-Model Consensus?
-
-Multi-model consensus is exactly what it sounds like: running the same query through multiple AI models and synthesizing their responses. Think of it as getting multiple expert opinions before making a decision.
-
-## The Accuracy Gains
-
-In our testing across hundreds of complex business queries, multi-model consensus consistently outperformed single-model responses:
-
-- **15-20% improvement** in factual accuracy
-- **Significant reduction** in hallucinations
-- **Better coverage** of edge cases and nuances
-
-## When to Use This Approach
-
-Multi-model consensus works best for:
-
-1. High-stakes decisions where accuracy matters
-2. Complex problems with multiple valid perspectives
-3. Situations where confidence levels need to be quantified
-4. Quality assurance for AI-generated content
-
-## Implementation Considerations
-
-The trade-offs are real: higher latency, increased costs, and more complex orchestration. But for critical business decisions, the accuracy gains often justify the investment.
-
-## Next Steps
-
-If you're considering multi-model consensus for your AI strategy, start with a pilot. Pick a high-value use case where accuracy matters and measure the improvement. The data will tell you whether the approach makes sense for your specific context.
-    `,
-  },
-  'ai-implementation-traps': {
-    title: 'The 5 Traps That Kill AI Implementations',
-    excerpt:
-      'Why 74% of AI projects fail to deliver value — and how to avoid their fate.',
-    category: 'Implementation',
-    date: '2024-01-08',
-    readingTime: '6 min',
-    content: `
-## The Uncomfortable Reality
-
-74% of AI projects fail to deliver tangible business value. This isn't a technology problem—it's an execution problem. After working on dozens of AI implementations, I've identified five recurring traps that consistently derail projects.
-
-## Trap #1: Starting with Technology
-
-The most common mistake is leading with "We need to implement AI" instead of "We need to solve this specific problem." Technology-first thinking leads to solutions looking for problems.
-
-**The Fix:** Start with a measurable business outcome. Define success in terms of revenue, cost, or customer impact—not model accuracy.
-
-## Trap #2: Underestimating Data Work
-
-Organizations consistently underestimate the work required to prepare data for AI. The glamorous part is the model; the hard part is everything that comes before.
-
-**The Fix:** Budget 60-70% of your project timeline for data preparation, cleaning, and integration work.
-
-## Trap #3: Pilot Purgatory
-
-Many organizations run successful pilots that never scale. The pilot becomes a permanent state, not a phase.
-
-**The Fix:** Define scaling criteria before starting the pilot. What specific metrics trigger the move to production?
-
-## Trap #4: Ignoring Change Management
-
-AI changes how people work. Technical success means nothing if users don't adopt the system.
-
-**The Fix:** Involve end users from day one. Their feedback shapes both the product and their willingness to use it.
-
-## Trap #5: Measuring the Wrong Things
-
-Model accuracy isn't business value. Many projects celebrate technical metrics while ignoring whether the business outcomes materialized.
-
-**The Fix:** Tie every AI metric back to a business outcome. If you can't draw that line, you're measuring the wrong thing.
-
-## The Path Forward
-
-Avoiding these traps requires discipline more than brilliance. The organizations that succeed with AI aren't necessarily the most technically sophisticated—they're the most strategically focused.
-    `,
-  },
-  'executive-ai-literacy': {
-    title: 'Executive AI Literacy: What You Actually Need to Know',
-    excerpt:
-      'The minimum viable AI knowledge for making informed strategic decisions.',
-    category: 'Leadership',
-    date: '2024-01-01',
-    readingTime: '5 min',
-    content: `
-## The Executive's Dilemma
-
-You don't need to understand how transformers work to make good AI decisions. But you do need enough literacy to ask the right questions and spot the wrong answers.
-
-## What You Actually Need to Know
-
-### 1. The Difference Between AI Types
-
-Understand the distinction between:
-- **Generative AI** (creates content)
-- **Predictive AI** (forecasts outcomes)
-- **Automation** (follows rules)
-
-Different types solve different problems. Mismatching technology to problem is expensive.
-
-### 2. What AI Can and Cannot Do
-
-AI excels at pattern recognition and content generation at scale. It struggles with novel situations, nuanced judgment, and tasks requiring deep context.
-
-Knowing these boundaries prevents both over-investment and under-investment.
-
-### 3. The Real Costs
-
-AI costs go beyond software licenses:
-- Data preparation and integration
-- Change management
-- Ongoing monitoring and refinement
-- Technical debt from rushed implementations
-
-Budget for the full picture.
-
-### 4. The Questions to Ask
-
-When evaluating AI proposals, ask:
-- What specific business outcome are we measuring?
-- How will we know if this succeeds?
-- What happens if it fails?
-- Who owns this after implementation?
-
-## The Bottom Line
-
-Executive AI literacy isn't about technical depth—it's about asking better questions and recognizing incomplete answers. That skill is more valuable than any technical certification.
-    `,
-  },
-};
 
 export async function generateStaticParams() {
   return Object.keys(articles).map((slug) => ({ slug }));
@@ -323,7 +330,7 @@ export default async function ArticlePage({
 
           <div className="flex items-center gap-4 text-text-muted text-small">
             <span>Thor Matthiasson</span>
-            <span>•</span>
+            <span>&bull;</span>
             <time dateTime={article.date}>
               {new Date(article.date).toLocaleDateString('en-US', {
                 month: 'long',

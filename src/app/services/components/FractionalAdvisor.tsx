@@ -77,12 +77,14 @@ export function FractionalAdvisor() {
     <section ref={sectionRef} id="advisory" className="section">
       <div className="container" style={{ maxWidth: '1024px', margin: '0 auto' }}>
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-20">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-8" style={{ marginBottom: '5rem' }}>
           <div>
-            <Badge variant="primary" className="mb-4">
-              Ongoing Engagement
-            </Badge>
-            <h2 className="advisor-title text-display-md text-text-primary mb-6">
+            <div style={{ marginBottom: '1.5rem' }}>
+              <Badge variant="primary">
+                Ongoing Engagement
+              </Badge>
+            </div>
+            <h2 className="advisor-title text-display-md text-text-primary" style={{ marginBottom: '1.5rem' }}>
               Fractional Head of AI <span className="text-accent">Delivery</span>
             </h2>
             <p className="text-body-lg text-text-secondary" style={{ maxWidth: '540px' }}>
@@ -99,13 +101,14 @@ export function FractionalAdvisor() {
         </div>
 
         {/* Services Grid */}
-        <div className="services-list grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="services-list grid md:grid-cols-2 lg:grid-cols-3" style={{ gap: '2rem' }}>
           {services.map((service, index) => (
             <div
               key={index}
-              className="service-item bg-bg-secondary border border-border p-6"
+              className="service-item bg-bg-secondary border border-border"
+              style={{ padding: '2rem' }}
             >
-              <h3 className="text-body-lg font-semibold text-text-primary mb-3">
+              <h3 className="text-body-lg font-semibold text-text-primary" style={{ marginBottom: '0.75rem' }}>
                 {service.title}
               </h3>
               <p className="text-text-secondary text-small">
@@ -116,13 +119,13 @@ export function FractionalAdvisor() {
         </div>
 
         {/* Ideal For Section */}
-        <div className="p-8 md:p-12 bg-bg-tertiary border-l-4 border-accent mt-20">
-          <h3 className="text-display-sm text-text-primary mb-8">
+        <div className="bg-bg-tertiary border-l-4 border-accent" style={{ padding: '3rem', marginTop: '5rem' }}>
+          <h3 className="text-display-sm text-text-primary" style={{ marginBottom: '2rem' }}>
             Ideal For
           </h3>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3" style={{ gap: '2rem' }}>
             <div>
-              <h4 className="font-semibold text-text-primary mb-2">
+              <h4 className="font-semibold text-text-primary" style={{ marginBottom: '0.5rem' }}>
                 Scaling Companies
               </h4>
               <p className="text-text-secondary text-small">
@@ -131,7 +134,7 @@ export function FractionalAdvisor() {
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-text-primary mb-2">
+              <h4 className="font-semibold text-text-primary" style={{ marginBottom: '0.5rem' }}>
                 Enterprise Teams
               </h4>
               <p className="text-text-secondary text-small">
@@ -140,7 +143,7 @@ export function FractionalAdvisor() {
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-text-primary mb-2">
+              <h4 className="font-semibold text-text-primary" style={{ marginBottom: '0.5rem' }}>
                 Exec-Level Oversight
               </h4>
               <p className="text-text-secondary text-small">

@@ -113,13 +113,13 @@ export function Credibility() {
           <h2 className="credibility-title text-display-md text-text-primary" style={{ marginBottom: '1.5rem' }}>
             Experience that <GradientText>ships</GradientText>
           </h2>
-          <p className="text-body-lg text-text-secondary max-w-2xl mx-auto text-center">
+          <p className="text-body-lg text-text-secondary mx-auto" style={{ maxWidth: '32rem', textAlign: 'center' }}>
             Executive strategy paired with hands-on delivery, built alongside your team.
           </p>
         </div>
 
         {/* Credentials Grid */}
-        <div className="credentials-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-24">
+        <div className="credentials-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6" style={{ marginBottom: '8rem' }}>
           {credentials.map((cred, index) => (
             <div
               key={index}
@@ -137,7 +137,7 @@ export function Credibility() {
         </div>
 
         {/* Expertise Tags */}
-        <div className="expertise-section text-center mt-20">
+        <div className="expertise-section text-center" style={{ marginTop: '6rem' }}>
           <p className="text-text-muted text-sm uppercase tracking-wider mb-6">
             Areas of Expertise
           </p>
@@ -156,33 +156,38 @@ export function Credibility() {
         </div>
 
         {/* Speaking & Accomplishments */}
-        <div className="mt-32 pt-20 border-t border-border">
+        <div className="border-t border-border" style={{ marginTop: '8rem', paddingTop: '5rem', paddingBottom: '2rem' }}>
           <p className="text-micro text-accent mb-8">Speaking & advisory</p>
           <h3 className="text-display-md mb-16 max-w-2xl">
             From panels to executive tables.
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="relative aspect-[4/5] rounded-xl overflow-hidden group">
-              <img
-                src="/images/speaking-national-security-panel.jpg"
-                alt="Thor speaking at national security panel"
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-              />
-            </div>
-            <div className="relative aspect-[4/5] rounded-xl overflow-hidden group">
-              <img
-                src="/images/speaking-google-event.jpg"
-                alt="Thor speaking at Google event"
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-              />
-            </div>
-            <div className="relative aspect-[4/5] rounded-xl overflow-hidden group">
-              <img
-                src="/images/speaking-workshop.jpg"
-                alt="Thor leading AI workshop"
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-              />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              {
+                src: '/images/speaking-national-security-panel.jpg',
+                alt: 'Thor speaking at NATO Hybrid Threats panel in Reykjavik',
+                caption: 'Featured panelist at NATO Hybrid Threats',
+                location: 'Reykjavik, Iceland',
+              },
+              {
+                src: '/images/speaking-google-event.jpg',
+                alt: 'Thor leading the Viking Cheer at Google Premier Partner Event',
+                caption: 'Leading the "Viking Cheer" at a Google Premier Partner Event',
+                location: 'Amsterdam, Netherlands',
+              },
+            ].map((img, i) => (
+              <div key={i} className="relative aspect-[4/5] rounded-xl overflow-hidden group cursor-pointer">
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                />
+                <div className="absolute inset-x-0 bottom-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85), transparent)' }}>
+                  <p className="text-small font-medium text-white">{img.caption}</p>
+                  <p className="text-small text-white/60" style={{ marginTop: '0.25rem' }}>{img.location}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
