@@ -31,11 +31,22 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   }, [pathname]);
 
   useEffect(() => {
-    // Initialize Lenis smooth scroll
+    // Skip Lenis on touch-only devices (iOS Safari pauses rAF during
+    // momentum scroll, which freezes the Lenis → ScrollTrigger chain)
+    const isTouchOnly = window.matchMedia(
+      '(hover: none) and (pointer: coarse)'
+    ).matches;
+
+    if (isTouchOnly) {
+      // Native scroll works perfectly with ScrollTrigger on mobile
+      const refreshTimeout = setTimeout(() => ScrollTrigger.refresh(), 500);
+      return () => clearTimeout(refreshTimeout);
+    }
+
+    // Initialize Lenis smooth scroll (desktop only)
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 2,
       infinite: false,
     });
 
@@ -54,7 +65,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     // Disable GSAP's default lag smoothing
     gsap.ticker.lagSmoothing(0);
 
-    // Recalculate ScrollTrigger positions after layout settles (critical for mobile)
+    // Recalculate ScrollTrigger positions after layout settles
     const refreshTimeout = setTimeout(() => ScrollTrigger.refresh(), 500);
 
     // Cleanup
