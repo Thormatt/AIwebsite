@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { gsap, ScrollTrigger, isTouchDevice } from '@/lib/gsap';
 
 export function ScrollProgress() {
   const progressRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isTouchDevice) return;
     const progress = progressRef.current;
     const container = containerRef.current;
     if (!progress || !container) return;

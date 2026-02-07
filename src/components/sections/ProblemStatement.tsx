@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { gsap, ScrollTrigger, isTouchDevice } from '@/lib/gsap';
 
 const problems = [
   { label: 'Pilots stuck in POC', stat: '95%', source: 'McKinsey 2024' },
@@ -14,6 +14,7 @@ export function ProblemStatement() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (isTouchDevice) return;
     const ctx = gsap.context(() => {
       // Animate headline
       gsap.fromTo(

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, createContext, useContext } from 'react';
 import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { gsap, ScrollTrigger, isTouchDevice } from '@/lib/gsap';
 
 // Context for Lenis instance
 const LenisContext = createContext<Lenis | null>(null);
@@ -31,17 +31,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   }, [pathname]);
 
   useEffect(() => {
-    // Skip Lenis on touch-only devices (iOS Safari pauses rAF during
-    // momentum scroll, which freezes the Lenis → ScrollTrigger chain)
-    const isTouchOnly = window.matchMedia(
-      '(hover: none) and (pointer: coarse)'
-    ).matches;
-
-    if (isTouchOnly) {
-      // Native scroll works perfectly with ScrollTrigger on mobile
-      const refreshTimeout = setTimeout(() => ScrollTrigger.refresh(), 500);
-      return () => clearTimeout(refreshTimeout);
-    }
+    // Skip Lenis entirely on touch devices — native scroll only
+    if (isTouchDevice) return;
 
     // Initialize Lenis smooth scroll (desktop only)
     const lenis = new Lenis({
@@ -76,21 +67,6 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       gsap.ticker.remove(onTick);
       setLenisInstance(null);
     };
-  }, []);
-
-  // Safety net: if GSAP animations fail (e.g. on Safari mobile), force
-  // all content visible after a timeout so the page is never blank.
-  useEffect(() => {
-    const safetyTimer = setTimeout(() => {
-      const hidden = document.querySelectorAll<HTMLElement>(
-        '[style*="opacity: 0"], [style*="opacity:0"]'
-      );
-      hidden.forEach((el) => {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-      });
-    }, 3500);
-    return () => clearTimeout(safetyTimer);
   }, []);
 
   return (

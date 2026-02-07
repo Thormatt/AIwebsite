@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { gsap, ScrollTrigger, isTouchDevice } from '@/lib/gsap';
 
 const deliverables = [
   'Current-state workflow + systems map',
@@ -17,6 +17,7 @@ export function ValueBrief() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (isTouchDevice) return;
     const ctx = gsap.context(() => {
       // Animate headline
       gsap.fromTo(

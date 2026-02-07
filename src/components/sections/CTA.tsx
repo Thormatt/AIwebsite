@@ -2,12 +2,13 @@
 
 import { useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { gsap } from '@/lib/gsap';
+import { gsap, isTouchDevice } from '@/lib/gsap';
 
 export function CTA() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (isTouchDevice) return;
     const ctx = gsap.context(() => {
       // Split and animate headline
       const headline = document.querySelector('.cta-headline');

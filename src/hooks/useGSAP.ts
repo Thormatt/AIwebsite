@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { gsap, ScrollTrigger, isTouchDevice } from '@/lib/gsap';
 
 type GSAPCallback = (context: gsap.Context) => void;
 
@@ -15,6 +15,7 @@ export function useGSAP(
   const contextRef = useRef<gsap.Context | null>(null);
 
   useEffect(() => {
+    if (isTouchDevice) return;
     // Create GSAP context for proper cleanup
     contextRef.current = gsap.context(() => {
       callback(contextRef.current!);

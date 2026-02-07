@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { GradientText } from '@/components/ui/GradientText';
 import { useGSAP } from '@/hooks/useGSAP';
-import { gsap } from '@/lib/gsap';
+import { gsap, isTouchDevice } from '@/lib/gsap';
 
 // Sample articles - will be replaced with actual data fetching
 const articles = [

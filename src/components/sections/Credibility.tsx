@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { Badge } from '@/components/ui/Badge';
 import { GradientText } from '@/components/ui/GradientText';
 import { useGSAP } from '@/hooks/useGSAP';
-import { gsap } from '@/lib/gsap';
+import { gsap, isTouchDevice } from '@/lib/gsap';
 
 const credentials = [
   {

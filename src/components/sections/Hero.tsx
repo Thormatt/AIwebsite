@@ -2,13 +2,14 @@
 
 import { useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { gsap, ScrollTrigger, isTouchDevice } from '@/lib/gsap';
 
 export function Hero() {
   const containerRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
+    if (isTouchDevice) return;
     const ctx = gsap.context(() => {
       const headline = headlineRef.current;
       if (!headline) return;

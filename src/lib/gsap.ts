@@ -3,8 +3,14 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Register GSAP plugins
-if (typeof window !== 'undefined') {
+// Detect touch-only devices (phones/tablets) — used to skip animations
+export const isTouchDevice =
+  typeof window !== 'undefined' &&
+  window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+// Register GSAP plugins (desktop only — ScrollTrigger + scrub
+// animations cause scroll jank and opacity glitches on iOS Safari)
+if (typeof window !== 'undefined' && !isTouchDevice) {
   gsap.registerPlugin(ScrollTrigger);
 }
 
@@ -28,12 +34,14 @@ gsap.defaults({
   duration: 1,
 });
 
-// ScrollTrigger defaults
-ScrollTrigger.defaults({
-  toggleActions: 'play none none reverse',
-  start: 'top 80%',
-  end: 'bottom 20%',
-});
+// ScrollTrigger defaults (desktop only)
+if (!isTouchDevice) {
+  ScrollTrigger.defaults({
+    toggleActions: 'play none none reverse',
+    start: 'top 80%',
+    end: 'bottom 20%',
+  });
+}
 
 // Utility: Split text into spans for character animation
 export function splitTextIntoChars(element: HTMLElement): HTMLSpanElement[] {

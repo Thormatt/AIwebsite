@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { gsap } from '@/lib/gsap';
+import { gsap, isTouchDevice } from '@/lib/gsap';
 
 const services = [
   {
@@ -58,6 +58,7 @@ export function Services() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (isTouchDevice) return;
     const ctx = gsap.context(() => {
       // Cards reveal with stagger
       gsap.fromTo(

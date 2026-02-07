@@ -1,13 +1,14 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { gsap, ScrollTrigger, isTouchDevice } from '@/lib/gsap';
 
 export function Solution() {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isTouchDevice) return;
     const intervals: number[] = [];
     const ctx = gsap.context(() => {
       // Text scramble effect for the main statement

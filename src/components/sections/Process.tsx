@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { GradientText } from '@/components/ui/GradientText';
 import { useGSAP } from '@/hooks/useGSAP';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { gsap, ScrollTrigger, isTouchDevice } from '@/lib/gsap';
 
 const steps = [
   {
