@@ -78,6 +78,21 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     };
   }, []);
 
+  // Safety net: if GSAP animations fail (e.g. on Safari mobile), force
+  // all content visible after a timeout so the page is never blank.
+  useEffect(() => {
+    const safetyTimer = setTimeout(() => {
+      const hidden = document.querySelectorAll<HTMLElement>(
+        '[style*="opacity: 0"], [style*="opacity:0"]'
+      );
+      hidden.forEach((el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }, 3500);
+    return () => clearTimeout(safetyTimer);
+  }, []);
+
   return (
     <LenisContext.Provider value={lenisInstance}>
       {children}
