@@ -1,12 +1,7 @@
 @import 'tailwindcss';
 
-/* Hide hero elements before GSAP animates them in (prevents flash) */
-.hero-line,
-.hero-subtitle,
-.hero-cta,
-.hero-stat {
-  opacity: 0;
-}
+/* Hero elements: visible by default, hidden by useLayoutEffect before paint.
+   No CSS opacity:0 — ensures content is always visible on slow/mobile connections. */
 
 /* ============================================
    AI With Thor - Brutalist Editorial Design

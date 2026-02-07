@@ -54,8 +54,12 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     // Disable GSAP's default lag smoothing
     gsap.ticker.lagSmoothing(0);
 
+    // Recalculate ScrollTrigger positions after layout settles (critical for mobile)
+    const refreshTimeout = setTimeout(() => ScrollTrigger.refresh(), 500);
+
     // Cleanup
     return () => {
+      clearTimeout(refreshTimeout);
       lenis.off('scroll', ScrollTrigger.update);
       lenis.destroy();
       gsap.ticker.remove(onTick);
